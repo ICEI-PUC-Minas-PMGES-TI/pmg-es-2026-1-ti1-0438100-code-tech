@@ -33,6 +33,13 @@ Motoristas e motociclistas,
 Órgãos públicos e equipes de manutenção,
 Comerciantes locais,
 População em geral usuária de serviços urbanos.
+## Metodologias:
+Ferramenta utilizadas: Figma, Miro, Pencil.
+Organização: Gabriel Drumond: wireframe,
+Raul: fluxograma,
+Felipe Marzano e Felipe Gabriel: interação,
+Lucas Dias e Hector: slides
+
 
 
 ## Mapa Steakehoalders e Matriz CSD
