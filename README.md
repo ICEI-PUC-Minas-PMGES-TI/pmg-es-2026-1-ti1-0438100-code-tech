@@ -13,7 +13,26 @@
   
 ## O infraBH é um painel administrativo web voltado para a gestão de ocorrências urbanas na região metropolitana de Belo Horizonte. O fluxo começa com login seguro e leva a um dashboard com visão geral dos dados, incluindo indicadores, mapa e lista de ocorrências. A interface utiliza uma sidebar fixa e navegação clara, facilitando o acesso às principais áreas do sistema.
 
-O sistema permite gerenciar ocorrências de forma completa, com criação, edição, filtros e visualização detalhada. Também inclui relatórios com gráficos e configurações administrativas. O wireframe foi projetado com foco em usabilidade, organização e consistência visual, servindo como base para uma aplicação moderna e eficiente.
+O sistema permite gerenciar ocorrências de forma completa, com criação, edição, filtros e visualização detalhada. Também inclui relatórios com gráficos e configurações administrativas. O wireframe foi projetado com foco em usabilidade, organização e consistência visual, servindo como base para uma aplicação moderna
+e eficiente.
+
+## Problema:
+Moradores da Região Metropolitana de BH precisam de infraestrutura urbana , mas sofrem com a presença de buracos, vazamentos, problemas, falta de água e etc.
+
+## Objetivo do projeto:
+O objetivo do nosso projeto é suprir as necessidades dos nossos usuários, através de um site cujo a finalidade é retalar problemas com a infraestrutura, para que os administradores busquem uma solução.
+
+## Justificativa:
+O projeto InfraBH foi desenvolvido para resolver um problema comum na Região Metropolitana de Belo Horizonte: a dificuldade dos moradores em reportar e acompanhar problemas de infraestrutura, como buracos, vazamentos e falta de água.
+Atualmente, os canais existentes são pouco eficientes e não oferecem retorno claro, o que desmotiva a população. Pensando nisso, a aplicação foi criada para facilitar o registro dessas ocorrências de forma simples e rápida, além de permitir o acompanhamento do status.
+A escolha desse tema se deve ao seu impacto social, já que melhora a comunicação entre cidadãos e responsáveis pela manutenção urbana, incentivando a participação da população e contribuindo para uma cidade mais organizada.
+
+## Público alvo:
+Moradores da Região Metropolitana de Belo Horizonte
+Motoristas e motociclistas
+Órgãos públicos e equipes de manutenção
+Comerciantes locais
+População em geral usuária de serviços urbanos
 
 
 ## Mapa Steakehoalders e Matriz CSD
