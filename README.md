@@ -35,7 +35,7 @@ Comerciantes locais,
 População em geral usuária de serviços urbanos.
 ## Metodologias:
 Ferramenta utilizadas: Figma, Miro, Pencil.
-Organização: Gabriel Drumond: wireframe,
+                                                                                                                                                                Organização: Gabriel Drumond: wireframe,
 Raul: fluxograma,
 Felipe Marzano e Felipe Gabriel: interação,
 Lucas Dias e Hector: slides
