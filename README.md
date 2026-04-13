@@ -49,6 +49,7 @@ População em geral usuária de serviços urbanos.
 ![5c5511e9-9a43-4027-bf6b-3e1d476fe10a](https://github.com/user-attachments/assets/697a3cb2-212e-458c-8318-5b972b7cb56e)
 
 ## Wireframe 
+## Painel interativo
 
 
 
