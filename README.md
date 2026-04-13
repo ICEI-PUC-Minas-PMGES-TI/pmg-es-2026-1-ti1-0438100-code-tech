@@ -15,8 +15,7 @@ O infraBH é um painel administrativo web voltado para a gestão de ocorrências
 
 O sistema permite gerenciar ocorrências de forma completa, com criação, edição, filtros e visualização detalhada. Também inclui relatórios com gráficos e configurações administrativas. O wireframe foi projetado com foco em usabilidade, organização e consistência visual, servindo como base para uma aplicação moderna e eficiente.
 
-(<img src="...">)
-(<img src="...">)
+
 ![40102279-6915-4733-8150-04f213ba0043](https://github.com/user-attachments/assets/f1e4b55a-a5d2-40c1-8eb9-387f170863f3)
 ![c28df00f-e54b-45b1-b0ee-da60ce7c2ad7](https://github.com/user-attachments/assets/868c0440-7c00-488b-8d9b-e926be59da2d)
 
