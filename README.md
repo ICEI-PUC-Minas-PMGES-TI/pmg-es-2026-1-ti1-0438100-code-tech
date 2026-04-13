@@ -24,6 +24,13 @@ O sistema permite gerenciar ocorrências de forma completa, com criação, ediç
 ![1138d70c-99ef-4ac5-a1d5-4f406d9d2348](https://github.com/user-attachments/assets/c0549f36-403a-4d2a-b8db-42ae06f194bd)
 ![92215c6f-dcd4-429f-8949-66a9469c33f8](https://github.com/user-attachments/assets/2b4f336b-fc12-4737-b091-aae34ccd958c)
 
+## Fluxograma 
+![a0280f01-ac24-4a07-ac33-434284d9300f](https://github.com/user-attachments/assets/5929a9d1-465a-4f27-89f1-49c412275cda)
+![5c5511e9-9a43-4027-bf6b-3e1d476fe10a](https://github.com/user-attachments/assets/697a3cb2-212e-458c-8318-5b972b7cb56e)
+
+
+
+
 
 ## Professores responsáveis
 
