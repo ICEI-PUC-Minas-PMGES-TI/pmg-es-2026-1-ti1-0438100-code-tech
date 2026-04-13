@@ -16,7 +16,7 @@
 O sistema permite gerenciar ocorrências de forma completa, com criação, edição, filtros e visualização detalhada. Também inclui relatórios com gráficos e configurações administrativas. O wireframe foi projetado com foco em usabilidade, organização e consistência visual, servindo como base para uma aplicação moderna e eficiente.
 
 
-## Mapa Steakhoalders e Matriz CSD
+## Mapa Steakehoalders e Matriz CSD
 ![40102279-6915-4733-8150-04f213ba0043](https://github.com/user-attachments/assets/f1e4b55a-a5d2-40c1-8eb9-387f170863f3)
 ![c28df00f-e54b-45b1-b0ee-da60ce7c2ad7](https://github.com/user-attachments/assets/868c0440-7c00-488b-8d9b-e926be59da2d)
 
@@ -28,6 +28,8 @@ O sistema permite gerenciar ocorrências de forma completa, com criação, ediç
 ## Fluxograma 
 ![a0280f01-ac24-4a07-ac33-434284d9300f](https://github.com/user-attachments/assets/5929a9d1-465a-4f27-89f1-49c412275cda)
 ![5c5511e9-9a43-4027-bf6b-3e1d476fe10a](https://github.com/user-attachments/assets/697a3cb2-212e-458c-8318-5b972b7cb56e)
+
+## Wireframe 
 
 
 
