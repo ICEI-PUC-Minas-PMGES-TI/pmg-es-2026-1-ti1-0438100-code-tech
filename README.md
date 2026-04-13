@@ -28,11 +28,11 @@ Atualmente, os canais existentes são pouco eficientes e não oferecem retorno c
 A escolha desse tema se deve ao seu impacto social, já que melhora a comunicação entre cidadãos e responsáveis pela manutenção urbana, incentivando a participação da população e contribuindo para uma cidade mais organizada.
 
 ## Público alvo:
-Moradores da Região Metropolitana de Belo Horizonte
-Motoristas e motociclistas
-Órgãos públicos e equipes de manutenção
-Comerciantes locais
-População em geral usuária de serviços urbanos
+Moradores da Região Metropolitana de Belo Horizonte,
+Motoristas e motociclistas,
+Órgãos públicos e equipes de manutenção,
+Comerciantes locais,
+População em geral usuária de serviços urbanos.
 
 
 ## Mapa Steakehoalders e Matriz CSD
