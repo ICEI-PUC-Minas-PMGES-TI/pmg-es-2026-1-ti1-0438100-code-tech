@@ -1,34 +1,22 @@
-# Nome do projeto
+# Infra BH
 
-Escreva um ou dois parágrafo resumindo o objetivo do seu projeto.
+O infraBH é um painel administrativo web voltado para a gestão de ocorrências urbanas na região metropolitana de Belo Horizonte. O fluxo começa com login seguro e leva a um dashboard com visão geral dos dados, incluindo indicadores, mapa e lista de ocorrências. A interface utiliza uma sidebar fixa e navegação clara, facilitando o acesso às principais áreas do sistema.
+
+O sistema permite gerenciar ocorrências de forma completa, com criação, edição, filtros e visualização detalhada. Também inclui relatórios com gráficos e configurações administrativas. O wireframe foi projetado com foco em usabilidade, organização e consistência visual, servindo como base para uma aplicação moderna e eficiente.
 
 ## Alunos integrantes da equipe
 
 * Gabriel Luiz Drumond Oliveira 
 * Felipe Gabriel 
 * Felipe Marzanno
-* Raul 
-
+* Raul Rocha
+* João Pedro Lemos
+* Lucas dias
+  
 ## Professores responsáveis
 
-* Nome completo do professor 1
-* Nome completo do professor 2
+* Diego Augusto de Faria Barros
+* Henrique Almeida Louzada
+* Luca Soares de Paiva Lacerda
 
 
-
-## Instruções de utilização 
-
-> **IMPORTANTE: APAGUE ESSA SEÇÃO DE INSTRUÇÕES ANTES DE ENTREGAR SEU TRABALHO**
-
-No desenvolvimento desse trabalho, o grupo deverá utilizar esse repositório como local para entrega de todos os artefatos a serem produzidos. Em especial, o grupo deverá providenciar a alteração dos seguintes arquivos:
-
-* **Capa do projeto** (Esse arquivo aqui): Informação básica sobre o projeto, alunos do grupo e professores responsáveis;
-* **Arquivo CITATION.cff**: descritor do projeto, utilizado para geração do certificado ao final da disciplina.
-* **Pasta código**: todos os arquivos resultantes da programação do software.
-* **Pasta docs --> arquivo README.md**: Documentação completa do projeto.
-* **Pasta video**: video de apresentação do projeto.
-
-Toda a documentação do projeto é estruturada por meio da linguagem Markdown adotada pelo GitHub e por diversas outras plataformas. Aprenda Markdown e use para documentar o projeto:
-
-* [Sintaxe básica de gravação e formatação no GitHub - GitHub Docs](https://docs.github.com/pt/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)
-* [Markdown® Básico: Sintaxe, Uso &amp; Exemplos [Passo a Passo]](https://markdown.net.br/sintaxe-basica/)
