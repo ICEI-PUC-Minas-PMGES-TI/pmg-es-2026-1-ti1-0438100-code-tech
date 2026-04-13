@@ -64,6 +64,8 @@ Lucas Dias e Hector: slides
 ![0e38981b-079a-465f-bc6b-2c7817ba69c2](https://github.com/user-attachments/assets/5a3626f1-f914-4c34-ba6d-e7442c53d90d)
 
 ## Prótotipo interativo 
+![6cabcd09-a420-404a-a8cc-64e82b23ecd7](https://github.com/user-attachments/assets/8f90b139-661e-445a-acfc-39178c2b81db)
+
 
 ## Professores responsáveis
 
