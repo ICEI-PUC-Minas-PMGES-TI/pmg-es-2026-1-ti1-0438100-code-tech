@@ -63,7 +63,6 @@ Lucas Dias e Hector: slides
 ![58d215fe-7139-4134-aa82-c53c22300059](https://github.com/user-attachments/assets/14e8b94b-3dab-44f8-a357-5b7f34161dc6)
 ![0e38981b-079a-465f-bc6b-2c7817ba69c2](https://github.com/user-attachments/assets/5a3626f1-f914-4c34-ba6d-e7442c53d90d)
 
-
 ## Professores responsáveis
 
 * Diego Augusto de Faria Barros
