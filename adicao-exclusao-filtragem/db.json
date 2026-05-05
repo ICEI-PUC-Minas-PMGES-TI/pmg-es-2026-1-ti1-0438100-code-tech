@@ -1,0 +1,8 @@
+{
+  "problemas": [],
+  "categorias": [
+    { "id": 1, "nome": "Buraco" },
+    { "id": 2, "nome": "Vazamento" },
+    { "id": 3, "nome": "Rachadura" }
+  ]
+}
