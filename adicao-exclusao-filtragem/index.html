@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Ocorrências Urbanas</title>
+</head>
+<body>
+
+  <h1>Registro de Problemas</h1>
+
+  <input id="titulo" placeholder="Título do problema">
+  <input id="descricao" placeholder="Descrição">
+
+  <select id="categoria">
+    <option value="1">Buraco</option>
+    <option value="2">Vazamento</option>
+    <option value="3">Rachadura</option>
+  </select>
+
+  <br><br>
+
+  <button onclick="adicionar()">Adicionar</button>
+  <button onclick="mostrarTodos()">Mostrar todos</button>
+
+  <h2>Filtrar</h2>
+  <button onclick="filtrar(1)">Buracos</button>
+  <button onclick="filtrar(2)">Vazamentos</button>
+  <button onclick="filtrar(3)">Rachaduras</button>
+
+  <h2>Lista de Problemas</h2>
+  <ul id="lista"></ul>
+
+  <script src="script.js"></script>
+</body>
+</html>
