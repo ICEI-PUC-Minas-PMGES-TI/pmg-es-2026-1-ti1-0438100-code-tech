@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
@@ -173,6 +173,7 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/contagem-por-categoria.js"></script>
   <script>
     const colors = {
       forestBlack: '#001e2b',
@@ -194,12 +195,21 @@
     Chart.defaults.font.size = 12;
     Chart.defaults.color = colors.coolGray;
 
+    // no futuro, precisa pegar esses dados de alguma api ou local mesmo
+    const problemasExemplo = [
+      { categoria: 'Buracos' }, { categoria: 'Buracos' }, { categoria: 'Buracos' },
+      { categoria: 'Vazamento' }, { categoria: 'Vazamento' },
+      { categoria: 'Agua' }, { categoria: 'Outros' }, { categoria: 'Outros' },
+    ];
+    const totais = contarPorCategoria(problemasExemplo);
+    const porTipo = contagemParaChart(totais);
+
     new Chart(document.getElementById('doughnutChart'), {
       type: 'doughnut',
       data: {
-        labels: ['Buracos', 'Vazamento', 'Água', 'Outros'],
+        labels: porTipo.labels,
         datasets: [{
-          data: [42, 25, 18, 15],
+          data: porTipo.data,
           backgroundColor: [
             colors.forestBlack,
             colors.coolGray,
