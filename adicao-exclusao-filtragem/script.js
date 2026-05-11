@@ -18,13 +18,24 @@ function carregarProblemas(url = API) {
       problemas.forEach(problema => {
         const item = document.createElement("li");
 
-        item.innerHTML = `
-          <strong>${problema.titulo}</strong> - ${problema.descricao}
-          <br>
-          Tipo: ${categorias[problema.categoriaId]} | Status: ${problema.status}
-          <br>
-          <button onclick="excluir(${problema.id})">Excluir</button>
-        `;
+        item.classList.add("list-group-item", "d-flex", "justify-content-between", "align-items-center");
+
+item.innerHTML = `
+  <div>
+    <strong>${problema.titulo}</strong>
+    <br>
+    ${problema.descricao}
+    <br>
+    Tipo: ${categorias[problema.categoriaId]}
+  </div>
+
+  <button
+    class="btn btn-danger btn-sm"
+    onclick="excluir(${problema.id})"
+  >
+    Excluir
+  </button>
+`;
 
         lista.appendChild(item);
       });
@@ -67,6 +78,7 @@ function adicionar() {
 
 // Remove um problema
 function excluir(id) {
+  console.log("Excluindo ID:", id);
   const confirmar = confirm("Deseja realmente excluir?");
   if (!confirmar) return;
 

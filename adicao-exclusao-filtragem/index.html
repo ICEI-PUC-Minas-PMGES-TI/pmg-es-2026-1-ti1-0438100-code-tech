@@ -2,34 +2,131 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Ocorrências Urbanas</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-  <h1>Registro de Problemas</h1>
+  <div class="container mt-5">
 
-  <input id="titulo" placeholder="Título do problema">
-  <input id="descricao" placeholder="Descrição">
+    <!-- Título -->
+    <div class="text-center mb-5">
+      <h1 class="fw-bold">Registro de Problemas Urbanos</h1>
 
-  <select id="categoria">
-    <option value="1">Buraco</option>
-    <option value="2">Vazamento</option>
-    <option value="3">Rachadura</option>
-  </select>
+      <p class="text-secondary">
+        Sistema para cadastro e gerenciamento de ocorrências.
+      </p>
+    </div>
 
-  <br><br>
+    <!-- Formulário -->
+    <div class="card shadow p-4 mb-4">
 
-  <button onclick="adicionar()">Adicionar</button>
-  <button onclick="mostrarTodos()">Mostrar todos</button>
+      <h3 class="mb-4">Cadastrar Ocorrência</h3>
 
-  <h2>Filtrar</h2>
-  <button onclick="filtrar(1)">Buracos</button>
-  <button onclick="filtrar(2)">Vazamentos</button>
-  <button onclick="filtrar(3)">Rachaduras</button>
+      <div class="row g-3">
 
-  <h2>Lista de Problemas</h2>
-  <ul id="lista"></ul>
+        <div class="col-md-4">
+          <input
+            type="text"
+            id="titulo"
+            class="form-control"
+            placeholder="Título do problema"
+          >
+        </div>
+
+        <div class="col-md-4">
+          <input
+            type="text"
+            id="descricao"
+            class="form-control"
+            placeholder="Descrição"
+          >
+        </div>
+
+        <div class="col-md-4">
+          <select id="categoria" class="form-select">
+            <option value="1">Buraco</option>
+            <option value="2">Vazamento</option>
+            <option value="3">Rachadura</option>
+          </select>
+        </div>
+
+      </div>
+
+      <div class="mt-4 d-flex gap-2">
+
+        <button
+          onclick="adicionar()"
+          class="btn btn-dark"
+        >
+          Adicionar
+        </button>
+
+        <button
+          onclick="mostrarTodos()"
+          class="btn btn-dark"
+        >
+          Mostrar Todos
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- Filtros -->
+    <div class="card shadow p-4 mb-4">
+
+      <h3 class="mb-3">Filtrar Ocorrências</h3>
+
+      <div class="d-flex gap-2 flex-wrap">
+
+        <button
+          onclick="filtrar(1)"
+          class="btn btn-outline-dark"
+        >
+          Buracos
+        </button>
+
+        <button
+          onclick="filtrar(2)"
+          class="btn btn-outline-dark"
+        >
+          Vazamentos
+        </button>
+
+        <button
+          onclick="filtrar(3)"
+          class="btn btn-outline-dark"
+        >
+          Rachaduras
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- Lista -->
+    <div class="card shadow p-4">
+
+      <h3 class="mb-4">Lista de Problemas</h3>
+
+      <ul id="lista" class="list-group"></ul>
+
+    </div>
+
+  </div>
 
   <script src="script.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
