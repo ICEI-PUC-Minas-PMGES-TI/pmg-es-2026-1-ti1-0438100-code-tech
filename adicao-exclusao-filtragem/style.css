@@ -1,0 +1,23 @@
+body {
+  background-color: #f4f6f9;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.titulo {
+  font-weight: bold;
+  color: #212529;
+}
+
+.subtitulo {
+  color: gray;
+}
+
+.card {
+  border: none;
+  border-radius: 16px;
+}
+
+.list-group-item {
+  border-radius: 10px !important;
+  margin-bottom: 10px;
+}
