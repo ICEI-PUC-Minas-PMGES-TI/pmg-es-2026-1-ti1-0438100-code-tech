@@ -1,14 +1,6 @@
 {
   "problemas": [
     {
-      "titulo": "aaaa",
-      "descricao": "aaaaaa",
-      "categoriaId": 1,
-      "status": "aberto",
-      "data": "04/05/2026",
-      "id": "_1QGmf_xvTk"
-    },
-    {
       "titulo": "eeeeee",
       "descricao": "eeeeeeee",
       "categoriaId": 1,

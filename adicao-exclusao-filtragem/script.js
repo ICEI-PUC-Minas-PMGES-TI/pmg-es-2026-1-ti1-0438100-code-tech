@@ -58,7 +58,7 @@ function carregarProblemas(url = API) {
 
           <button
             class="btn btn-danger btn-sm"
-            onclick="excluir(${problema.id})"
+            onclick="excluir('${problema.id}')"
           >
             Excluir
           </button>
