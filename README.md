@@ -4,6 +4,7 @@
 
 ## Alunos integrantes da equipe
 
+* Hector Paulo Nogueira Xavier
 * Gabriel Luiz Drumond Oliveira 
 * Felipe Gabriel 
 * Felipe Marzanno
