@@ -2,8 +2,8 @@
   "usuarios": [
     {
       "id": 1,
-      "nome": "Felipe",
-      "email": "felipe@gmail.com",
+      "nome": "Aluno",
+      "email": "aluno@gmail.com",
       "senha": "123456",
       "tipo": "usuario"
     },
@@ -52,6 +52,7 @@
       "longitude": -44.040
     }
 
+    
   ]
 }
 
