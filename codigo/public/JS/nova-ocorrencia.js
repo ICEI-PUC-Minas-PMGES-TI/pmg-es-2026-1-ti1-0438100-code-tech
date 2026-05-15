@@ -100,3 +100,105 @@ function formatarEndereco(item, textoDigitado = "") {
 
   return `${rua}${numero ? ", " + numero : ""} - ${bairro}, ${cidade} - ${estado}`;
 }
+
+btnBuscar.addEventListener("click", function () {
+
+  const texto = endereco.value.trim();
+
+  if (texto === "") {
+    alert("Digite um endereço.");
+    return;
+  }
+
+  fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(montarEnderecoBusca(texto))}&format=json&addressdetails=1&limit=1&countrycodes=br&accept-language=pt-BR`)
+    .then(resposta => resposta.json())
+    .then(dados => {
+
+      if (dados.length === 0) {
+        alert("Endereço não encontrado.");
+        return;
+      }
+
+      latitude = parseFloat(dados[0].lat);
+      longitude = parseFloat(dados[0].lon);
+
+      endereco.value =
+        formatarEndereco(dados[0], texto);
+
+      atualizarMapa();
+    })
+    .catch(() => {
+      alert("Erro ao buscar endereço.");
+    });
+});
+
+function removerLista() {
+
+  const lista = document.getElementById("listaSugestoes");
+
+  if (lista) {
+    lista.remove();
+  }
+}
+
+endereco.addEventListener("input", function () {
+
+  clearTimeout(timeout);
+
+  const texto = endereco.value.trim();
+
+  if (texto.length < 3) {
+    removerLista();
+    return;
+  }
+
+  timeout = setTimeout(function () {
+
+    fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(montarEnderecoBusca(texto))}&format=json&addressdetails=1&limit=8&countrycodes=br&accept-language=pt-BR`)
+      .then(resposta => resposta.json())
+      .then(dados => {
+
+        removerLista();
+
+        if (dados.length === 0) return;
+
+        const lista = document.createElement("div");
+
+        lista.id = "listaSugestoes";
+        lista.className = "lista-sugestoes";
+
+        dados.forEach(item => {
+
+          const enderecoFormatado =
+            formatarEndereco(item, texto);
+
+          const opcao = document.createElement("div");
+
+          opcao.className = "item-sugestao";
+
+          opcao.innerHTML = `
+            <i class="bi bi-geo-alt"></i>
+            ${enderecoFormatado}
+          `;
+
+          opcao.addEventListener("click", function () {
+
+            latitude = parseFloat(item.lat);
+            longitude = parseFloat(item.lon);
+
+            endereco.value = enderecoFormatado;
+
+            removerLista();
+
+            atualizarMapa();
+          });
+
+          lista.appendChild(opcao);
+        });
+
+        endereco.parentElement.style.position = "relative";
+        endereco.parentElement.appendChild(lista);
+      });
+
+  }, 500);
+});
