@@ -1,0 +1,411 @@
+const STORAGE_KEY = 'tiaw_ocorrencias_v1';
+
+const defaultStatus = 'Pendente';
+
+function getStoredOcorrencias() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return [];
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return [];
+  }
+}
+
+function saveStoredOcorrencias(items) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+}
+
+function generateOcorrenciaId() {
+  return `OC${Date.now()}`;
+}
+
+function formatDate(date) {
+  return new Date(date).toLocaleDateString('pt-BR');
+}
+
+function formatDateTime(date) {
+  const dt = new Date(date);
+  return `${dt.toLocaleDateString('pt-BR')} às ${dt.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`;
+}
+
+function getQueryParam(name) {
+  var url = new URL(window.location.href);
+  return url.searchParams.get(name);
+}
+
+function buildDetailsLink(id) {
+  return 'detalhes.html?id=' + encodeURIComponent(id);
+}
+
+function getCurrentOcorrencias() {
+  return getStoredOcorrencias().sort(function(a, b) { return b.createdAt - a.createdAt; });
+}
+
+function parseFilterDate(value) {
+  if (!value) return null;
+  if (value.indexOf('/') !== -1) {
+    return new Date(value.split('/').reverse().join('-')).getTime();
+  }
+  return new Date(value).getTime();
+}
+
+function getValue(id) {
+  var el = document.getElementById(id);
+  return el ? el.value : '';
+}
+
+function applyFilters(items) {
+  var typeFilter = getValue('filter-type') || 'todos';
+  var statusFilter = getValue('filter-status') || 'todos';
+  var bairroFilter = getValue('filter-bairro') || 'todos';
+  var startDate = getValue('filter-start');
+  var endDate = getValue('filter-end');
+  var addressFilter = getValue('filter-address').toLowerCase() || '';
+  var searchFilter = getValue('search-text').toLowerCase() || '';
+
+  return items.filter(function(item) {
+    if (typeFilter !== 'todos' && item.type !== typeFilter) return false;
+    if (statusFilter !== 'todos' && item.status !== statusFilter) return false;
+    if (bairroFilter !== 'todos' && item.bairro !== bairroFilter) return false;
+    if (addressFilter && item.address.toLowerCase().indexOf(addressFilter) === -1) return false;
+    if (searchFilter && (item.id + ' ' + item.type + ' ' + item.address + ' ' + item.bairro + ' ' + item.description).toLowerCase().indexOf(searchFilter) === -1) return false;
+    if (startDate) {
+      var start = parseFilterDate(startDate);
+      if (item.createdAt < start) return false;
+    }
+    if (endDate) {
+      var end = parseFilterDate(endDate) + 24 * 60 * 60 * 1000 - 1;
+      if (item.createdAt > end) return false;
+    }
+    return true;
+  });
+}
+
+function renderOcorrenciasList() {
+  const rowsContainer = document.getElementById('ocorrencias-table-body');
+  const items = getCurrentOcorrencias();
+  if (!rowsContainer) return;
+
+  const filtered = applyFilters(items);
+  rowsContainer.innerHTML = '';
+
+  if (!filtered.length) {
+    rowsContainer.innerHTML = `
+      <tr>
+        <td colspan="8" style="text-align: center; padding: 24px; color: var(--cool-gray);">
+          Nenhuma ocorrência encontrada. Registre sua primeira ocorrência.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  const fragment = document.createDocumentFragment();
+  filtered.forEach(item => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td><strong>${item.id}</strong></td>
+      <td>${item.type}</td>
+      <td>${item.address}</td>
+      <td>${item.bairro}</td>
+      <td>${formatDate(item.createdAt)}</td>
+      <td><span class="badge-status badge-${item.status === 'Pendente' ? 'pendente' : item.status === 'Em andamento' ? 'andamento' : 'resolvido'}">${item.status}</span></td>
+      <td><span class="badge-priority badge-${item.priority.toLowerCase()}">${item.priority}</span></td>
+      <td><a href="${buildDetailsLink(item.id)}" class="btn-mongodb-outline" style="padding: 6px 12px; font-size: 12px;">Ver detalhes</a></td>
+    `;
+    fragment.appendChild(row);
+  });
+
+  rowsContainer.appendChild(fragment);
+}
+
+function renderDashboardOverview() {
+  const items = getCurrentOcorrencias();
+  const counts = {
+    buraco: 0,
+    vazamento: 0,
+    faltaDeAgua: 0,
+    outros: 0,
+  };
+
+  items.forEach(item => {
+    switch (item.type) {
+      case 'Buraco': counts.buraco += 1; break;
+      case 'Vazamento': counts.vazamento += 1; break;
+      case 'Falta de Água': counts.faltaDeAgua += 1; break;
+      default: counts.outros += 1; break;
+    }
+  });
+
+  document.getElementById('count-buracos')?.textContent = counts.buraco;
+  document.getElementById('count-vazamentos')?.textContent = counts.vazamento;
+  document.getElementById('count-falta-agua')?.textContent = counts.faltaDeAgua;
+  document.getElementById('count-outros')?.textContent = counts.outros;
+
+  const dashboardBody = document.getElementById('dashboard-recent-body');
+  if (!dashboardBody) return;
+  dashboardBody.innerHTML = '';
+
+  const recent = items.slice(0, 3);
+  if (!recent.length) {
+    dashboardBody.innerHTML = `
+      <tr>
+        <td colspan="6" style="text-align: center; padding: 24px; color: var(--cool-gray);">Nenhuma ocorrência registrada ainda.</td>
+      </tr>
+    `;
+    return;
+  }
+
+  const fragment = document.createDocumentFragment();
+  recent.forEach(item => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td><strong>${item.id}</strong></td>
+      <td>${item.type}</td>
+      <td>${item.address}</td>
+      <td>${item.bairro}</td>
+      <td>${formatDate(item.createdAt)}</td>
+      <td><span class="badge-status badge-${item.status === 'Pendente' ? 'pendente' : item.status === 'Em andamento' ? 'andamento' : 'resolvido'}">${item.status}</span></td>
+    `;
+    fragment.appendChild(row);
+  });
+  dashboardBody.appendChild(fragment);
+}
+
+function populateDetailPage() {
+  const detailId = getQueryParam('id');
+  if (!detailId) return;
+  const items = getStoredOcorrencias();
+  const ocorrencia = items.find(item => item.id === detailId);
+  if (!ocorrencia) {
+    const area = document.querySelector('.content-area');
+    if (area) {
+      area.innerHTML = `<div style="padding: 32px; text-align: center;"><h2>Ocorrência não encontrada</h2><p>Verifique se o link está correto ou volte para a lista de ocorrências.</p><a href="ocorrencias.html" class="btn-mongodb-primary">Voltar para minhas ocorrências</a></div>`;
+    }
+    return;
+  }
+
+  document.getElementById('detail-id')?.textContent = ocorrencia.id;
+  document.getElementById('detail-type')?.textContent = ocorrencia.type;
+  document.getElementById('detail-address')?.textContent = ocorrencia.address;
+  document.getElementById('detail-bairro')?.textContent = ocorrencia.bairro;
+  document.getElementById('detail-date')?.textContent = formatDateTime(ocorrencia.createdAt);
+  document.getElementById('detail-priority')?.innerHTML = `<span class="badge-priority badge-${ocorrencia.priority.toLowerCase()}">${ocorrencia.priority}</span>`;
+  document.getElementById('detail-status')?.innerHTML = `<span class="badge-status badge-${ocorrencia.status === 'Pendente' ? 'pendente' : ocorrencia.status === 'Em andamento' ? 'andamento' : 'resolvido'}">${ocorrencia.status}</span>`;
+  document.getElementById('detail-description')?.textContent = ocorrencia.description;
+  document.getElementById('detail-reported')?.textContent = 'Você';
+  document.getElementById('detail-location')?.textContent = `${ocorrencia.bairro} — ${ocorrencia.address}`;
+
+  const historyContainer = document.getElementById('detail-history');
+  if (historyContainer) {
+    historyContainer.innerHTML = '';
+    const history = ocorrencia.history || [];
+    if (!history.length) {
+      historyContainer.innerHTML = '<div style="color: var(--cool-gray);">Sem histórico adicional.</div>';
+    } else {
+      history.forEach(entry => {
+        const item = document.createElement('div');
+        item.className = 'history-item';
+        item.innerHTML = `<span class="time">${entry.time}</span> ${entry.message}`;
+        historyContainer.appendChild(item);
+      });
+    }
+  }
+
+  const cancelButton = document.getElementById('btn-cancel-occurrence');
+  if (cancelButton) {
+    cancelButton.addEventListener('click', () => {
+      const filtered = items.filter(item => item.id !== ocorrencia.id);
+      saveStoredOcorrencias(filtered);
+      window.location.href = 'ocorrencias.html';
+    });
+  }
+}
+
+let locationMap;
+let locationMarker;
+
+function setLocationFields(latlng) {
+  const latInput = document.getElementById('input-lat');
+  const lngInput = document.getElementById('input-lng');
+  if (latInput) latInput.value = latlng.lat.toFixed(6);
+  if (lngInput) lngInput.value = latlng.lng.toFixed(6);
+}
+
+function updateLocationMarker(latlng) {
+  if (!locationMap) return;
+  if (locationMarker) {
+    locationMarker.setLatLng(latlng);
+  } else {
+    locationMarker = L.marker(latlng, { draggable: true }).addTo(locationMap);
+    locationMarker.on('dragend', function() {
+      var position = locationMarker.getLatLng();
+      setLocationFields(position);
+    });
+  }
+  locationMap.setView(latlng, 16);
+  if (typeof locationMap.invalidateSize === 'function') {
+    locationMap.invalidateSize();
+  }
+  setLocationFields(latlng);
+}
+
+async function searchAddress() {
+  var addressInput = document.getElementById('input-address');
+  var query = addressInput ? addressInput.value.trim() : '';
+  if (!query) {
+    alert('Digite um endereço para buscar no mapa.');
+    return;
+  }
+
+  try {
+    var response = await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(query) + '&countrycodes=br');
+    var results = await response.json();
+
+    if (!results || !results.length) {
+      alert('Endereço não encontrado. Tente outro termo.');
+      return;
+    }
+
+    var place = results[0];
+    var latlng = { lat: parseFloat(place.lat), lng: parseFloat(place.lon) };
+    updateLocationMarker(latlng);
+    if (addressInput) {
+      addressInput.value = place.display_name;
+    }
+  } catch (error) {
+    console.error(error);
+    alert('Não foi possível buscar o endereço. Tente novamente em alguns segundos.');
+  }
+}
+
+function initLocationMap() {
+  var mapContainer = document.getElementById('ocorrencia-map');
+  if (!mapContainer || typeof L === 'undefined') return;
+
+  locationMap = L.map(mapContainer).setView([-19.920, -43.940], 13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors',
+    maxZoom: 19,
+  }).addTo(locationMap);
+
+  locationMap.on('click', function(event) {
+    updateLocationMarker(event.latlng);
+  });
+
+  updateLocationMarker(locationMap.getCenter());
+
+  setTimeout(function() {
+    if (locationMap) {
+      locationMap.invalidateSize();
+    }
+  }, 100);
+}
+
+function bindRegisterForm() {
+  var button = document.getElementById('btn-register-occurrence');
+  if (!button) return;
+  button.addEventListener('click', function() {
+    var addressInput = document.getElementById('input-address');
+    var bairroInput = document.getElementById('input-bairro');
+    var typeInput = document.getElementById('input-type');
+    var priorityInput = document.getElementById('input-priority');
+    var descriptionInput = document.getElementById('input-description');
+
+    var address = addressInput ? addressInput.value.trim() : '';
+    var bairro = bairroInput ? bairroInput.value : '';
+    var type = typeInput ? typeInput.value : '';
+    var priority = priorityInput ? priorityInput.value : '';
+    var description = descriptionInput ? descriptionInput.value.trim() : '';
+
+    if (!address || !bairro || !type || !priority || !description) {
+      alert('Por favor, preencha todos os campos antes de registrar a ocorrência.');
+      return;
+    }
+
+    var lat = '';
+    var lng = '';
+    if (locationMarker && typeof locationMarker.getLatLng === 'function') {
+      var pos = locationMarker.getLatLng();
+      lat = pos ? pos.lat : '';
+      lng = pos ? pos.lng : '';
+    } else {
+      var latInput = document.getElementById('input-lat');
+      var lngInput = document.getElementById('input-lng');
+      lat = latInput ? latInput.value : '';
+      lng = lngInput ? lngInput.value : '';
+    }
+
+    var items = getStoredOcorrencias();
+    var newItem = {
+      id: generateOcorrenciaId(),
+      type: type,
+      address: address,
+      bairro: bairro,
+      priority: priority,
+      status: defaultStatus,
+      description: description,
+      lat: lat,
+      lng: lng,
+      createdAt: Date.now(),
+      history: [{ time: formatDateTime(Date.now()), message: 'Ocorrência registrada.' }],
+    };
+
+    items.unshift(newItem);
+    saveStoredOcorrencias(items);
+    window.location.href = 'ocorrencias.html';
+  });
+}
+
+function bindLocationSearch() {
+  const searchButton = document.getElementById('btn-search-address');
+  if (searchButton) {
+    searchButton.addEventListener('click', searchAddress);
+  }
+
+  initLocationMap();
+}
+
+function resetFilters() {
+  const inputs = ['filter-type', 'filter-status', 'filter-bairro', 'filter-start', 'filter-end', 'filter-address', 'search-text'];
+  inputs.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (el.tagName === 'SELECT') {
+      el.selectedIndex = 0;
+    } else {
+      el.value = '';
+    }
+  });
+  renderOcorrenciasList();
+}
+
+function bindFilterEvents() {
+  ['filter-type', 'filter-status', 'filter-bairro', 'filter-start', 'filter-end', 'filter-address', 'search-text'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('input', renderOcorrenciasList);
+      el.addEventListener('change', renderOcorrenciasList);
+    }
+  });
+
+  const clearLink = document.getElementById('clear-filters');
+  if (clearLink) {
+    clearLink.addEventListener('click', event => {
+      event.preventDefault();
+      resetFilters();
+    });
+  }
+}
+
+function initApp() {
+  renderOcorrenciasList();
+  renderDashboardOverview();
+  populateDetailPage();
+  bindRegisterForm();
+  bindFilterEvents();
+  bindLocationSearch();
+}
+
+document.addEventListener('DOMContentLoaded', initApp);

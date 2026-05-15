@@ -3,19 +3,19 @@
 
 :root {
   
-  --forest-black: #001e2b;
-  --mongodb-green: #00ed64;
-  --dark-green: #00684a;
+  --forest-black: #0e3a5e;
+  --mongodb-green: #0d6efd;
+  --dark-green: #0b5ed7;
 
-  --action-blue: #006cfa;
-  --hover-blue: #3860be;
-  --teal-active: #1eaedb;
+  --action-blue: #0d6efd;
+  --hover-blue: #0b5ed7;
+  --teal-active: #3a8ee6;
 
-  --deep-teal: #1c2d38;
-  --teal-gray: #3d4f58;
-  --dark-slate: #21313c;
-  --cool-gray: #5c6c75;
-  --silver-teal: #b8c4c2;
+  --deep-teal: #1f3b58;
+  --teal-gray: #496f9c;
+  --dark-slate: #243a55;
+  --cool-gray: #66788f;
+  --silver-teal: #bbc9dd;
   --light-input: #e8edeb;
   --pure-white: #ffffff;
 
@@ -253,14 +253,20 @@ body {
   font-weight: 300;
 }
 
-.page-header-row {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+.accent-underline {
+  position: relative;
+  color: var(--action-blue);
 }
 
-.content-area {
-  padding: 24px 32px;
+.accent-underline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 100%;
+  height: 4px;
+  background: rgba(13, 110, 253, 0.18);
+  border-radius: 999px;
 }
 
 .card-mongodb {
@@ -270,6 +276,7 @@ body {
   padding: 24px;
   box-shadow: rgba(0, 30, 43, 0.06) 0px 4px 12px;
   transition: box-shadow 0.2s;
+  margin: 0 auto 24px;
 }
 
 .card-mongodb:hover {
@@ -704,12 +711,6 @@ body {
   font-family: 'Source Code Pro', monospace;
   font-size: 12px;
   color: var(--cool-gray);
-}
-
-.accent-underline {
-  border-bottom: 2px solid var(--mongodb-green);
-  padding-bottom: 2px;
-  display: inline;
 }
 
 .text-mongodb-green { color: var(--mongodb-green); }
