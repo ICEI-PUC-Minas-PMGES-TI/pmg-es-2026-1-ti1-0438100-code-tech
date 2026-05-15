@@ -41,9 +41,9 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // MELHORA A BUSCA
-  function montarEnderecoBusca(texto) {
-    return `${texto}, Riacho das Pedras, Contagem, Minas Gerais, Brasil`;
-  }
+function montarEnderecoBusca(texto) {
+  return `${texto}, Minas Gerais, Brasil`;
+}
 
   // FORMATA O ENDEREÇO
   function formatarEndereco(item, textoDigitado = "") {
@@ -110,82 +110,51 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(montarEnderecoBusca(texto))}&format=json&addressdetails=1&limit=1&countrycodes=br&accept-language=pt-BR`)
-      .then(resposta => resposta.json())
-      .then(dados => {
-        if (dados.length === 0) {
-          alert("Endereço não encontrado.");
-          return;
-        }
+    fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(montarEnderecoBusca(texto))}&format=json&addressdetails=1&limit=5&countrycodes=br&accept-language=pt-BR`)
+  .then(resposta => resposta.json())
+  .then(dados => {
 
-        latitude = parseFloat(dados[0].lat);
-        longitude = parseFloat(dados[0].lon);
-
-        endereco.value = formatarEndereco(dados[0], texto);
-
-        atualizarMapa();
-        atualizarProgresso();
-      })
-      .catch(() => {
-        alert("Erro ao buscar endereço.");
-      });
-  });
-
-  // AUTOCOMPLETE
-  endereco.addEventListener("input", function () {
-    atualizarProgresso();
-    clearTimeout(timeout);
-
-    const texto = endereco.value.trim();
-
-    if (texto.length < 3) {
-      removerLista();
+    if (dados.length === 0) {
+      alert("Endereço não encontrado.");
       return;
     }
 
-    timeout = setTimeout(function () {
-      fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(montarEnderecoBusca(texto))}&format=json&addressdetails=1&limit=8&countrycodes=br&accept-language=pt-BR`)
-        .then(resposta => resposta.json())
-        .then(dados => {
-          removerLista();
+    // tenta pegar resultado mais completo
+    const resultado =
+      dados.find(item =>
+        item.address &&
+        item.address.road &&
+        (
+          item.address.city ||
+          item.address.town
+        )
+      ) || dados[0];
 
-          if (dados.length === 0) return;
+    latitude = parseFloat(resultado.lat);
+    longitude = parseFloat(resultado.lon);
 
-          const lista = document.createElement("div");
-          lista.id = "listaSugestoes";
-          lista.className = "lista-sugestoes";
+    endereco.value =
+      formatarEndereco(resultado, texto);
 
-          dados.forEach(item => {
-            const enderecoFormatado = formatarEndereco(item, texto);
+    atualizarMapa();
 
-            const opcao = document.createElement("div");
-            opcao.className = "item-sugestao";
-
-            opcao.innerHTML = `
-              <i class="bi bi-geo-alt"></i>
-              ${enderecoFormatado}
-            `;
-
-            opcao.addEventListener("click", function () {
-              latitude = parseFloat(item.lat);
-              longitude = parseFloat(item.lon);
-
-              endereco.value = enderecoFormatado;
-
-              removerLista();
-              atualizarMapa();
-              atualizarProgresso();
-            });
-
-            lista.appendChild(opcao);
-          });
-
-          endereco.parentElement.style.position = "relative";
-          endereco.parentElement.appendChild(lista);
-        });
-
-    }, 500);
+    atualizarProgresso();
+  })
+  .catch(() => {
+    alert("Erro ao buscar endereço.");
   });
+});
+
+// BUSCAR AO APERTAR ENTER
+endereco.addEventListener("keydown", function (evento) {
+
+  if (evento.key === "Enter") {
+
+    evento.preventDefault();
+
+    btnBuscar.click();
+  }
+});
 
   // CLICAR NO MAPA
   mapa.on("click", function (evento) {
