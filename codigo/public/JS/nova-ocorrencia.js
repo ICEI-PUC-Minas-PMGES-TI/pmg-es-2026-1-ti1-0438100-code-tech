@@ -347,3 +347,83 @@ dragDrop.addEventListener("drop", function (evento) {
 
   adicionarFotos(evento.dataTransfer.files);
 });
+
+form.addEventListener("submit", function (evento) {
+
+  evento.preventDefault();
+
+  if (endereco.value.trim() === "") {
+    alert("Preencha o endereço.");
+    return;
+  }
+
+  if (tipo.value === "") {
+    alert("Selecione o tipo.");
+    return;
+  }
+
+  if (descricao.value.trim() === "") {
+    alert("Descreva a ocorrência.");
+    return;
+  }
+
+  if (latitude === null || longitude === null) {
+    alert("Marque a localização no mapa.");
+    return;
+  }
+
+  const ocorrencia = {
+
+    endereco: endereco.value,
+
+    tipo: tipo.value,
+
+    descricao: descricao.value,
+
+    latitude: latitude,
+
+    longitude: longitude,
+
+    fotos: fotos,
+
+    data: new Date().toLocaleString("pt-BR"),
+
+    status: "Pendente"
+  };
+
+  console.log(ocorrencia);
+});
+
+const ocorrencias =
+  JSON.parse(localStorage.getItem("ocorrencias")) || [];
+
+ocorrencias.push(ocorrencia);
+
+localStorage.setItem(
+  "ocorrencias",
+  JSON.stringify(ocorrencias)
+);
+
+const modal = new bootstrap.Modal(
+  document.getElementById("modalSucesso")
+);
+
+modal.show();
+
+form.reset();
+
+fotos = [];
+
+fotosContainer.innerHTML = "";
+
+coordenadas.textContent = "Lat: -- | Lng: --";
+
+latitude = null;
+longitude = null;
+
+if (marcador) {
+  mapa.removeLayer(marcador);
+  marcador = null;
+}
+
+atualizarProgresso();
