@@ -8,13 +8,9 @@
   <title>Nova Ocorrência - TIAW</title>
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
   <link href="css/style.css" rel="stylesheet">
-
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
 
@@ -23,79 +19,36 @@
   <div class="app-layout">
 
     <aside class="sidebar">
-
       <nav>
-
         <ul class="sidebar-nav">
-
-          <li>
-            <a href="dashboard.html">
-              <i class="bi bi-grid-1x2"></i>
-              <span>Dashboard</span>
-            </a>
-          </li>
-
-          <li>
-            <a href="ocorrencias.html">
-              <i class="bi bi-list-ul"></i>
-              <span>Ocorrências</span>
-            </a>
-          </li>
-
-          <li>
-            <a href="relatorios.html">
-              <i class="bi bi-bar-chart-line"></i>
-              <span>Relatórios</span>
-            </a>
-          </li>
-
-          <li>
-            <a href="nova-ocorrencia.html" class="active">
-              <i class="bi bi-plus-circle"></i>
-              <span>Nova Ocorrência</span>
-            </a>
-          </li>
-
-          <li>
-            <a href="detalhes.html">
-              <i class="bi bi-file-earmark-text"></i>
-              <span>Detalhes</span>
-            </a>
-          </li>
-
+          <li><a href="dashboard.html"><i class="bi bi-grid-1x2"></i><span>Dashboard</span></a></li>
+          <li><a href="ocorrencias.html"><i class="bi bi-list-ul"></i><span>Ocorrências</span></a></li>
+          <li><a href="relatorios.html"><i class="bi bi-bar-chart-line"></i><span>Relatórios</span></a></li>
+          <li><a href="nova-ocorrencia.html" class="active"><i class="bi bi-plus-circle"></i><span>Nova Ocorrência</span></a></li>
+          <li><a href="detalhes.html"><i class="bi bi-file-earmark-text"></i><span>Detalhes</span></a></li>
         </ul>
-
       </nav>
 
       <div class="sidebar-bottom">
-
-        <a href="#">
-          <i class="bi bi-box-arrow-left"></i>
-          <span>Sair</span>
-        </a>
-
+        <a href="#"><i class="bi bi-box-arrow-left"></i><span>Sair</span></a>
       </div>
-
     </aside>
 
     <main class="main-content">
 
       <div class="top-bar">
-
         <a href="ocorrencias.html" class="back-link">
           <i class="bi bi-arrow-left"></i>
           Voltar
         </a>
 
         <div class="top-bar-right">
-
           <div class="notification-bell">
             <i class="bi bi-bell"></i>
             <span class="badge-dot">4</span>
           </div>
 
           <div class="user-info">
-
             <div class="user-avatar">
               <i class="bi bi-person"></i>
             </div>
@@ -104,15 +57,11 @@
               <div class="name">Admin</div>
               <div class="role">Administrador</div>
             </div>
-
           </div>
-
         </div>
-
       </div>
 
       <div class="page-header">
-
         <h1>
           <i class="bi bi-plus-circle"></i>
           Nova Ocorrência
@@ -121,31 +70,23 @@
         <p class="subtitle">
           Registre uma nova ocorrência de infraestrutura urbana
         </p>
-
       </div>
 
       <div class="content-area">
-
         <div class="row g-4">
 
           <!-- MAPA -->
           <div class="col-lg-5">
-
             <div class="card border-0 shadow-sm">
-
               <div class="card-header-custom">
                 <i class="bi bi-map"></i>
                 Localização
               </div>
 
               <div class="card-body p-3">
-
-                <div id="mapa"
-                  style="height: 320px; border-radius: 8px; border: 1px solid #e8edeb;">
-                </div>
+                <div id="mapa" style="height: 320px; border-radius: 8px; border: 1px solid #e8edeb;"></div>
 
                 <div class="mt-3 p-3 bg-light rounded text-center">
-
                   <small class="text-muted">
                     <i class="bi bi-info-circle"></i>
                     Clique no mapa para marcar a localização
@@ -154,13 +95,9 @@
                   <div class="mt-2 coordenadas" id="coordenadas">
                     Lat: -- | Lng: --
                   </div>
-
                 </div>
-
               </div>
-
             </div>
-
           </div>
 
           <!-- FORMULÁRIO -->
@@ -168,191 +105,119 @@
 
             <!-- PROGRESS -->
             <div class="mb-3">
-
               <small class="text-muted">
                 Preenchimento:
                 <span id="progress">0</span>%
               </small>
 
               <div class="progress">
-
-                <div class="progress-fill"
-                  id="progressBar">
-                </div>
-
+                <div class="progress-fill" id="progressBar"></div>
               </div>
-
             </div>
 
             <form id="formOcorrencia">
 
               <!-- ENDEREÇO -->
               <div class="card border-0 shadow-sm mb-3">
-
                 <div class="card-header-custom">
                   <i class="bi bi-geo-alt"></i>
                   Endereço
                 </div>
 
                 <div class="card-body">
-
                   <div class="input-group">
+                    <input type="text" class="form-control" id="endereco" placeholder="Ex: Rua Timbiras, 150" required>
 
-                    <input type="text"
-                      class="form-control"
-                      id="endereco"
-                      placeholder="Ex: Rua Timbiras, 150"
-                      required>
-
-                    <button class="btn btn-mongodb-primary"
-                      type="button">
-
+                    <button class="btn btn-mongodb-primary" type="button">
                       <i class="bi bi-search"></i>
                       Buscar
-
                     </button>
-
                   </div>
-
                 </div>
-
               </div>
 
               <!-- CLASSIFICAÇÃO -->
               <div class="card border-0 shadow-sm mb-3">
-
                 <div class="card-header-custom">
                   <i class="bi bi-tag"></i>
                   Classificação
                 </div>
 
                 <div class="card-body">
-
                   <label class="form-label small">
                     🔧 Tipo de Ocorrência
                   </label>
 
-                  <select class="form-select form-control-mongodb"
-                    id="tipo"
-                    required>
-
+                  <select class="form-select form-control-mongodb" id="tipo" required>
                     <option value="">-- Selecione --</option>
-
-                    <option value="Buraco">
-                      🕳️ Buraco
-                    </option>
-
-                    <option value="Vazamento">
-                      💧 Vazamento
-                    </option>
-
-                    <option value="Falta de Água">
-                      🚫 Falta de Água
-                    </option>
-
-                    <option value="Outros">
-                      ❓ Outros
-                    </option>
-
+                    <option value="Buraco">🕳️ Buraco</option>
+                    <option value="Vazamento">💧 Vazamento</option>
+                    <option value="Falta de Água">🚫 Falta de Água</option>
+                    <option value="Outros">❓ Outros</option>
                   </select>
-
                 </div>
-
               </div>
 
               <!-- DESCRIÇÃO -->
               <div class="card border-0 shadow-sm mb-3">
-
                 <div class="card-header-custom">
                   <i class="bi bi-file-text"></i>
                   Descrição
                 </div>
 
                 <div class="card-body">
-
-                  <textarea class="form-control"
-                    id="descricao"
-                    rows="3"
-                    placeholder="Descreva a ocorrência em detalhes..."
-                    required></textarea>
-
+                  <textarea class="form-control" id="descricao" rows="3" placeholder="Descreva a ocorrência em detalhes..." required></textarea>
                 </div>
-
               </div>
 
               <!-- FOTOS -->
               <div class="card border-0 shadow-sm mb-3">
-
                 <div class="card-header-custom">
                   <i class="bi bi-image"></i>
                   Fotos
                 </div>
 
                 <div class="card-body">
-
                   <div class="drag-drop" id="dragDrop">
-
                     <i class="bi bi-cloud-arrow-up upload-icon"></i>
 
                     <p class="mt-2 mb-0">
-                      <small>
-                        Arraste fotos aqui ou clique
-                      </small>
+                      <small>Arraste fotos aqui ou clique</small>
                     </p>
-
                   </div>
 
-                  <div class="row g-2 mt-3"
-                    id="fotosContainer">
-                  </div>
+                  <input type="file" id="inputFotos" multiple accept="image/*" hidden>
 
+                  <div class="row g-2 mt-3" id="fotosContainer"></div>
                 </div>
-
               </div>
 
               <!-- BOTÕES -->
               <div class="d-grid gap-2 d-sm-flex">
-
-                <button type="submit"
-                  class="btn btn-mongodb-primary flex-grow-1">
-
+                <button type="submit" class="btn btn-mongodb-primary flex-grow-1">
                   <i class="bi bi-check-lg"></i>
                   Registrar Ocorrência
-
                 </button>
 
-                <a href="ocorrencias.html"
-                  class="btn btn-mongodb-outline">
-
+                <a href="ocorrencias.html" class="btn btn-mongodb-outline">
                   Cancelar
-
                 </a>
-
               </div>
 
             </form>
-
           </div>
 
         </div>
-
       </div>
 
     </main>
-
   </div>
 
   <!-- MODAL -->
-  <div class="modal fade"
-    id="modalSucesso"
-    tabindex="-1">
-
+  <div class="modal fade" id="modalSucesso" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-
       <div class="modal-content modal-success">
-
         <div class="modal-body p-4">
-
           <i class="bi bi-check-circle"></i>
 
           <h5>Ocorrência Registrada!</h5>
@@ -361,26 +226,17 @@
             Sua ocorrência foi cadastrada com sucesso e será analisada em breve.
           </p>
 
-          <a href="ocorrencias.html"
-            class="btn btn-mongodb-primary w-100">
-
+          <a href="ocorrencias.html" class="btn btn-mongodb-primary w-100">
             <i class="bi bi-eye"></i>
             Ver Ocorrências
-
           </a>
-
         </div>
-
       </div>
-
     </div>
-
   </div>
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
   <script src="JS/nova-ocorrencia.js"></script>
-
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>

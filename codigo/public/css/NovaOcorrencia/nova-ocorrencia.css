@@ -83,3 +83,15 @@
     transform: scale(1);
   }
 }
+.sidebar {
+  display: none !important;
+}
+
+.app-layout {
+  margin-left: 0 !important;
+}
+
+.main-content {
+  margin-left: 0 !important;
+  width: 100% !important;
+}
