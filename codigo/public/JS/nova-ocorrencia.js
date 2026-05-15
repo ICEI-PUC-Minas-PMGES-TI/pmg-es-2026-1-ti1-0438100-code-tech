@@ -61,3 +61,42 @@ mapa.on("click", function (evento) {
 
   atualizarMapa();
 });
+function montarEnderecoBusca(texto) {
+  return `${texto}, Riacho das Pedras, Contagem, Minas Gerais, Brasil`;
+}
+
+function formatarEndereco(item, textoDigitado = "") {
+
+  const a = item.address || {};
+
+  const rua = a.road || "";
+
+  let numero = a.house_number || "";
+
+  if (!numero) {
+
+    const numeroDigitado = textoDigitado.match(/\d+/);
+
+    if (numeroDigitado) {
+      numero = numeroDigitado[0];
+    }
+  }
+
+  const bairro =
+    a.suburb ||
+    a.neighbourhood ||
+    a.city_district ||
+    "";
+
+  const cidade =
+    a.city ||
+    a.town ||
+    a.village ||
+    "Contagem";
+
+  const estado =
+    a.state ||
+    "Minas Gerais";
+
+  return `${rua}${numero ? ", " + numero : ""} - ${bairro}, ${cidade} - ${estado}`;
+}
