@@ -235,3 +235,94 @@ mapa.on("click", function (evento) {
       }
     });
 });
+
+function atualizarProgresso() {
+
+  let total = 0;
+
+  if (endereco.value.trim() !== "") total += 25;
+
+  if (tipo.value !== "") total += 25;
+
+  if (descricao.value.trim() !== "") total += 25;
+
+  if (latitude !== null && longitude !== null) total += 15;
+
+  if (fotos.length > 0) total += 10;
+
+  progress.textContent = total;
+
+  progressBar.style.width = total + "%";
+}
+
+endereco.addEventListener("input", atualizarProgresso);
+tipo.addEventListener("change", atualizarProgresso);
+descricao.addEventListener("input", atualizarProgresso);
+
+dragDrop.addEventListener("click", function () {
+  inputFotos.click();
+});
+
+inputFotos.addEventListener("change", function () {
+  adicionarFotos(inputFotos.files);
+});
+
+function adicionarFotos(arquivos) {
+
+  Array.from(arquivos).forEach(arquivo => {
+
+    if (!arquivo.type.startsWith("image/")) return;
+
+    const leitor = new FileReader();
+
+    leitor.onload = function (evento) {
+
+      fotos.push(evento.target.result);
+
+      mostrarFotos();
+
+      atualizarProgresso();
+    };
+
+    leitor.readAsDataURL(arquivo);
+  });
+}
+
+function mostrarFotos() {
+
+  fotosContainer.innerHTML = "";
+
+  fotos.forEach((foto, index) => {
+
+    const div = document.createElement("div");
+
+    div.className = "col-4";
+
+    div.innerHTML = `
+      <div class="photo-thumb">
+
+        <img src="${foto}" alt="Foto">
+
+        <button
+          type="button"
+          class="btn-remove"
+          onclick="removerFoto(${index})"
+        >
+          <i class="bi bi-x"></i>
+        </button>
+
+      </div>
+    `;
+
+    fotosContainer.appendChild(div);
+  });
+}
+
+window.removerFoto = function (index) {
+
+  fotos.splice(index, 1);
+
+  mostrarFotos();
+
+  atualizarProgresso();
+};
