@@ -3,11 +3,11 @@ const STORAGE_KEY = 'tiaw_ocorrencias_v1';
 const defaultStatus = 'Pendente';
 
 function getStoredOcorrencias() {
-  const raw = localStorage.getItem(STORAGE_KEY);
+  var raw = localStorage.getItem(STORAGE_KEY);
   if (!raw) return [];
   try {
     return JSON.parse(raw);
-  } catch {
+  } catch (error) {
     return [];
   }
 }
@@ -30,8 +30,15 @@ function formatDateTime(date) {
 }
 
 function getQueryParam(name) {
-  var url = new URL(window.location.href);
-  return url.searchParams.get(name);
+  var search = window.location.search.substring(1);
+  var params = search ? search.split('&') : [];
+  for (var i = 0; i < params.length; i++) {
+    var pair = params[i].split('=');
+    if (pair[0] === name) {
+      return decodeURIComponent(pair[1] || '');
+    }
+  }
+  return null;
 }
 
 function buildDetailsLink(id) {
@@ -138,12 +145,16 @@ function renderDashboardOverview() {
     }
   });
 
-  document.getElementById('count-buracos')?.textContent = counts.buraco;
-  document.getElementById('count-vazamentos')?.textContent = counts.vazamento;
-  document.getElementById('count-falta-agua')?.textContent = counts.faltaDeAgua;
-  document.getElementById('count-outros')?.textContent = counts.outros;
+  var countBuracos = document.getElementById('count-buracos');
+  var countVazamentos = document.getElementById('count-vazamentos');
+  var countFaltaAgua = document.getElementById('count-falta-agua');
+  var countOutros = document.getElementById('count-outros');
+  if (countBuracos) countBuracos.textContent = counts.buraco;
+  if (countVazamentos) countVazamentos.textContent = counts.vazamento;
+  if (countFaltaAgua) countFaltaAgua.textContent = counts.faltaDeAgua;
+  if (countOutros) countOutros.textContent = counts.outros;
 
-  const dashboardBody = document.getElementById('dashboard-recent-body');
+  var dashboardBody = document.getElementById('dashboard-recent-body');
   if (!dashboardBody) return;
   dashboardBody.innerHTML = '';
 
@@ -186,16 +197,27 @@ function populateDetailPage() {
     return;
   }
 
-  document.getElementById('detail-id')?.textContent = ocorrencia.id;
-  document.getElementById('detail-type')?.textContent = ocorrencia.type;
-  document.getElementById('detail-address')?.textContent = ocorrencia.address;
-  document.getElementById('detail-bairro')?.textContent = ocorrencia.bairro;
-  document.getElementById('detail-date')?.textContent = formatDateTime(ocorrencia.createdAt);
-  document.getElementById('detail-priority')?.innerHTML = `<span class="badge-priority badge-${ocorrencia.priority.toLowerCase()}">${ocorrencia.priority}</span>`;
-  document.getElementById('detail-status')?.innerHTML = `<span class="badge-status badge-${ocorrencia.status === 'Pendente' ? 'pendente' : ocorrencia.status === 'Em andamento' ? 'andamento' : 'resolvido'}">${ocorrencia.status}</span>`;
-  document.getElementById('detail-description')?.textContent = ocorrencia.description;
-  document.getElementById('detail-reported')?.textContent = 'Você';
-  document.getElementById('detail-location')?.textContent = `${ocorrencia.bairro} — ${ocorrencia.address}`;
+  var detailIdElement = document.getElementById('detail-id');
+  var detailTypeElement = document.getElementById('detail-type');
+  var detailAddressElement = document.getElementById('detail-address');
+  var detailBairroElement = document.getElementById('detail-bairro');
+  var detailDateElement = document.getElementById('detail-date');
+  var detailPriorityElement = document.getElementById('detail-priority');
+  var detailStatusElement = document.getElementById('detail-status');
+  var detailDescriptionElement = document.getElementById('detail-description');
+  var detailReportedElement = document.getElementById('detail-reported');
+  var detailLocationElement = document.getElementById('detail-location');
+
+  if (detailIdElement) detailIdElement.textContent = ocorrencia.id;
+  if (detailTypeElement) detailTypeElement.textContent = ocorrencia.type;
+  if (detailAddressElement) detailAddressElement.textContent = ocorrencia.address;
+  if (detailBairroElement) detailBairroElement.textContent = ocorrencia.bairro;
+  if (detailDateElement) detailDateElement.textContent = formatDateTime(ocorrencia.createdAt);
+  if (detailPriorityElement) detailPriorityElement.innerHTML = '<span class="badge-priority badge-' + ocorrencia.priority.toLowerCase() + '">' + ocorrencia.priority + '</span>';
+  if (detailStatusElement) detailStatusElement.innerHTML = '<span class="badge-status badge-' + (ocorrencia.status === 'Pendente' ? 'pendente' : ocorrencia.status === 'Em andamento' ? 'andamento' : 'resolvido') + '">' + ocorrencia.status + '</span>';
+  if (detailDescriptionElement) detailDescriptionElement.textContent = ocorrencia.description;
+  if (detailReportedElement) detailReportedElement.textContent = 'Você';
+  if (detailLocationElement) detailLocationElement.textContent = ocorrencia.bairro + ' — ' + ocorrencia.address;
 
   const historyContainer = document.getElementById('detail-history');
   if (historyContainer) {
