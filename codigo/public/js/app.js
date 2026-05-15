@@ -182,7 +182,42 @@ function renderDashboardOverview() {
     fragment.appendChild(row);
   });
   dashboardBody.appendChild(fragment);
+    initDashboardMap();
 }
+
+  let dashboardMap;
+  let dashboardMarkers = [];
+
+  function initDashboardMap() {
+    var mapContainer = document.getElementById('dashboard-map');
+    if (!mapContainer || typeof L === 'undefined') return;
+
+    if (!dashboardMap) {
+      dashboardMap = L.map(mapContainer).setView([-19.920, -43.940], 11);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors',
+        maxZoom: 19,
+      }).addTo(dashboardMap);
+      setTimeout(function() { if (dashboardMap && typeof dashboardMap.invalidateSize === 'function') dashboardMap.invalidateSize(); }, 100);
+    }
+
+    dashboardMarkers.forEach(function(m) { try { dashboardMap.removeLayer(m); } catch (e) {} });
+    dashboardMarkers = [];
+
+    var items = getCurrentOcorrencias();
+    items.forEach(function(item) {
+      if (!item.lat || !item.lng) return;
+      var lat = parseFloat(item.lat);
+      var lng = parseFloat(item.lng);
+      if (isNaN(lat) || isNaN(lng)) return;
+      try {
+        var color = item.type === 'Vazamento' ? '#006cfa' : item.type === 'Falta de Água' ? '#ffc107' : item.type === 'Buraco' ? '#dc3545' : '#5c6c75';
+        var marker = L.circleMarker([lat, lng], { radius: 6, fillColor: color, color: '#fff', weight: 1, fillOpacity: 0.9 }).addTo(dashboardMap);
+        marker.bindPopup('<strong>' + item.id + '</strong><br/>' + item.type + '<br/>' + item.bairro);
+        dashboardMarkers.push(marker);
+      } catch (e) {}
+    });
+  }
 
 function populateDetailPage() {
   const detailId = getQueryParam('id');
