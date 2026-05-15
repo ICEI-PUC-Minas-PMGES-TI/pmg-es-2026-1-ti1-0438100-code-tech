@@ -1,4 +1,3 @@
-```javascript
 // ESPERAR A PÁGINA CARREGAR
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -107,4 +106,4 @@ Status: ${ocorrencia.status}
     });
 
 }
-```
+
