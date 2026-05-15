@@ -19,6 +19,8 @@ document.addEventListener("DOMContentLoaded", function () {
   let timeout = null;
   let fotos = [];
 
+  // MAPA 
+
   const mapa = L.map("mapa").setView([-19.9167, -43.9345], 7);
 
   L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -54,13 +56,6 @@ function atualizarMapa() {
   `;
 }
 
-mapa.on("click", function (evento) {
-
-  latitude = evento.latlng.lat;
-  longitude = evento.latlng.lng;
-
-  atualizarMapa();
-});
 function montarEnderecoBusca(texto) {
   return `${texto}, Riacho das Pedras, Contagem, Minas Gerais, Brasil`;
 }
@@ -201,4 +196,42 @@ endereco.addEventListener("input", function () {
       });
 
   }, 500);
+});
+
+mapa.on("click", function (evento) {
+
+  latitude = evento.latlng.lat;
+  longitude = evento.latlng.lng;
+
+  atualizarMapa();
+
+  fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1&accept-language=pt-BR`)
+    .then(resposta => resposta.json())
+    .then(dados => {
+
+      if (dados.address) {
+
+        endereco.value =
+          formatarEndereco(dados);
+      }
+    });
+});
+
+mapa.on("click", function (evento) {
+
+  latitude = evento.latlng.lat;
+  longitude = evento.latlng.lng;
+
+  atualizarMapa();
+
+  fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1&accept-language=pt-BR`)
+    .then(resposta => resposta.json())
+    .then(dados => {
+
+      if (dados.address) {
+
+        endereco.value =
+          formatarEndereco(dados);
+      }
+    });
 });
