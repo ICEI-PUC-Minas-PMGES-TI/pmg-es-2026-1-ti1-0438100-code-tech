@@ -326,3 +326,24 @@ window.removerFoto = function (index) {
 
   atualizarProgresso();
 };
+
+dragDrop.addEventListener("dragover", function (evento) {
+
+  evento.preventDefault();
+
+  dragDrop.classList.add("drag-over");
+});
+
+dragDrop.addEventListener("dragleave", function () {
+
+  dragDrop.classList.remove("drag-over");
+});
+
+dragDrop.addEventListener("drop", function (evento) {
+
+  evento.preventDefault();
+
+  dragDrop.classList.remove("drag-over");
+
+  adicionarFotos(evento.dataTransfer.files);
+});
