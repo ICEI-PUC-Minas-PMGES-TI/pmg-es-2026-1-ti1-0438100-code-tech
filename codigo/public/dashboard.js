@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
   ).addTo(map);
 
   // VARIAVEIS
-  let todasOcorrencias = [];
+  window.todasOcorrencias = [];
   let marcadores = [];
 
   // BUSCAR DADOS
@@ -60,7 +60,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     .then(data => {
 
-      todasOcorrencias = data.ocorrencias;
+      window.todasOcorrencias =
+        data.ocorrencias;
 
       renderizarOcorrencias(
         todasOcorrencias
@@ -78,40 +79,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     });
 
-  // FILTRO
-  document
-    .getElementById("filtroBusca")
-
-    .addEventListener("input", () => {
-
-      const valor = document
-        .getElementById("filtroBusca")
-        .value
-        .toLowerCase();
-
-      const filtradas =
-        todasOcorrencias.filter(
-          ocorrencia =>
-
-            ocorrencia.tipo
-              .toLowerCase()
-              .includes(valor)
-
-            ||
-
-            ocorrencia.bairro
-              .toLowerCase()
-              .includes(valor)
-        );
-
-      renderizarOcorrencias(
-        filtradas
-      );
-
-    });
-
   // RENDERIZAR
-  function renderizarOcorrencias(
+  window.renderizarOcorrencias = function (
     ocorrencias
   ) {
 
@@ -270,7 +239,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         }
 
-        // TABELA
+        // LINHA TABELA
         const linha =
           document.createElement(
             "tr"
@@ -344,7 +313,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ).innerText =
       totalOutros;
 
-  }
+  };
 
 });
 
@@ -382,6 +351,35 @@ ${ocorrencia.status}
 
 }
 
+// FILTRAR
+function filtrarOcorrencias() {
+
+  const valor = document
+    .getElementById("filtroBusca")
+    .value
+    .toLowerCase();
+
+  const filtradas =
+    todasOcorrencias.filter(
+      ocorrencia =>
+
+        ocorrencia.tipo
+          .toLowerCase()
+          .includes(valor)
+
+        ||
+
+        ocorrencia.bairro
+          .toLowerCase()
+          .includes(valor)
+    );
+
+  renderizarOcorrencias(
+    filtradas
+  );
+
+}
+
 // LIMPAR FILTROS
 function limparFiltros() {
 
@@ -389,7 +387,9 @@ function limparFiltros() {
     "filtroBusca"
   ).value = "";
 
-  location.reload();
+  renderizarOcorrencias(
+    todasOcorrencias
+  );
 
 }
 
