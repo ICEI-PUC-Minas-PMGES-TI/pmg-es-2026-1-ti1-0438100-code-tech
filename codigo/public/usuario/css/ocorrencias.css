@@ -1,0 +1,32 @@
+/* Minhas Ocorrências page styles */
+.filter-box {
+  background: var(--pure-white);
+  border: 1px solid var(--silver-teal);
+  border-radius: 16px;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+}
+
+.filter-box h3 {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--forest-black);
+  margin-bottom: 16px;
+}
+
+.form-label-mongodb {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--forest-black);
+  margin-bottom: 6px;
+  display: block;
+}
+
+.select-mongodb {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%235c6c75' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+}

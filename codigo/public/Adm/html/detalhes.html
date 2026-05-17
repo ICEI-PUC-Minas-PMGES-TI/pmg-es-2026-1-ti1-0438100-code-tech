@@ -3,12 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Detalhes da Ocorrência - TIAW</title>
+  <title>ID #1023 - TIAW</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Code+Pro:wght@400;500;600&display=swap" rel="stylesheet">
-  <link href="css/style.css" rel="stylesheet">
-  <link href="css/detalhes.css" rel="stylesheet">
+  <link href="../css/style.css" rel="stylesheet">
 </head>
 <body>
   <div class="app-layout">
@@ -18,20 +17,32 @@
         <ul class="sidebar-nav">
           <li>
             <a href="dashboard.html">
-              <i class="bi bi-house-door"></i>
-              <span>Início</span>
+              <i class="bi bi-grid-1x2"></i>
+              <span>Dashboard</span>
             </a>
           </li>
           <li>
             <a href="ocorrencias.html">
               <i class="bi bi-list-ul"></i>
-              <span>Minhas Ocorrências</span>
+              <span>Ocorrencias</span>
+            </a>
+          </li>
+          <li>
+            <a href="relatorios.html">
+              <i class="bi bi-bar-chart-line"></i>
+              <span>Relatários</span>
             </a>
           </li>
           <li>
             <a href="nova-ocorrencia.html">
               <i class="bi bi-plus-circle"></i>
-              <span>Registrar Ocorrência</span>
+              <span>Nova Ocorrencia</span>
+            </a>
+          </li>
+          <li>
+            <a href="detalhes.html" class="active">
+              <i class="bi bi-file-earmark-text"></i>
+              <span>Detalhes</span>
             </a>
           </li>
         </ul>
@@ -60,15 +71,15 @@
               <i class="bi bi-person"></i>
             </div>
             <div class="user-details">
-              <div class="name">Usuário</div>
-              <div class="role">Morador</div>
+              <div class="name">Admin</div>
+              <div class="role">Administrador</div>
             </div>
           </div>
         </div>
       </div>
 
       <div class="page-header">
-        <h1>ID <span class="accent-underline" id="detail-id">#0000</span></h1>
+        <h1>ID <span class="accent-underline">#1023</span></h1>
       </div>
 
       <div class="content-area">
@@ -85,31 +96,27 @@
             <table class="detail-info-table">
               <tr>
                 <td>Tipo:</td>
-                <td id="detail-type"></td>
+                <td>Buraco</td>
               </tr>
               <tr>
                 <td>Endereço:</td>
-                <td id="detail-address"></td>
-              </tr>
-              <tr>
-                <td>Bairro:</td>
-                <td id="detail-bairro"></td>
+                <td>Rua dos Campos, 256 - Comiteco<br>Belo Horizonte - MG, 31 720-000</td>
               </tr>
               <tr>
                 <td>Data:</td>
-                <td id="detail-date"></td>
+                <td>10/04/2026 as 14:32</td>
               </tr>
               <tr>
                 <td>Prioridade:</td>
-                <td id="detail-priority"></td>
+                <td><span class="badge-priority badge-alta">Alta</span></td>
               </tr>
               <tr>
                 <td>Status:</td>
-                <td id="detail-status"></td>
+                <td><span class="badge-status badge-pendente">Pendente</span></td>
               </tr>
               <tr>
                 <td>Reportado por:</td>
-                <td id="detail-reported"></td>
+                <td>Ana Ferreira Lima (Moradora)</td>
               </tr>
             </table>
           </div>
@@ -132,7 +139,7 @@
           <div class="col-md-8">
             <div class="description-box">
               <h4>Descrição</h4>
-              <p id="detail-description"></p>
+              <p>"Tem um buraco enorme nesta rua ja faz mais de uma semana. Esta ficando cada vez maior e esta perigoso para carros e motos"</p>
             </div>
           </div>
         </div>
@@ -143,21 +150,35 @@
             <div class="map-container" style="height: 240px;">
               <div style="text-align: center; color: var(--cool-gray);">
                 <i class="bi bi-geo-alt-fill" style="font-size: 36px; display: block; margin-bottom: 8px;"></i>
-                <span id="detail-location" style="font-size: 13px;"></span>
+                <span style="font-size: 13px;">Belo Horizonte - Comiteco</span>
               </div>
             </div>
           </div>
           <div class="col-md-6">
             <div class="history-box" style="height: 100%;">
               <h4>Histórico</h4>
-              <div id="detail-history"></div>
+              <div class="history-item">
+                <span class="time">10/04/2026 - 14:32</span> ocorrencias
+              </div>
+              <div class="history-item">
+                <span class="time">10/04/2026 - 15:10</span> Prioridade definida como alta
+              </div>
+              <div class="history-item" style="margin-top: 12px; color: var(--cool-gray); font-style: italic;">
+                Aguardando atendimento
+              </div>
             </div>
           </div>
         </div>
 
         <div class="d-flex gap-3 justify-content-center" style="padding: 16px 0 32px;">
-          <button id="btn-cancel-occurrence" class="btn-mongodb-danger" style="border-radius: 100px; padding: 12px 32px; font-size: 15px;">
-            Cancelar solicitação
+          <button class="btn-mongodb-danger" style="border-radius: 100px; padding: 12px 32px; font-size: 15px;">
+            Marcar como lido
+          </button>
+          <button class="btn-mongodb-outline" style="padding: 12px 32px; font-size: 15px;">
+            Encaminhar para equipe
+          </button>
+          <button class="btn-mongodb-outline" style="padding: 12px 32px; font-size: 15px;">
+            Aumentar prioridade
           </button>
         </div>
       </div>
@@ -165,7 +186,5 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="js/app.js"></script>
-  <script src="js/detalhes.js"></script>
 </body>
 </html>

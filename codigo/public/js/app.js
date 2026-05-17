@@ -455,14 +455,3 @@ function bindFilterEvents() {
     });
   }
 }
-
-function initApp() {
-  renderOcorrenciasList();
-  renderDashboardOverview();
-  populateDetailPage();
-  bindRegisterForm();
-  bindFilterEvents();
-  bindLocationSearch();
-}
-
-document.addEventListener('DOMContentLoaded', initApp);
