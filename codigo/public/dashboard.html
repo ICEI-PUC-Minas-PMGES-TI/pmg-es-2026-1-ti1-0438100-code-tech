@@ -116,72 +116,57 @@
     <!-- CONTEUDO -->
     <main class="main-content">
 
-      <!-- TOPO -->
-      <div class="top-bar">
+<!-- TOPO -->
+  <div class="top-bar">
 
-              <div class="search-box">
+    <div class="search-box">
 
-        <i class="bi bi-search"></i>
+      <i class="bi bi-search"></i>
 
-        <input
-          type="text"
-          id="filtroBusca"
-          placeholder="Buscar por tipo ou bairro..."
-        >
+      <input
+        type="text"
+        placeholder="Buscar por endereço, bairro, tipo..."
+      >
 
-        <button
-          class="btn btn-dark btn-sm"
-          onclick="filtrarOcorrencias()"
-        >
-          Filtrar
-        </button>
+    </div>
 
-        <button
-          class="btn btn-secondary btn-sm"
-          onclick="limparFiltros()"
-        >
-          Limpar
-        </button>
+    <div class="top-bar-right">
+
+      <div class="notification-bell">
+
+        <i class="bi bi-bell"></i>
+
+        <span class="badge-dot">4</span>
 
       </div>
 
-        <div class="top-bar-right">
+      <div class="user-info">
 
-          <div class="notification-bell">
+        <div class="user-avatar">
 
-            <i class="bi bi-bell"></i>
+          <i class="bi bi-person"></i>
 
-            <span class="badge-dot">4</span>
+        </div>
 
-          </div>
+        <div class="user-details">
 
-          <div class="user-info">
+          <div
+            class="name"
+            id="nomeUsuario"
+          ></div>
 
-            <div class="user-avatar">
-
-              <i class="bi bi-person"></i>
-
-            </div>
-
-            <div class="user-details">
-
-              <div
-                class="name"
-                id="nomeUsuario"
-              ></div>
-
-              <div
-                class="role"
-                id="tipoUsuario"
-              ></div>
-
-            </div>
-
-          </div>
+          <div
+            class="role"
+            id="tipoUsuario"
+          ></div>
 
         </div>
 
       </div>
+
+    </div>
+
+  </div>
 
       <!-- HEADER -->
       <div class="page-header">

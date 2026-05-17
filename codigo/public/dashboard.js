@@ -351,48 +351,6 @@ ${ocorrencia.status}
 
 }
 
-// FILTRAR
-window.filtrarOcorrencias = function () {
-
-  const valor = document
-    .getElementById("filtroBusca")
-    .value
-    .toLowerCase();
-
-  const filtradas =
-    todasOcorrencias.filter(
-      ocorrencia =>
-
-        ocorrencia.tipo
-          .toLowerCase()
-          .includes(valor)
-
-        ||
-
-        ocorrencia.bairro
-          .toLowerCase()
-          .includes(valor)
-    );
-
-  renderizarOcorrencias(
-    filtradas
-  );
-
-}
-
-// LIMPAR FILTROS
-window.limparFiltros = function () {
-
-  document.getElementById(
-    "filtroBusca"
-  ).value = "";
-
-  renderizarOcorrencias(
-    todasOcorrencias
-  );
-
-}
-
 // LOGOUT
 function logout() {
 
