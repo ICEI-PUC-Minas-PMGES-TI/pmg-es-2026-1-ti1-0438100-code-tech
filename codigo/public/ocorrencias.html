@@ -94,61 +94,127 @@
       <div class="content-area">
         
         <div class="filter-box">
-          <div class="d-flex align-items-center justify-content-between mb-3">
-            <h3 style="margin: 0;">Filtros</h3>
-            <a href="#" style="color: var(--action-blue); text-decoration: none; font-size: 13px; font-weight: 400;">Limpar filtros</a>
-          </div>
-          <div class="row g-3">
-            <div class="col-md-4">
-              <label class="form-label-mongodb">Tipo</label>
-              <select class="form-control-mongodb select-mongodb">
-                <option>todos</option>
-                <option>Buraco</option>
-                <option>Vazamento</option>
-                <option>Falta de Água</option>
-                <option>Outros</option>
-              </select>
-            </div>
-            <div class="col-md-4">
-              <label class="form-label-mongodb">Status</label>
-              <select class="form-control-mongodb select-mongodb">
-                <option>todos</option>
-                <option>Pendente</option>
-                <option>Em andamento</option>
-                <option>Resolvido</option>
-              </select>
-            </div>
-            <div class="col-md-4">
-              <label class="form-label-mongodb">Bairro</label>
-              <select class="form-control-mongodb select-mongodb">
-                <option>todos</option>
-                <option>Comiteco</option>
-                <option>Boa Viagem</option>
-                <option>Pantanal</option>
-                <option>Barreto</option>
-                <option>Queiroz</option>
-                <option>Vila Rica</option>
-              </select>
-            </div>
-            <div class="col-md-4">
-              <label class="form-label-mongodb">Data inicial</label>
-              <input type="text" class="form-control-mongodb" placeholder="dd/mm/aaaa">
-            </div>
-            <div class="col-md-4">
-              <label class="form-label-mongodb">Data final</label>
-              <input type="text" class="form-control-mongodb" placeholder="dd/mm/aaaa">
-            </div>
-            <div class="col-md-4">
-              <label class="form-label-mongodb">Endereço</label>
-              <input type="text" class="form-control-mongodb" placeholder="Buscar por Endereço...">
-            </div>
-          </div>
-        </div>
+
+  <div class="d-flex align-items-center justify-content-between mb-3">
+
+    <h3 style="margin: 0;">
+      Filtros
+    </h3>
+
+    <button
+      class="btn btn-outline-secondary btn-sm"
+      onclick="limparFiltros()"
+    >
+      Limpar filtros
+    </button>
+
+  </div>
+
+  <div class="row g-3">
+
+    <div class="col-md-4">
+
+      <label class="form-label-mongodb">
+        Tipo
+      </label>
+
+      <select
+        id="filtroTipo"
+        class="form-control-mongodb select-mongodb"
+      >
+
+        <option value="">
+          Todos
+        </option>
+
+        <option value="Buraco">
+          Buraco
+        </option>
+
+        <option value="Vazamento">
+          Vazamento
+        </option>
+
+        <option value="Falta de Água">
+          Falta de Água
+        </option>
+
+      </select>
+
+    </div>
+
+    <div class="col-md-4">
+
+      <label class="form-label-mongodb">
+        Status
+      </label>
+
+      <select
+        id="filtroStatus"
+        class="form-control-mongodb select-mongodb"
+      >
+
+        <option value="">
+          Todos
+        </option>
+
+        <option value="Pendente">
+          Pendente
+        </option>
+
+        <option value="Em andamento">
+          Em andamento
+        </option>
+
+        <option value="Resolvido">
+          Resolvido
+        </option>
+
+      </select>
+
+    </div>
+
+    <div class="col-md-4">
+
+      <label class="form-label-mongodb">
+        Bairro
+      </label>
+
+      <input
+        type="text"
+        id="filtroBairro"
+        class="form-control-mongodb"
+        placeholder="Digite o bairro"
+      >
+
+    </div>
+
+    <div class="col-md-12">
+
+      <button
+        class="btn-mongodb-primary"
+        onclick="filtrarOcorrencias()"
+      >
+
+        <i class="bi bi-funnel"></i>
+
+        Filtrar
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
 
         <div class="card-mongodb" style="padding: 0; overflow: hidden;">
           <table class="table-mongodb">
+
             <thead>
+
               <tr>
+
                 <th>ID</th>
                 <th>Tipo</th>
                 <th>Endereço</th>
@@ -157,94 +223,21 @@
                 <th>Status</th>
                 <th>Prioridade</th>
                 <th>Ações</th>
+
               </tr>
+
             </thead>
-            <tbody>
-              <tr>
-                <td><a href="detalhes.html" style="color: var(--forest-black); font-weight: 500; text-decoration: none;">#1023</a></td>
-                <td>Buraco</td>
-                <td>Rua dos campos, 256</td>
-                <td>Comiteco</td>
-                <td>10/04/2026</td>
-                <td><span class="badge-status badge-pendente">Pendente</span></td>
-                <td><span class="badge-priority badge-alta">Alta</span></td>
-                <td>
-                  <button class="action-icon action-icon-edit"><i class="bi bi-pencil"></i></button>
-                  <button class="action-icon action-icon-delete"><i class="bi bi-trash3-fill"></i></button>
-                </td>
-              </tr>
-              <tr>
-                <td><strong>#1022</strong></td>
-                <td>Vazamento</td>
-                <td>Av Alonso Peres, 55</td>
-                <td>Boa viagem</td>
-                <td>05/04/2026</td>
-                <td><span class="badge-status badge-andamento">Em andamento</span></td>
-                <td><span class="badge-priority badge-media">média</span></td>
-                <td>
-                  <button class="action-icon action-icon-edit"><i class="bi bi-pencil"></i></button>
-                  <button class="action-icon action-icon-delete"><i class="bi bi-trash3-fill"></i></button>
-                </td>
-              </tr>
-              <tr>
-                <td><strong>#1021</strong></td>
-                <td>Falta de Água</td>
-                <td>Rua das flores, 229</td>
-                <td>Pantanal</td>
-                <td>03/04/2026</td>
-                <td><span class="badge-status badge-pendente">Pendente</span></td>
-                <td><span class="badge-priority badge-alta">Alta</span></td>
-                <td>
-                  <button class="action-icon action-icon-edit"><i class="bi bi-pencil"></i></button>
-                  <button class="action-icon action-icon-delete"><i class="bi bi-trash3-fill"></i></button>
-                </td>
-              </tr>
-              <tr>
-                <td><strong>#1020</strong></td>
-                <td>Vazamento</td>
-                <td>Rua da paz, 22</td>
-                <td>Barreto</td>
-                <td>02/04/2026</td>
-                <td><span class="badge-status badge-pendente">Pendente</span></td>
-                <td><span class="badge-priority badge-baixa">Baixa</span></td>
-                <td>
-                  <button class="action-icon action-icon-edit"><i class="bi bi-pencil"></i></button>
-                  <button class="action-icon action-icon-delete"><i class="bi bi-trash3-fill"></i></button>
-                </td>
-              </tr>
-              <tr>
-                <td><strong>#1019</strong></td>
-                <td>Buraco</td>
-                <td>Rua Botafogo, 29</td>
-                <td>Queiroz</td>
-                <td>01/04/2026</td>
-                <td><span class="badge-status badge-pendente">Pendente</span></td>
-                <td><span class="badge-priority badge-baixa">Baixa</span></td>
-                <td>
-                  <button class="action-icon action-icon-edit"><i class="bi bi-pencil"></i></button>
-                  <button class="action-icon action-icon-delete"><i class="bi bi-trash3-fill"></i></button>
-                </td>
-              </tr>
-              <tr>
-                <td><strong>#1018</strong></td>
-                <td>Falta de Água</td>
-                <td>Rua do sol, 114</td>
-                <td>Vila rica</td>
-                <td>01/04/2026</td>
-                <td><span class="badge-status badge-pendente">Pendente</span></td>
-                <td><span class="badge-priority badge-alta">Alta</span></td>
-                <td>
-                  <button class="action-icon action-icon-edit"><i class="bi bi-pencil"></i></button>
-                  <button class="action-icon action-icon-delete"><i class="bi bi-trash3-fill"></i></button>
-                </td>
-              </tr>
+
+            <tbody id="tabelaOcorrencias">
+
             </tbody>
+
           </table>
         </div>
       </div>
     </main>
   </div>
-
+  <script src="ocorrencias.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
