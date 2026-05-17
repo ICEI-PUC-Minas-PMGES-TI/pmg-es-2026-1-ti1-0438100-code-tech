@@ -119,14 +119,21 @@
       <!-- TOPO -->
       <div class="top-bar">
 
-        <div class="search-box">
-
-          <i class="bi bi-search"></i>
+        <div class="search-box d-flex gap-2">
 
           <input
             type="text"
-            placeholder="Buscar por endereço, bairro, tipo..."
+            id="filtroBusca"
+            placeholder="Filtrar por tipo ou bairro..."
+            class="form-control"
           >
+
+          <button
+            class="btn btn-dark"
+            onclick="limparFiltros()"
+          >
+            Limpar
+          </button>
 
         </div>
 
@@ -484,7 +491,7 @@
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
   <!-- JS DASHBOARD -->
-  <script src="js/dashboard.js"></script>
+  <script src="dashboard.js"></script>
 
   <!-- BOOTSTRAP -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

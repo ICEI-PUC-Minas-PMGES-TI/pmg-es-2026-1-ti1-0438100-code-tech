@@ -46,7 +46,7 @@ function login() {
         // USUÁRIO
         else {
 
-          window.location.href = "dashboard-usuario.html";
+          window.location.href = "dashboard.html";
 
         }
 
