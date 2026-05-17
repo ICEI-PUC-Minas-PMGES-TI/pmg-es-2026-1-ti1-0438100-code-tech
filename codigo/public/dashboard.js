@@ -352,7 +352,7 @@ ${ocorrencia.status}
 }
 
 // FILTRAR
-function filtrarOcorrencias() {
+window.filtrarOcorrencias = function () {
 
   const valor = document
     .getElementById("filtroBusca")
@@ -381,7 +381,7 @@ function filtrarOcorrencias() {
 }
 
 // LIMPAR FILTROS
-function limparFiltros() {
+window.limparFiltros = function () {
 
   document.getElementById(
     "filtroBusca"

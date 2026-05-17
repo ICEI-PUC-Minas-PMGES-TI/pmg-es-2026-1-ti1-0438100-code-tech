@@ -119,30 +119,31 @@
       <!-- TOPO -->
       <div class="top-bar">
 
-        <div class="search-box d-flex gap-2">
+              <div class="search-box">
 
-          <input
-            type="text"
-            id="filtroBusca"
-            placeholder="Filtrar por tipo ou bairro..."
-            class="form-control"
-          >
+        <i class="bi bi-search"></i>
 
-          <button
-            class="btn btn-dark"
-            onclick="filtrarOcorrencias()"
-          >
-            Filtrar
-          </button>
+        <input
+          type="text"
+          id="filtroBusca"
+          placeholder="Buscar por tipo ou bairro..."
+        >
 
-          <button
-            class="btn btn-secondary"
-            onclick="limparFiltros()"
-          >
-            Limpar
-          </button>
+        <button
+          class="btn btn-dark btn-sm"
+          onclick="filtrarOcorrencias()"
+        >
+          Filtrar
+        </button>
 
-        </div>
+        <button
+          class="btn btn-secondary btn-sm"
+          onclick="limparFiltros()"
+        >
+          Limpar
+        </button>
+
+      </div>
 
         <div class="top-bar-right">
 
