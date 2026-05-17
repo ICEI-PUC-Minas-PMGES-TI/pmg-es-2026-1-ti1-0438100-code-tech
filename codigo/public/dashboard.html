@@ -231,7 +231,9 @@
 
               <div class="stat-label">Buracos</div>
 
-              <div class="stat-value">129</div>
+              <div class="stat-value" id="totalBuracos">
+                0
+              </div>
 
               <div class="stat-percent">
                 reportados
@@ -261,11 +263,14 @@
                 Vazamentos
               </div>
 
-              <div class="stat-value">55</div>
+              
+<div
+  class="stat-value"
+  id="totalVazamentos"
+>
+  0
+</div>
 
-              <div class="stat-percent">
-                reportados
-              </div>
 
             </div>
 
@@ -291,7 +296,9 @@
                 Falta de Água
               </div>
 
-              <div class="stat-value">33</div>
+              <div class="stat-value" id="totalFaltaAgua">
+                0
+              </div>
 
               <div class="stat-percent">
                 reportados
@@ -319,7 +326,9 @@
 
               <div class="stat-label">Outros</div>
 
-              <div class="stat-value">90</div>
+              <div class="stat-value" id="totalOutros">
+                0
+              </div>
 
               <div class="stat-percent">
                 reportados
@@ -475,56 +484,12 @@
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
   <!-- JS DASHBOARD -->
-  <script src="dashusu.js"></script>
+  <script src="js/dashboard.js"></script>
 
   <!-- BOOTSTRAP -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-  <!-- USUARIO -->
-  <script>
-
-    const usuarioLogado = JSON.parse(
-      localStorage.getItem("usuarioLogado")
-    );
-
-    // NOME
-    document.getElementById(
-      "nomeUsuario"
-    ).innerText = usuarioLogado.nome;
-
-    // TIPO
-    document.getElementById(
-      "tipoUsuario"
-    ).innerText = usuarioLogado.tipo;
-
-    // BEM VINDO
-    document.getElementById(
-      "bemVindoUsuario"
-    ).innerText = usuarioLogado.nome;
-
-    // ESCONDER RELATORIOS
-    if (usuarioLogado.tipo === "usuario") {
-
-      document.getElementById(
-        "menuRelatorios"
-      ).style.display = "none";
-
-    }
-
-    // LOGOUT
-    function logout() {
-
-      localStorage.removeItem(
-        "usuarioLogado"
-      );
-
-      window.location.href =
-        "login.html";
-
-    }
-
-  </script>
-
+  
 </body>
 
 </html>
