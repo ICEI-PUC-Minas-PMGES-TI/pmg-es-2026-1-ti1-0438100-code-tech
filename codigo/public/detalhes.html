@@ -87,8 +87,13 @@
         <div class="detail-grid mb-4">
           
           <div class="card-mongodb" style="padding: 0; overflow: hidden;">
-            <div style="width: 100%; height: 260px; background: var(--light-input); display: flex; align-items: center; justify-content: center;">
-              <i class="bi bi-image" style="font-size: 64px; color: var(--silver-teal);"></i>
+            <div style="width: 100%; height: 260px; background: var(--light-input); overflow: hidden;">
+              <img
+                src="https://commons.wikimedia.org/wiki/Special:FilePath/Newport_Whitepit_Lane_pot_hole.JPG"
+                alt="Registro fotográfico - Buraco na Rua dos Campos, Comiteco, Belo Horizonte"
+                style="width: 100%; height: 260px; object-fit: cover;"
+                onerror="this.parentNode.style.cssText='width:100%;height:260px;background:var(--light-input);display:flex;align-items:center;justify-content:center;'; this.outerHTML='<i class=\'bi bi-image\' style=\'font-size:64px;color:var(--silver-teal);\'></i>'"
+              >
             </div>
           </div>
 
@@ -125,14 +130,29 @@
         <div class="row g-4 mb-4">
           <div class="col-md-4">
             <div class="image-gallery">
-              <div class="thumb" style="display: flex; align-items: center; justify-content: center;">
-                <i class="bi bi-image" style="color: var(--silver-teal);"></i>
+              <div class="thumb" style="overflow: hidden;">
+                <img
+                  src="https://commons.wikimedia.org/wiki/Special:FilePath/Newport_Whitepit_Lane_pot_hole_3.JPG"
+                  alt="Foto 1 - Detalhe do buraco"
+                  style="width: 64px; height: 64px; object-fit: cover; border-radius: 6px;"
+                  onerror="this.parentNode.style.cssText='display:flex;align-items:center;justify-content:center;'; this.outerHTML='<i class=\'bi bi-image\' style=\'color:var(--silver-teal);\'></i>'"
+                >
               </div>
-              <div class="thumb" style="display: flex; align-items: center; justify-content: center;">
-                <i class="bi bi-image" style="color: var(--silver-teal);"></i>
+              <div class="thumb" style="overflow: hidden;">
+                <img
+                  src="https://commons.wikimedia.org/wiki/Special:FilePath/Rua_Guajajaras_-_Belo_Horizonte.JPG"
+                  alt="Foto 2 - Contexto da rua em Belo Horizonte"
+                  style="width: 64px; height: 64px; object-fit: cover; border-radius: 6px;"
+                  onerror="this.parentNode.style.cssText='display:flex;align-items:center;justify-content:center;'; this.outerHTML='<i class=\'bi bi-image\' style=\'color:var(--silver-teal);\'></i>'"
+                >
               </div>
-              <div class="thumb" style="display: flex; align-items: center; justify-content: center;">
-                <i class="bi bi-image" style="color: var(--silver-teal);"></i>
+              <div class="thumb" style="overflow: hidden;">
+                <img
+                  src="https://biankatpas.github.io/Cracks-and-Potholes-in-Road-Images-Dataset/figures/2.png"
+                  alt="Foto 3 - Exemplos de danos no pavimento (rodovias brasileiras)"
+                  style="width: 64px; height: 64px; object-fit: cover; border-radius: 6px;"
+                  onerror="this.parentNode.style.cssText='display:flex;align-items:center;justify-content:center;'; this.outerHTML='<i class=\'bi bi-image\' style=\'color:var(--silver-teal);\'></i>'"
+                >
               </div>
             </div>
           </div>
@@ -148,10 +168,13 @@
           <div class="col-md-6">
             <h4 style="font-size: 16px; font-weight: 500; text-align: center; margin-bottom: 12px; color: var(--forest-black);">Localização</h4>
             <div class="map-container" style="height: 240px;">
-              <div style="text-align: center; color: var(--cool-gray);">
-                <i class="bi bi-geo-alt-fill" style="font-size: 36px; display: block; margin-bottom: 8px;"></i>
-                <span style="font-size: 13px;">Belo Horizonte - Comiteco</span>
-              </div>
+              <iframe
+                src="https://www.openstreetmap.org/export/embed.html?bbox=-43.933%2C-19.962%2C-43.919%2C-19.951&layer=mapnik&marker=-19.9564%2C-43.9258"
+                style="width: 100%; height: 100%; border: none; border-radius: 14px;"
+                title="Rua dos Campos, 256 - Comiteco, Belo Horizonte - MG"
+                loading="lazy"
+                allowfullscreen
+              ></iframe>
             </div>
           </div>
           <div class="col-md-6">
