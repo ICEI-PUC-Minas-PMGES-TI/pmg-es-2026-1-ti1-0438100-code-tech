@@ -113,7 +113,8 @@
               </tr>
               <tr>
                 <td>Prioridade:</td>
-                <td><span class="badge-priority badge-alta">Alta</span></td>
+                <!-- id adicionado para o JS atualizar o badge ao mudar prioridade -->
+                <td><span class="badge-priority badge-alta" id="badge-prioridade">Alta</span></td>
               </tr>
               <tr>
                 <td>Status:</td>
@@ -194,20 +195,47 @@
         </div>
 
         <div class="d-flex gap-3 justify-content-center" style="padding: 16px 0 32px;">
-          <button class="btn-mongodb-danger" style="border-radius: 100px; padding: 12px 32px; font-size: 15px;">
+
+          <!-- id adicionado para a funcionalidade "Marcar como lido" -->
+          <button class="btn-mongodb-danger" id="btn-marcar-lido" style="border-radius: 100px; padding: 12px 32px; font-size: 15px;">
             Marcar como lido
           </button>
+
+          <!-- botão "Encaminhar para equipe" mantido exatamente como estava, sem nenhuma alteração -->
           <button class="btn-mongodb-outline" style="padding: 12px 32px; font-size: 15px;">
             Encaminhar para equipe
           </button>
-          <button class="btn-mongodb-outline" style="padding: 12px 32px; font-size: 15px;">
-            Aumentar prioridade
-          </button>
+
+          <!-- "Aumentar prioridade" renomeado para "Mudar prioridade" conforme solicitado.
+               O wrapper (position: relative) é necessário para o dropdown flutuar
+               sobre o botão sem deslocar os demais elementos da página. -->
+          <div class="priority-dropdown-wrapper">
+            <button class="btn-mongodb-outline" id="btn-mudar-prioridade" style="padding: 12px 32px; font-size: 15px;">
+              Mudar prioridade <i class="bi bi-chevron-up" id="priority-chevron"></i>
+            </button>
+
+            <!-- Dropdown de prioridade — oculto por padrão (display:none via CSS).
+                 Cada opção tem data-prioridade para o JS identificar o valor escolhido. -->
+            <div class="priority-dropdown" id="priority-dropdown" role="listbox" aria-label="Selecionar prioridade">
+              <button class="priority-option" data-prioridade="Baixa" role="option">
+                <span class="priority-dot dot-baixa"></span> Baixa
+              </button>
+              <button class="priority-option" data-prioridade="Média" role="option">
+                <span class="priority-dot dot-media"></span> Média
+              </button>
+              <button class="priority-option" data-prioridade="Alta" role="option">
+                <span class="priority-dot dot-alta"></span> Alta
+              </button>
+            </div>
+          </div>
+
         </div>
       </div>
     </main>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Script adicionado: funcionalidades "Marcar como lido" e "Mudar prioridade" -->
+  <script src="js/detalhes.js"></script>
 </body>
 </html>

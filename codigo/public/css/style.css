@@ -778,3 +778,103 @@ body {
     padding: 16px 16px 0;
   }
 }
+
+/* =============================================================
+   ESTILOS ADICIONADOS
+   Funcionalidades: "Marcar como lido" e "Mudar prioridade"
+   Nenhum estilo existente foi removido ou alterado.
+   ============================================================= */
+
+/* --- Badge de prioridade Urgente (nível acima de Alta) --- */
+.badge-urgente {
+  background: #f3e5f5;
+  color: #4a148c;
+  border: 1px solid #9c27b0;
+}
+
+/* --- Estado visual do botão após "Marcar como lido" ser acionado --- */
+.btn-mongodb-lido {
+  background: var(--dark-green) !important;
+  color: var(--pure-white) !important;
+  border: 1px solid var(--dark-green) !important;
+  opacity: 0.75;
+  cursor: default;
+}
+
+.btn-mongodb-lido:hover {
+  background: var(--dark-green) !important;
+  transform: none;
+  opacity: 0.75;
+}
+
+/* --- Wrapper do botão "Mudar prioridade" ---
+   position: relative é obrigatório para o dropdown se posicionar
+   em relação ao botão, sem afetar os demais elementos da página. */
+.priority-dropdown-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+/* --- Dropdown de prioridade ---
+   Flutua acima do botão (bottom: calc(100% + 8px)) para não
+   cobrir os botões ao redor nem deslocar o layout. */
+.priority-dropdown {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--pure-white);
+  border: 1px solid var(--silver-teal);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 30, 43, 0.14);
+  min-width: 170px;
+  z-index: 300;
+  padding: 6px 0;
+  overflow: hidden;
+}
+
+/* Classe adicionada via JS quando o dropdown está aberto */
+.priority-dropdown.open {
+  display: block;
+}
+
+/* --- Cada opção dentro do dropdown --- */
+.priority-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 16px;
+  background: none;
+  border: none;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--forest-black);
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.priority-option:hover {
+  background: var(--light-input);
+}
+
+/* Opção que corresponde à prioridade atualmente selecionada */
+.priority-option.active {
+  font-weight: 600;
+  background: #f0faf5;
+}
+
+/* --- Bolinha colorida de indicador de nível --- */
+.priority-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dot-baixa   { background: #28a745; }
+.dot-media   { background: #ffc107; }
+.dot-alta    { background: #dc3545; }
+.dot-urgente { background: #9c27b0; }
