@@ -39,24 +39,26 @@ function cadastrarOcorrencia() {
 
   const ocorrencia = {
 
-    id: Date.now(),
+  id: Date.now(),
 
-    tipo: tipo,
+  tipo: tipo,
 
-    endereco: endereco,
+  endereco: endereco,
 
-    bairro: "Não informado",
+  bairro: "Não informado",
 
-    data: new Date()
-      .toLocaleDateString("pt-BR"),
+  data: new Date()
+    .toLocaleDateString("pt-BR"),
 
-    status: "Pendente",
+  status: "Pendente",
 
-    prioridade: prioridade,
+  prioridade: prioridade,
 
-    descricao: descricao
+  descricao: descricao,
 
-  };
+  curtidas: 0
+
+};
 
   let ocorrencias =
     JSON.parse(
