@@ -115,25 +115,44 @@ function carregarOcorrencias() {
 
           <td>
 
-            <button
-              class="
-                action-icon
-                action-icon-delete
-              "
-              onclick="
-                excluirOcorrencia(
-                  ${ocorrencia.id}
-                )
-              "
-            >
+  <div class="d-flex gap-2">
 
-              <i class="
-                bi bi-trash3-fill
-              "></i>
+    <button
+      class="
+        btn btn-dark btn-sm
+      "
+      onclick="
+        curtirOcorrencia(
+          ${ocorrencia.id}
+        )
+      "
+    >
 
-            </button>
+      👍 ${ocorrencia.curtidas || 0}
 
-          </td>
+    </button>
+
+    <button
+      class="
+        action-icon
+        action-icon-delete
+      "
+      onclick="
+        excluirOcorrencia(
+          ${ocorrencia.id}
+        )
+      "
+    >
+
+      <i class="
+        bi bi-trash3-fill
+      "></i>
+
+    </button>
+
+  </div>
+
+</td>
 
         </tr>
 
@@ -317,6 +336,50 @@ function limparFiltros() {
   document.getElementById(
     "filtroBairro"
   ).value = "";
+
+  carregarOcorrencias();
+
+}
+
+// ==============================
+// CURTIR OCORRÊNCIA
+// ==============================
+
+function curtirOcorrencia(id) {
+
+  let ocorrencias =
+    JSON.parse(
+      localStorage.getItem(
+        "ocorrencias"
+      )
+    ) || [];
+
+  ocorrencias.forEach(
+    ocorrencia => {
+
+      if (
+        ocorrencia.id === id
+      ) {
+
+        if (
+          !ocorrencia.curtidas
+        ) {
+
+          ocorrencia.curtidas = 0;
+
+        }
+
+        ocorrencia.curtidas++;
+
+      }
+
+    }
+  );
+
+  localStorage.setItem(
+    "ocorrencias",
+    JSON.stringify(ocorrencias)
+  );
 
   carregarOcorrencias();
 
