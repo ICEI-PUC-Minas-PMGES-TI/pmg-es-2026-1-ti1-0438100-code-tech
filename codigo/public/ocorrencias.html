@@ -4,49 +4,59 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ocorrências - TIAW</title>
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Code+Pro:wght@400;500;600&display=swap" rel="stylesheet">
   <link href="css/style.css" rel="stylesheet">
 </head>
+
 <body>
+
   <div class="app-layout">
-    
+
     <aside class="sidebar">
       <nav>
         <ul class="sidebar-nav">
+
           <li>
-            <a href="dashboard.html">
+            <a href="dashboard-admin.html">
               <i class="bi bi-grid-1x2"></i>
               <span>Dashboard</span>
             </a>
           </li>
+
           <li>
             <a href="ocorrencias.html" class="active">
               <i class="bi bi-list-ul"></i>
               <span>Ocorrências</span>
             </a>
           </li>
+
           <li>
             <a href="relatorios.html">
               <i class="bi bi-bar-chart-line"></i>
-              <span>Relátorios</span>
+              <span>Relatórios</span>
             </a>
           </li>
+
           <li>
             <a href="nova-ocorrencia.html">
               <i class="bi bi-plus-circle"></i>
               <span>Nova Ocorrência</span>
             </a>
           </li>
+
           <li>
             <a href="detalhes.html">
               <i class="bi bi-file-earmark-text"></i>
               <span>Detalhes</span>
             </a>
           </li>
+
         </ul>
       </nav>
+
       <div class="sidebar-bottom">
         <a href="#">
           <i class="bi bi-box-arrow-left"></i>
@@ -56,261 +66,281 @@
     </aside>
 
     <main class="main-content">
-      
-      <div class="top-bar">
 
-  <button class="mobile-menu-btn" onclick="toggleSidebar()">
-    <i class="bi bi-list"></i>
-  </button>
+      <!-- TOPO -->
+      <div class="top-bar d-flex flex-column flex-md-row align-items-stretch align-items-md-center gap-3">
 
-  <div class="search-box">
-    <i class="bi bi-search"></i>
-    <input type="text" placeholder="Buscar por Endereço, bairro, tipo...">
-  </div>
+        <button class="mobile-menu-btn" onclick="toggleSidebar()">
+          <i class="bi bi-list"></i>
+        </button>
 
+        <div class="search-box w-100">
+          <i class="bi bi-search"></i>
+          <input
+            type="text"
+            placeholder="Buscar por Endereço, bairro, tipo..."
+          >
+        </div>
+
+      </div>
+
+      <!-- HEADER -->
       <div class="page-header">
-        <div class="page-header-row">
+        <div class="page-header-row d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-3">
+
           <div>
             <h1>Ocorrências</h1>
-            <p class="subtitle">Gerencie todas as Ocorrências reportadas</p>
+            <p class="subtitle">
+              Gerencie todas as Ocorrências reportadas
+            </p>
           </div>
+
           <a href="nova-ocorrencia.html" class="btn-mongodb-primary">
-            <i class="bi bi-plus-lg"></i> Novas Ocorrências
+            <i class="bi bi-plus-lg"></i>
+            Novas Ocorrências
           </a>
+
         </div>
       </div>
 
+      <!-- CONTEÚDO -->
       <div class="content-area">
-        
+
+        <!-- FILTROS -->
         <div class="filter-box">
 
-  <div class="d-flex align-items-center justify-content-between mb-3">
+          <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-3 mb-3">
 
-    <h3 style="margin: 0;">
-      Filtros
-    </h3>
+            <h3 style="margin: 0;">
+              Filtros
+            </h3>
 
-    <button
-      class="btn btn-outline-secondary btn-sm"
-      onclick="limparFiltros()"
-    >
-      Limpar filtros
-    </button>
+            <button
+              class="btn btn-outline-secondary btn-sm"
+              onclick="limparFiltros()"
+            >
+              Limpar filtros
+            </button>
 
-  </div>
+          </div>
 
-  <div class="row g-3">
+          <div class="row g-3 align-items-end">
 
-    <div class="col-md-4">
+            <!-- TIPO -->
+            <div class="col-12 col-md-4">
 
-  <label class="form-label-mongodb">
-    Tipo
-  </label>
+              <label class="form-label-mongodb">
+                Tipo
+              </label>
 
-  <input
-    type="hidden"
-    id="filtroTipo"
-    value=""
-  >
+              <input
+                type="hidden"
+                id="filtroTipo"
+                value=""
+              >
 
-  <div class="dropdown filtro-dropdown">
+              <div class="dropdown filtro-dropdown w-100">
 
-    <button
-      class="form-control-mongodb dropdown-toggle text-start"
-      type="button"
-      data-bs-toggle="dropdown"
-      aria-expanded="false"
-      id="textoFiltroTipo"
-    >
-      Todos
-    </button>
+                <button
+                  class="form-control-mongodb dropdown-toggle text-start w-100 d-flex justify-content-between align-items-center"
+                  type="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                  id="textoFiltroTipo"
+                >
+                  Todos
+                </button>
 
-    <ul class="dropdown-menu filtro-menu">
+                <ul class="dropdown-menu filtro-menu w-100">
 
-      <li>
-        <button
-          class="dropdown-item"
-          type="button"
-          onclick="selecionarTipo('', 'Todos')"
-        >
-          Todos
-        </button>
-      </li>
+                  <li>
+                    <button
+                      class="dropdown-item"
+                      type="button"
+                      onclick="selecionarTipo('', 'Todos')"
+                    >
+                      Todos
+                    </button>
+                  </li>
 
-      <li>
-        <button
-          class="dropdown-item"
-          type="button"
-          onclick="selecionarTipo('Buraco', 'Buraco')"
-        >
-          Buraco
-        </button>
-      </li>
+                  <li>
+                    <button
+                      class="dropdown-item"
+                      type="button"
+                      onclick="selecionarTipo('Buraco', 'Buraco')"
+                    >
+                      Buraco
+                    </button>
+                  </li>
 
-      <li>
-        <button
-          class="dropdown-item"
-          type="button"
-          onclick="selecionarTipo('Vazamento', 'Vazamento')"
-        >
-          Vazamento
-        </button>
-      </li>
+                  <li>
+                    <button
+                      class="dropdown-item"
+                      type="button"
+                      onclick="selecionarTipo('Vazamento', 'Vazamento')"
+                    >
+                      Vazamento
+                    </button>
+                  </li>
 
-      <li>
-        <button
-          class="dropdown-item"
-          type="button"
-          onclick="selecionarTipo('Falta de Água', 'Falta de Água')"
-        >
-          Falta de Água
-        </button>
-      </li>
+                  <li>
+                    <button
+                      class="dropdown-item"
+                      type="button"
+                      onclick="selecionarTipo('Falta de Água', 'Falta de Água')"
+                    >
+                      Falta de Água
+                    </button>
+                  </li>
 
-    </ul>
+                </ul>
 
-  </div>
+              </div>
 
-</div>
+            </div>
 
-    </div>
+            <!-- STATUS -->
+            <div class="col-12 col-md-4">
 
-    <div class="col-md-4">
+              <label class="form-label-mongodb">
+                Status
+              </label>
 
-  <label class="form-label-mongodb">
-    Status
-  </label>
+              <input
+                type="hidden"
+                id="filtroStatus"
+                value=""
+              >
 
-  <input
-    type="hidden"
-    id="filtroStatus"
-    value=""
-  >
+              <div class="dropdown filtro-dropdown w-100">
 
-  <div class="dropdown filtro-dropdown">
+                <button
+                  class="form-control-mongodb dropdown-toggle text-start w-100 d-flex justify-content-between align-items-center"
+                  type="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                  id="textoFiltroStatus"
+                >
+                  Todos
+                </button>
 
-    <button
-      class="form-control-mongodb dropdown-toggle text-start"
-      type="button"
-      data-bs-toggle="dropdown"
-      aria-expanded="false"
-      id="textoFiltroStatus"
-    >
-      Todos
-    </button>
+                <ul class="dropdown-menu filtro-menu w-100">
 
-    <ul class="dropdown-menu filtro-menu">
+                  <li>
+                    <button
+                      class="dropdown-item"
+                      type="button"
+                      onclick="selecionarStatus('', 'Todos')"
+                    >
+                      Todos
+                    </button>
+                  </li>
 
-      <li>
-        <button
-          class="dropdown-item"
-          type="button"
-          onclick="selecionarStatus('', 'Todos')"
-        >
-          Todos
-        </button>
-      </li>
+                  <li>
+                    <button
+                      class="dropdown-item"
+                      type="button"
+                      onclick="selecionarStatus('Pendente', 'Pendente')"
+                    >
+                      Pendente
+                    </button>
+                  </li>
 
-      <li>
-        <button
-          class="dropdown-item"
-          type="button"
-          onclick="selecionarStatus('Pendente', 'Pendente')"
-        >
-          Pendente
-        </button>
-      </li>
+                  <li>
+                    <button
+                      class="dropdown-item"
+                      type="button"
+                      onclick="selecionarStatus('Em andamento', 'Em andamento')"
+                    >
+                      Em andamento
+                    </button>
+                  </li>
 
-      <li>
-        <button
-          class="dropdown-item"
-          type="button"
-          onclick="selecionarStatus('Em andamento', 'Em andamento')"
-        >
-          Em andamento
-        </button>
-      </li>
+                  <li>
+                    <button
+                      class="dropdown-item"
+                      type="button"
+                      onclick="selecionarStatus('Resolvido', 'Resolvido')"
+                    >
+                      Resolvido
+                    </button>
+                  </li>
 
-      <li>
-        <button
-          class="dropdown-item"
-          type="button"
-          onclick="selecionarStatus('Resolvido', 'Resolvido')"
-        >
-          Resolvido
-        </button>
-      </li>
+                </ul>
 
-    </ul>
+              </div>
 
-  </div>
+            </div>
 
-</div>
+            <!-- BAIRRO -->
+            <div class="col-12 col-md-4">
 
-    <div class="col-md-4">
+              <label class="form-label-mongodb">
+                Bairro
+              </label>
 
-      <label class="form-label-mongodb">
-        Bairro
-      </label>
+              <input
+                type="text"
+                id="filtroBairro"
+                class="form-control-mongodb"
+                placeholder="Digite o bairro"
+              >
 
-      <input
-        type="text"
-        id="filtroBairro"
-        class="form-control-mongodb"
-        placeholder="Digite o bairro"
-      >
+            </div>
 
-    </div>
+            <!-- BOTÃO FILTRAR -->
+            <div class="col-12">
 
-    <div class="col-md-12">
+              <button
+                class="btn-mongodb-primary w-100 w-md-auto justify-content-center"
+                onclick="filtrarOcorrencias()"
+              >
+                <i class="bi bi-funnel"></i>
+                Filtrar
+              </button>
 
-      <button
-        class="btn-mongodb-primary"
-        onclick="filtrarOcorrencias()"
-      >
+            </div>
 
-        <i class="bi bi-funnel"></i>
+          </div>
 
-        Filtrar
-
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
-        <div class="card-mongodb" style="padding: 0; overflow: hidden;">
-          <table class="table-mongodb">
-
-            <thead>
-
-              <tr>
-
-                <th>ID</th>
-                <th>Tipo</th>
-                <th>Endereço</th>
-                <th>Bairro</th>
-                <th>Data</th>
-                <th>Status</th>
-                <th>Prioridade</th>
-                <th>Ações</th>
-
-              </tr>
-
-            </thead>
-
-            <tbody id="tabelaOcorrencias">
-
-            </tbody>
-
-          </table>
         </div>
+
+        <!-- TABELA -->
+        <div class="card-mongodb p-0 overflow-hidden">
+
+          <div class="table-responsive">
+
+            <table class="table-mongodb">
+
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Tipo</th>
+                  <th>Endereço</th>
+                  <th>Bairro</th>
+                  <th>Data</th>
+                  <th>Status</th>
+                  <th>Prioridade</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+
+              <tbody id="tabelaOcorrencias"></tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
       </div>
+
     </main>
+
   </div>
-  <script src="ocorrencias.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+ <script src="js/ocorrencias.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
