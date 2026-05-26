@@ -1,8 +1,6 @@
-﻿
-@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;500;600&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;500;600&display=swap');
 
 :root {
-  
   --forest-black: #001e2b;
   --mongodb-green: #00ed64;
   --dark-green: #00684a;
@@ -19,12 +17,17 @@
   --light-input: #e8edeb;
   --pure-white: #ffffff;
 
-  --shadow-forest: rgba(0, 30, 43, 0.12) 0px 26px 44px, rgba(0, 0, 0, 0.13) 0px 7px 13px;
+  --shadow-forest: rgba(0, 30, 43, 0.12) 0px 26px 44px,
+    rgba(0, 0, 0, 0.13) 0px 7px 13px;
   --shadow-standard: rgba(0, 0, 0, 0.15) 0px 3px 20px;
   --shadow-subtle: rgba(0, 0, 0, 0.1) 0px 2px 4px;
 
   --sidebar-width: 220px;
 }
+
+/* ==============================
+   RESET E BASE
+   ============================== */
 
 * {
   margin: 0;
@@ -40,10 +43,18 @@ body {
   min-height: 100vh;
 }
 
+/* ==============================
+   LAYOUT GERAL
+   ============================== */
+
 .app-layout {
   display: flex;
   min-height: 100vh;
 }
+
+/* ==============================
+   SIDEBAR
+   ============================== */
 
 .sidebar {
   width: var(--sidebar-width);
@@ -120,12 +131,20 @@ body {
   color: var(--pure-white);
 }
 
+/* ==============================
+   CONTEÚDO PRINCIPAL
+   ============================== */
+
 .main-content {
   margin-left: var(--sidebar-width);
   flex: 1;
   background: var(--pure-white);
   min-height: 100vh;
 }
+
+/* ==============================
+   TOP BAR
+   ============================== */
 
 .top-bar {
   display: flex;
@@ -137,6 +156,15 @@ body {
   position: sticky;
   top: 0;
   z-index: 50;
+}
+
+.mobile-menu-btn {
+  display: none;
+  border: none;
+  background-color: transparent;
+  color: var(--forest-black);
+  font-size: 28px;
+  cursor: pointer;
 }
 
 .search-box {
@@ -236,6 +264,10 @@ body {
   font-weight: 400;
 }
 
+/* ==============================
+   CABEÇALHO DAS PÁGINAS
+   ============================== */
+
 .page-header {
   padding: 24px 32px 0;
 }
@@ -257,11 +289,16 @@ body {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
+  gap: 20px;
 }
 
 .content-area {
   padding: 24px 32px;
 }
+
+/* ==============================
+   CARDS
+   ============================== */
 
 .card-mongodb {
   background: var(--pure-white);
@@ -269,7 +306,7 @@ body {
   border-radius: 16px;
   padding: 24px;
   box-shadow: rgba(0, 30, 43, 0.06) 0px 4px 12px;
-  transition: box-shadow 0.2s;
+  transition: all 0.2s ease;
 }
 
 .card-mongodb:hover {
@@ -323,6 +360,10 @@ body {
   color: var(--cool-gray);
   font-weight: 400;
 }
+
+/* ==============================
+   BOTÕES
+   ============================== */
 
 .btn-mongodb-primary {
   background: var(--dark-green);
@@ -384,6 +425,10 @@ body {
   background: #c82333;
 }
 
+/* ==============================
+   TABELAS
+   ============================== */
+
 .table-mongodb {
   width: 100%;
   border-collapse: separate;
@@ -419,6 +464,10 @@ body {
   color: var(--forest-black);
   vertical-align: middle;
 }
+
+/* ==============================
+   BADGES
+   ============================== */
 
 .badge-status {
   display: inline-block;
@@ -474,6 +523,10 @@ body {
   border: 1px solid #28a745;
 }
 
+/* ==============================
+   FORMULÁRIOS E FILTROS
+   ============================== */
+
 .form-control-mongodb {
   border: 1px solid var(--silver-teal);
   border-radius: 8px;
@@ -524,6 +577,10 @@ body {
   margin-bottom: 16px;
 }
 
+/* ==============================
+   AÇÕES
+   ============================== */
+
 .action-icon {
   width: 32px;
   height: 32px;
@@ -555,6 +612,10 @@ body {
   background: #f8d7da;
 }
 
+/* ==============================
+   MAPA
+   ============================== */
+
 .map-container {
   width: 100%;
   height: 300px;
@@ -580,6 +641,10 @@ body {
   position: relative;
   width: 100%;
 }
+
+/* ==============================
+   LINKS E ELEMENTOS AUXILIARES
+   ============================== */
 
 .back-link {
   display: inline-flex;
@@ -611,32 +676,92 @@ body {
   background-position: right 10px center;
 }
 
-.detail-grid {
+.accent-underline {
+  border-bottom: 2px solid var(--mongodb-green);
+  padding-bottom: 2px;
+  display: inline;
+}
+
+.text-mongodb-green {
+  color: var(--mongodb-green);
+}
+
+.text-cool-gray {
+  color: var(--cool-gray);
+}
+
+.bg-forest {
+  background: var(--forest-black);
+}
+
+.leafy-label {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--cool-gray);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--teal-gray);
+  font-weight: 400;
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ==============================
+   DETALHES
+   ============================== */
+
+.detail-grid,
+.detalhe-responsivo {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 24px;
 }
 
+.detalhe-card-imagem {
+  padding: 0;
+  overflow: hidden;
+}
+
+.detalhe-card-info {
+  overflow: hidden;
+}
+
 .detail-info-table {
   width: 100%;
+  table-layout: fixed;
 }
 
 .detail-info-table td {
-  padding: 8px 0;
-  font-size: 14px;
+  padding: 10px;
   vertical-align: top;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .detail-info-table td:first-child {
-  font-weight: 500;
+  width: 35%;
+  font-weight: 600;
   color: var(--cool-gray);
-  width: 140px;
   font-family: 'Source Code Pro', monospace;
   font-size: 13px;
   letter-spacing: 0.5px;
 }
 
 .detail-info-table td:last-child {
+  width: 65%;
   color: var(--forest-black);
   font-weight: 400;
 }
@@ -706,134 +831,92 @@ body {
   color: var(--cool-gray);
 }
 
-.accent-underline {
-  border-bottom: 2px solid var(--mongodb-green);
-  padding-bottom: 2px;
-  display: inline;
-}
-
-.text-mongodb-green { color: var(--mongodb-green); }
-.text-cool-gray { color: var(--cool-gray); }
-.bg-forest { background: var(--forest-black); }
-
-.leafy-label {
-  font-family: 'Source Code Pro', monospace;
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: var(--cool-gray);
-}
-
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  color: var(--teal-gray);
-  font-weight: 400;
-}
-
-.legend-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
+/* ==============================
+   RESPONSIVIDADE - NOTEBOOKS
+   ============================== */
 
 @media (max-width: 1024px) {
+  :root {
+    --sidebar-width: 60px;
+  }
+
   .sidebar {
     width: 60px;
     overflow: hidden;
   }
+
+  .sidebar-nav a {
+    justify-content: center;
+    padding: 12px 0;
+  }
+
   .sidebar-nav a span,
   .sidebar-bottom a span {
     display: none;
   }
+
+  .sidebar-bottom {
+    padding: 0;
+  }
+
+  .sidebar-bottom a {
+    justify-content: center;
+  }
+
   .main-content {
     margin-left: 60px;
   }
-  :root {
-    --sidebar-width: 60px;
-  }
-}
-
-@media (max-width: 768px) {
-  .sidebar {
-    display: none;
-  }
-  .main-content {
-    margin-left: 0;
-  }
-  .top-bar {
-    padding: 12px 16px;
-  }
-  .search-box {
-    width: 200px;
-  }
-  .content-area {
-    padding: 16px;
-  }
-  .page-header {
-    padding: 16px 16px 0;
-  }
 }
 
 /* ==============================
-   RESPONSIVIDADE GERAL
-   ============================== */
-
-.mobile-menu-btn {
-  display: none;
-  border: none;
-  background-color: transparent;
-  color: var(--dark);
-  font-size: 28px;
-  cursor: pointer;
-}
-
-.table-mongodb {
-  width: 100%;
-}
-
-.card-mongodb,
-.filter-box,
-.stat-card {
-  transition: 0.3s ease;
-}
-
-.card-mongodb:hover,
-.filter-box:hover,
-.stat-card:hover {
-  transform: translateY(-2px);
-}
-
-/* ==============================
-   TABLETS
+   RESPONSIVIDADE - TABLETS
    ============================== */
 
 @media (max-width: 992px) {
+  :root {
+    --sidebar-width: 220px;
+  }
+
   .app-layout {
     display: block;
   }
 
   .sidebar {
     position: fixed;
-    left: -260px;
     top: 0;
+    left: -260px;
     width: 260px;
     height: 100vh;
+    display: flex;
     z-index: 999;
-    transition: 0.3s ease;
+    transition: left 0.3s ease;
   }
 
   .sidebar.sidebar-open {
     left: 0;
   }
 
+  .sidebar-nav a {
+    justify-content: flex-start;
+    padding: 12px 24px;
+  }
+
+  .sidebar-nav a span,
+  .sidebar-bottom a span {
+    display: inline;
+  }
+
+  .sidebar-bottom {
+    padding: 0 24px;
+  }
+
+  .sidebar-bottom a {
+    justify-content: flex-start;
+  }
+
   .main-content {
-    width: 100%;
     margin-left: 0;
+    width: 100%;
   }
 
   .mobile-menu-btn {
@@ -841,17 +924,19 @@ body {
   }
 
   .top-bar {
-    gap: 15px;
+    padding: 14px 20px;
+    gap: 16px;
   }
 
   .search-box {
     flex: 1;
+    width: auto;
   }
 
   .page-header-row {
     flex-direction: column;
     align-items: flex-start;
-    gap: 20px;
+    gap: 16px;
   }
 
   .content-area {
@@ -872,7 +957,7 @@ body {
 }
 
 /* ==============================
-   CELULARES
+   RESPONSIVIDADE - CELULARES
    ============================== */
 
 @media (max-width: 768px) {
@@ -882,7 +967,9 @@ body {
   }
 
   .top-bar-right {
+    display: flex;
     justify-content: space-between;
+    width: 100%;
   }
 
   .search-box {
@@ -893,8 +980,12 @@ body {
     width: 100%;
   }
 
+  .page-header {
+    padding: 18px 16px 0;
+  }
+
   .page-header h1 {
-    font-size: 28px;
+    font-size: 26px;
   }
 
   .subtitle {
@@ -906,15 +997,38 @@ body {
   }
 
   .filter-box {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
     padding: 18px;
   }
 
   .filter-box .row {
-    gap: 10px;
+    flex-direction: column;
+    margin: 0;
+    gap: 12px;
+  }
+
+  .filter-box .col-md-4,
+  .filter-box .col-md-12 {
+    width: 100%;
+    max-width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .form-control-mongodb,
+  .select-mongodb {
+    width: 100%;
+    max-width: 100%;
+    min-height: 48px;
+    font-size: 15px;
+    box-sizing: border-box;
   }
 
   .btn-mongodb-primary,
-  .btn-mongodb-outline {
+  .btn-mongodb-outline,
+  .btn-mongodb-danger {
     width: 100%;
     justify-content: center;
   }
@@ -924,11 +1038,15 @@ body {
   }
 
   .stat-card {
-    min-height: 150px;
+    min-height: 140px;
   }
 
   .map-container {
     height: 280px !important;
+  }
+
+  .table-mongodb {
+    min-width: 900px;
   }
 
   .user-details .name {
@@ -939,13 +1057,65 @@ body {
     font-size: 12px;
   }
 
-  .table-mongodb {
-    min-width: 900px;
+  .detail-grid,
+  .detalhe-responsivo {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .detalhe-card-imagem,
+  .detalhe-card-info {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .detail-info-table tr {
+    display: block;
+    margin-bottom: 14px;
+  }
+
+  .detail-info-table td {
+    display: block;
+    width: 100% !important;
+    padding: 4px 0;
+  }
+
+  .detail-info-table td:first-child {
+    font-size: 13px;
+    color: var(--cool-gray);
+  }
+
+  .detail-info-table td:last-child {
+    font-size: 15px;
+  }
+
+  .image-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .image-gallery .thumb {
+    width: 64px;
+    height: 64px;
+  }
+
+  .description-box,
+  .history-box {
+    width: 100%;
+  }
+
+  .content-area > .d-flex.gap-3.justify-content-center {
+    flex-direction: column;
+  }
+
+  .content-area > .d-flex.gap-3.justify-content-center button {
+    width: 100%;
   }
 }
 
 /* ==============================
-   CELULARES PEQUENOS
+   RESPONSIVIDADE - CELULARES PEQUENOS
    ============================== */
 
 @media (max-width: 480px) {
@@ -961,19 +1131,11 @@ body {
     padding: 14px;
   }
 
-  .search-box {
-    padding: 10px;
-  }
-
   .user-info {
     gap: 8px;
   }
 
-  .user-avatar {
-    width: 38px;
-    height: 38px;
-  }
-
+  .user-avatar,
   .notification-bell {
     width: 38px;
     height: 38px;
