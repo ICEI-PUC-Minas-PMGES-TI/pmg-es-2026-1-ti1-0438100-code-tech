@@ -4,7 +4,7 @@ Informações básicas do projeto.
 
 * **Projeto:** [infrabh]
 * **Repositório GitHub:** [https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-1-ti1-0438100-code-tech]
-* **Membros da equipe:**Gabriel Drumond, Felipe Gabriel, Felipe Marzzano, Raul Rocha, Jõao, Lucas Dias, Hector.
+* **Membros da equipe:**
 
   * [Gabriel Drumond](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-1-ti1-0438100-code-tech/tree/gabriel) 
   * [Beltrano](https://github.com/beltrano) ⚠️ EXEMPLO ⚠️
