@@ -1,386 +1,164 @@
 document.addEventListener("DOMContentLoaded", () => {
-
   carregarOcorrencias();
-
 });
 
-function carregarOcorrencias() {
+function buscarOcorrencias() {
+  return JSON.parse(localStorage.getItem("ocorrencias")) || [];
+}
 
-  const tabela =
-    document.getElementById(
-      "tabelaOcorrencias"
-    );
+function salvarOcorrencias(ocorrencias) {
+  localStorage.setItem("ocorrencias", JSON.stringify(ocorrencias));
+}
+
+function carregarOcorrencias() {
+  const ocorrencias = buscarOcorrencias();
+  renderizarTabela(ocorrencias);
+}
+
+function renderizarTabela(ocorrencias) {
+  const tabela = document.getElementById("tabelaOcorrencias");
 
   tabela.innerHTML = "";
 
-  const ocorrencias =
-    JSON.parse(
-      localStorage.getItem(
-        "ocorrencias"
-      )
-    ) || [];
+  ocorrencias.forEach((ocorrencia) => {
+    const badgeStatus = definirClasseStatus(ocorrencia.status);
+    const badgePrioridade = definirClassePrioridade(ocorrencia.prioridade);
 
-  ocorrencias.forEach(
-    (ocorrencia) => {
+    tabela.innerHTML += `
+      <tr>
+        <td>
+          <strong>#${ocorrencia.id}</strong>
+        </td>
 
-      let badgeStatus =
-        "badge-pendente";
+        <td>${ocorrencia.tipo}</td>
 
-      if (
-        ocorrencia.status ===
-        "Em andamento"
-      ) {
+        <td>${ocorrencia.endereco}</td>
 
-        badgeStatus =
-          "badge-andamento";
+        <td>${ocorrencia.bairro}</td>
 
-      }
+        <td>${ocorrencia.data}</td>
 
-      else if (
-        ocorrencia.status ===
-        "Resolvido"
-      ) {
+        <td>
+          <span class="badge-status ${badgeStatus}">
+            ${ocorrencia.status}
+          </span>
+        </td>
 
-        badgeStatus =
-          "badge-resolvido";
+        <td>
+          <span class="badge-priority ${badgePrioridade}">
+            ${ocorrencia.prioridade}
+          </span>
+        </td>
 
-      }
+        <td>
+          <div class="d-flex gap-2 align-items-center flex-wrap">
 
-      let badgePrioridade =
-        "badge-baixa";
+            <button
+              class="btn btn-outline-dark btn-sm"
+              onclick="curtirOcorrencia('${ocorrencia.id}')"
+            >
+              👍 ${ocorrencia.curtidas || 0}
+            </button>
 
-      if (
-        ocorrencia.prioridade ===
-        "Média"
-      ) {
+            <button
+              class="action-icon action-icon-delete"
+              onclick="excluirOcorrencia('${ocorrencia.id}')"
+            >
+              <i class="bi bi-trash3-fill"></i>
+            </button>
 
-        badgePrioridade =
-          "badge-media";
+          </div>
+        </td>
+      </tr>
+    `;
+  });
+}
 
-      }
+function definirClasseStatus(status) {
+  if (status === "Em andamento") {
+    return "badge-andamento";
+  }
 
-      else if (
-        ocorrencia.prioridade ===
-        "Alta"
-      ) {
+  if (status === "Resolvido") {
+    return "badge-resolvido";
+  }
 
-        badgePrioridade =
-          "badge-alta";
+  return "badge-pendente";
+}
 
-      }
+function definirClassePrioridade(prioridade) {
+  if (prioridade === "Média") {
+    return "badge-media";
+  }
 
-      tabela.innerHTML += `
+  if (prioridade === "Alta") {
+    return "badge-alta";
+  }
 
-        <tr>
-
-          <td>
-            <strong>
-              #${ocorrencia.id}
-            </strong>
-          </td>
-
-          <td>
-            ${ocorrencia.tipo}
-          </td>
-
-          <td>
-            ${ocorrencia.endereco}
-          </td>
-
-          <td>
-            ${ocorrencia.bairro}
-          </td>
-
-          <td>
-            ${ocorrencia.data}
-          </td>
-
-          <td>
-            <span class="
-              badge-status
-              ${badgeStatus}
-            ">
-              ${ocorrencia.status}
-            </span>
-          </td>
-
-          <td>
-            <span class="
-              badge-priority
-              ${badgePrioridade}
-            ">
-              ${ocorrencia.prioridade}
-            </span>
-          </td>
-
-          <td>
-
-  <div class="d-flex gap-2">
-
-    <button
-      class="
-        btn btn-dark btn-sm
-      "
-      onclick="
-        curtirOcorrencia(
-          ${ocorrencia.id}
-        )
-      "
-    >
-
-      👍 ${ocorrencia.curtidas || 0}
-
-    </button>
-
-    <button
-      class="
-        action-icon
-        action-icon-delete
-      "
-      onclick="
-        excluirOcorrencia(
-          ${ocorrencia.id}
-        )
-      "
-    >
-
-      <i class="
-        bi bi-trash3-fill
-      "></i>
-
-    </button>
-
-  </div>
-
-</td>
-
-        </tr>
-
-      `;
-
-    });
-
+  return "badge-baixa";
 }
 
 function excluirOcorrencia(id) {
+  const confirmar = confirm("Deseja realmente excluir esta ocorrência?");
 
-  let ocorrencias =
-    JSON.parse(
-      localStorage.getItem(
-        "ocorrencias"
-      )
-    ) || [];
+  if (!confirmar) return;
 
-  ocorrencias =
-    ocorrencias.filter(
-      ocorrencia =>
-        ocorrencia.id !== id
-    );
+  let ocorrencias = buscarOcorrencias();
 
-  localStorage.setItem(
-    "ocorrencias",
-    JSON.stringify(ocorrencias)
+  ocorrencias = ocorrencias.filter(
+    ocorrencia => String(ocorrencia.id) !== String(id)
   );
 
-  carregarOcorrencias();
+  salvarOcorrencias(ocorrencias);
 
+  carregarOcorrencias();
+}
+
+function curtirOcorrencia(id) {
+  const ocorrencias = buscarOcorrencias();
+
+  ocorrencias.forEach((ocorrencia) => {
+    if (String(ocorrencia.id) === String(id)) {
+      ocorrencia.curtidas = (ocorrencia.curtidas || 0) + 1;
+    }
+  });
+
+  salvarOcorrencias(ocorrencias);
+
+  carregarOcorrencias();
 }
 
 function filtrarOcorrencias() {
+  const tipo = document.getElementById("filtroTipo").value;
+  const status = document.getElementById("filtroStatus").value;
+  const bairro = document.getElementById("filtroBairro").value.toLowerCase();
 
-  const tipo =
-    document.getElementById(
-      "filtroTipo"
-    ).value;
+  let ocorrencias = buscarOcorrencias();
 
-  const status =
-    document.getElementById(
-      "filtroStatus"
-    ).value;
-
-  const bairro =
-    document.getElementById(
-      "filtroBairro"
-    ).value.toLowerCase();
-
-  let ocorrencias =
-    JSON.parse(
-      localStorage.getItem(
-        "ocorrencias"
+  ocorrencias = ocorrencias.filter((ocorrencia) => {
+    return (
+      (tipo === "" || ocorrencia.tipo === tipo) &&
+      (status === "" || ocorrencia.status === status) &&
+      (
+        bairro === "" ||
+        ocorrencia.bairro.toLowerCase().includes(bairro)
       )
-    ) || [];
-
-  ocorrencias =
-    ocorrencias.filter(
-      ocorrencia => {
-
-        return (
-
-          (tipo === "" ||
-            ocorrencia.tipo === tipo)
-
-          &&
-
-          (status === "" ||
-            ocorrencia.status === status)
-
-          &&
-
-          (
-            bairro === "" ||
-
-            ocorrencia.bairro
-              .toLowerCase()
-              .includes(bairro)
-          )
-
-        );
-
-      }
     );
+  });
 
-  renderizarFiltro(
-    ocorrencias
-  );
-
-}
-
-function renderizarFiltro(
-  ocorrencias
-) {
-
-  const tabela =
-    document.getElementById(
-      "tabelaOcorrencias"
-    );
-
-  tabela.innerHTML = "";
-
-  ocorrencias.forEach(
-    (ocorrencia) => {
-
-      tabela.innerHTML += `
-
-        <tr>
-
-          <td>
-            <strong>
-              #${ocorrencia.id}
-            </strong>
-          </td>
-
-          <td>
-            ${ocorrencia.tipo}
-          </td>
-
-          <td>
-            ${ocorrencia.endereco}
-          </td>
-
-          <td>
-            ${ocorrencia.bairro}
-          </td>
-
-          <td>
-            ${ocorrencia.data}
-          </td>
-
-          <td>
-            ${ocorrencia.status}
-          </td>
-
-          <td>
-            ${ocorrencia.prioridade}
-          </td>
-
-          <td>
-
-            <button
-              class="
-                action-icon
-                action-icon-delete
-              "
-              onclick="
-                excluirOcorrencia(
-                  ${ocorrencia.id}
-                )
-              "
-            >
-
-              <i class="
-                bi bi-trash3-fill
-              "></i>
-
-            </button>
-
-          </td>
-
-        </tr>
-
-      `;
-
-    });
-
+  renderizarTabela(ocorrencias);
 }
 
 function limparFiltros() {
-
-  document.getElementById(
-    "filtroTipo"
-  ).value = "";
-
-  document.getElementById(
-    "filtroStatus"
-  ).value = "";
-
-  document.getElementById(
-    "filtroBairro"
-  ).value = "";
+  document.getElementById("filtroTipo").value = "";
+  document.getElementById("filtroStatus").value = "";
+  document.getElementById("filtroBairro").value = "";
 
   carregarOcorrencias();
-
 }
 
-// ==============================
-// CURTIR OCORRÊNCIA
-// ==============================
+function toggleSidebar() {
+  const sidebar = document.querySelector(".sidebar");
 
-function curtirOcorrencia(id) {
-
-  let ocorrencias =
-    JSON.parse(
-      localStorage.getItem(
-        "ocorrencias"
-      )
-    ) || [];
-
-  ocorrencias.forEach(
-    ocorrencia => {
-
-      if (
-        ocorrencia.id === id
-      ) {
-
-        if (
-          !ocorrencia.curtidas
-        ) {
-
-          ocorrencia.curtidas = 0;
-
-        }
-
-        ocorrencia.curtidas++;
-
-      }
-
-    }
-  );
-
-  localStorage.setItem(
-    "ocorrencias",
-    JSON.stringify(ocorrencias)
-  );
-
-  carregarOcorrencias();
-
+  sidebar.classList.toggle("sidebar-open");
 }
