@@ -59,6 +59,9 @@
     <main class="main-content">
       
       <div class="top-bar">
+        <button class="mobile-menu-btn" onclick="toggleSidebar()">
+          <i class="bi bi-list"></i>
+        </button>
         <div class="search-box">
           <i class="bi bi-search"></i>
           <input type="text" placeholder="Buscar por Endereço, bairro, tipo...">
@@ -330,5 +333,12 @@
       }
     });
   </script>
+  <script>
+  function toggleSidebar() {
+    const sidebar = document.querySelector(".sidebar");
+    sidebar.classList.toggle("sidebar-open");
+    }
+  </script>
+
 </body>
 </html>
