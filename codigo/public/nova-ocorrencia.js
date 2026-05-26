@@ -50,3 +50,13 @@ function toggleSidebar() {
 
   sidebar.classList.toggle("sidebar-open");
 }
+
+function selecionarTipoNova(valor, texto) {
+  document.getElementById("tipo").value = valor;
+  document.getElementById("textoTipo").innerText = texto;
+}
+
+function selecionarPrioridadeNova(valor, texto) {
+  document.getElementById("prioridade").value = valor;
+  document.getElementById("textoPrioridade").innerText = texto;
+}

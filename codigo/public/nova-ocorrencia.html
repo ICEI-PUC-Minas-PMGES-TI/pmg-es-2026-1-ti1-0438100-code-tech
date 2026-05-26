@@ -249,31 +249,69 @@
 
             </label>
 
-            <select
-              id="tipo"
-              class="
-                form-control-mongodb
-                select-mongodb
-              "
-            >
+            <input
+  type="hidden"
+  id="tipo"
+  value="Buraco"
+>
 
-              <option value="Buraco">
-                Buraco
-              </option>
+<div class="dropdown filtro-dropdown">
 
-              <option value="Vazamento">
-                Vazamento
-              </option>
+  <button
+    class="form-control-mongodb dropdown-toggle text-start"
+    type="button"
+    data-bs-toggle="dropdown"
+    aria-expanded="false"
+    id="textoTipo"
+  >
+    Buraco
+  </button>
 
-              <option value="Falta de Água">
-                Falta de Água
-              </option>
+  <ul class="dropdown-menu filtro-menu">
 
-              <option value="Outros">
-                Outros
-              </option>
+    <li>
+      <button
+        class="dropdown-item"
+        type="button"
+        onclick="selecionarTipoNova('Buraco', 'Buraco')"
+      >
+        Buraco
+      </button>
+    </li>
 
-            </select>
+    <li>
+      <button
+        class="dropdown-item"
+        type="button"
+        onclick="selecionarTipoNova('Vazamento', 'Vazamento')"
+      >
+        Vazamento
+      </button>
+    </li>
+
+    <li>
+      <button
+        class="dropdown-item"
+        type="button"
+        onclick="selecionarTipoNova('Falta de Água', 'Falta de Água')"
+      >
+        Falta de Água
+      </button>
+    </li>
+
+    <li>
+      <button
+        class="dropdown-item"
+        type="button"
+        onclick="selecionarTipoNova('Outros', 'Outros')"
+      >
+        Outros
+      </button>
+    </li>
+
+  </ul>
+
+</div> 
 
           </div>
 
@@ -286,27 +324,59 @@
 
             </label>
 
-            <select
-              id="prioridade"
-              class="
-                form-control-mongodb
-                select-mongodb
-              "
-            >
+            <input
+  type="hidden"
+  id="prioridade"
+  value="Baixa"
+>
 
-              <option value="Baixa">
-                Baixa
-              </option>
+<div class="dropdown filtro-dropdown">
 
-              <option value="Média">
-                Média
-              </option>
+  <button
+    class="form-control-mongodb dropdown-toggle text-start"
+    type="button"
+    data-bs-toggle="dropdown"
+    aria-expanded="false"
+    id="textoPrioridade"
+  >
+    Baixa
+  </button>
 
-              <option value="Alta">
-                Alta
-              </option>
+  <ul class="dropdown-menu filtro-menu">
 
-            </select>
+    <li>
+      <button
+        class="dropdown-item"
+        type="button"
+        onclick="selecionarPrioridadeNova('Baixa', 'Baixa')"
+      >
+        Baixa
+      </button>
+    </li>
+
+    <li>
+      <button
+        class="dropdown-item"
+        type="button"
+        onclick="selecionarPrioridadeNova('Média', 'Média')"
+      >
+        Média
+      </button>
+    </li>
+
+    <li>
+      <button
+        class="dropdown-item"
+        type="button"
+        onclick="selecionarPrioridadeNova('Alta', 'Alta')"
+      >
+        Alta
+      </button>
+    </li>
+
+  </ul>
+
+</div>
 
           </div>
 
