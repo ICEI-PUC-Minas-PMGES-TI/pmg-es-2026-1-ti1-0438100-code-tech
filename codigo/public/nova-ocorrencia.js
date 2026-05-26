@@ -1,71 +1,37 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const botaoCadastrar = document.getElementById("btnCadastrar");
 
-  const botaoCadastrar =
-    document.getElementById("btnCadastrar");
-
-  botaoCadastrar.addEventListener(
-    "click",
-    cadastrarOcorrencia
-  );
-
+  botaoCadastrar.addEventListener("click", cadastrarOcorrencia);
 });
 
 function cadastrarOcorrencia() {
+  const endereco = document.getElementById("endereco").value.trim();
+  const bairro = document.getElementById("bairro").value.trim();
+  const tipo = document.getElementById("tipo").value;
+  const prioridade = document.getElementById("prioridade").value;
+  const descricao = document.getElementById("descricao").value.trim();
 
-  const endereco =
-    document.getElementById("endereco").value;
-
-  const tipo =
-    document.getElementById("tipo").value;
-
-  const prioridade =
-    document.getElementById("prioridade").value;
-
-  const descricao =
-    document.getElementById("descricao").value;
-
-  if (
-    endereco === "" ||
-    descricao === ""
-  ) {
-
-    alert(
-      "Preencha todos os campos!"
-    );
-
+  if (endereco === "" || bairro === "" || descricao === "") {
+    alert("Preencha todos os campos obrigatórios!");
     return;
-
   }
 
   const ocorrencia = {
+    id: Date.now(),
+    tipo: tipo,
+    endereco: endereco,
+    bairro: bairro,
+    data: new Date().toLocaleDateString("pt-BR"),
+    status: "Pendente",
+    prioridade: prioridade,
+    descricao: descricao,
+    curtidas: 0,
+    latitude: -19.916,
+    longitude: -43.934
+  };
 
-  id: Date.now(),
-
-  tipo: tipo,
-
-  endereco: endereco,
-
-  bairro: "Não informado",
-
-  data: new Date()
-    .toLocaleDateString("pt-BR"),
-
-  status: "Pendente",
-
-  prioridade: prioridade,
-
-  descricao: descricao,
-
-  curtidas: 0
-
-};
-
-  let ocorrencias =
-    JSON.parse(
-      localStorage.getItem(
-        "ocorrencias"
-      )
-    ) || [];
+  const ocorrencias =
+    JSON.parse(localStorage.getItem("ocorrencias")) || [];
 
   ocorrencias.push(ocorrencia);
 
@@ -74,11 +40,13 @@ function cadastrarOcorrencia() {
     JSON.stringify(ocorrencias)
   );
 
-  alert(
-    "Ocorrência cadastrada com sucesso!"
-  );
+  alert("Ocorrência cadastrada com sucesso!");
 
-  window.location.href =
-    "ocorrencias.html";
+  window.location.href = "ocorrencias.html";
+}
 
+function toggleSidebar() {
+  const sidebar = document.querySelector(".sidebar");
+
+  sidebar.classList.toggle("sidebar-open");
 }
