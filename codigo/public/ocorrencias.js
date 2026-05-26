@@ -151,6 +151,8 @@ function filtrarOcorrencias() {
 
 function limparFiltros() {
   document.getElementById("filtroTipo").value = "";
+  document.getElementById("textoFiltroTipo").innerText = "Todos";
+
   document.getElementById("filtroStatus").value = "";
   document.getElementById("filtroBairro").value = "";
 
@@ -161,4 +163,9 @@ function toggleSidebar() {
   const sidebar = document.querySelector(".sidebar");
 
   sidebar.classList.toggle("sidebar-open");
+}
+
+function selecionarTipo(valor, texto) {
+  document.getElementById("filtroTipo").value = valor;
+  document.getElementById("textoFiltroTipo").innerText = texto;
 }

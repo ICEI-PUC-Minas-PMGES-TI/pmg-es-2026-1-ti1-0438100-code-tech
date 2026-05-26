@@ -114,65 +114,150 @@
 
     <div class="col-md-4">
 
-      <label class="form-label-mongodb">
-        Tipo
-      </label>
+  <label class="form-label-mongodb">
+    Tipo
+  </label>
 
-      <select
-        id="filtroTipo"
-        class="form-control-mongodb select-mongodb"
-      >
+  <input
+    type="hidden"
+    id="filtroTipo"
+    value=""
+  >
 
-        <option value="">
+  <div class="dropdown filtro-dropdown">
+
+    <button
+      class="form-control-mongodb dropdown-toggle text-start"
+      type="button"
+      data-bs-toggle="dropdown"
+      aria-expanded="false"
+      id="textoFiltroTipo"
+    >
+      Todos
+    </button>
+
+    <ul class="dropdown-menu filtro-menu">
+
+      <li>
+        <button
+          class="dropdown-item"
+          type="button"
+          onclick="selecionarTipo('', 'Todos')"
+        >
           Todos
-        </option>
+        </button>
+      </li>
 
-        <option value="Buraco">
+      <li>
+        <button
+          class="dropdown-item"
+          type="button"
+          onclick="selecionarTipo('Buraco', 'Buraco')"
+        >
           Buraco
-        </option>
+        </button>
+      </li>
 
-        <option value="Vazamento">
+      <li>
+        <button
+          class="dropdown-item"
+          type="button"
+          onclick="selecionarTipo('Vazamento', 'Vazamento')"
+        >
           Vazamento
-        </option>
+        </button>
+      </li>
 
-        <option value="Falta de Água">
+      <li>
+        <button
+          class="dropdown-item"
+          type="button"
+          onclick="selecionarTipo('Falta de Água', 'Falta de Água')"
+        >
           Falta de Água
-        </option>
+        </button>
+      </li>
 
-      </select>
+    </ul>
+
+  </div>
+
+</div>
+    </select>
 
     </div>
 
     <div class="col-md-4">
 
-      <label class="form-label-mongodb">
-        Status
-      </label>
+  <label class="form-label-mongodb">
+    Status
+  </label>
 
-      <select
-        id="filtroStatus"
-        class="form-control-mongodb select-mongodb"
-      >
+  <input
+    type="hidden"
+    id="filtroStatus"
+    value=""
+  >
 
-        <option value="">
+  <div class="dropdown filtro-dropdown">
+
+    <button
+      class="form-control-mongodb dropdown-toggle text-start"
+      type="button"
+      data-bs-toggle="dropdown"
+      aria-expanded="false"
+      id="textoFiltroStatus"
+    >
+      Todos
+    </button>
+
+    <ul class="dropdown-menu filtro-menu">
+
+      <li>
+        <button
+          class="dropdown-item"
+          type="button"
+          onclick="selecionarStatus('', 'Todos')"
+        >
           Todos
-        </option>
+        </button>
+      </li>
 
-        <option value="Pendente">
+      <li>
+        <button
+          class="dropdown-item"
+          type="button"
+          onclick="selecionarStatus('Pendente', 'Pendente')"
+        >
           Pendente
-        </option>
+        </button>
+      </li>
 
-        <option value="Em andamento">
+      <li>
+        <button
+          class="dropdown-item"
+          type="button"
+          onclick="selecionarStatus('Em andamento', 'Em andamento')"
+        >
           Em andamento
-        </option>
+        </button>
+      </li>
 
-        <option value="Resolvido">
+      <li>
+        <button
+          class="dropdown-item"
+          type="button"
+          onclick="selecionarStatus('Resolvido', 'Resolvido')"
+        >
           Resolvido
-        </option>
+        </button>
+      </li>
 
-      </select>
+    </ul>
 
-    </div>
+  </div>
+
+</div>
 
     <div class="col-md-4">
 
