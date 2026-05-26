@@ -778,3 +778,218 @@ body {
     padding: 16px 16px 0;
   }
 }
+
+/* ==============================
+   RESPONSIVIDADE GERAL
+   ============================== */
+
+.mobile-menu-btn {
+  display: none;
+  border: none;
+  background-color: transparent;
+  color: var(--dark);
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.table-mongodb {
+  width: 100%;
+}
+
+.card-mongodb,
+.filter-box,
+.stat-card {
+  transition: 0.3s ease;
+}
+
+.card-mongodb:hover,
+.filter-box:hover,
+.stat-card:hover {
+  transform: translateY(-2px);
+}
+
+/* ==============================
+   TABLETS
+   ============================== */
+
+@media (max-width: 992px) {
+  .app-layout {
+    display: block;
+  }
+
+  .sidebar {
+    position: fixed;
+    left: -260px;
+    top: 0;
+    width: 260px;
+    height: 100vh;
+    z-index: 999;
+    transition: 0.3s ease;
+  }
+
+  .sidebar.sidebar-open {
+    left: 0;
+  }
+
+  .main-content {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .mobile-menu-btn {
+    display: block;
+  }
+
+  .top-bar {
+    gap: 15px;
+  }
+
+  .search-box {
+    flex: 1;
+  }
+
+  .page-header-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .content-area {
+    padding: 20px;
+  }
+
+  .card-mongodb {
+    overflow-x: auto;
+  }
+
+  .table-mongodb {
+    min-width: 850px;
+  }
+
+  .legend-item {
+    font-size: 12px;
+  }
+}
+
+/* ==============================
+   CELULARES
+   ============================== */
+
+@media (max-width: 768px) {
+  .top-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .top-bar-right {
+    justify-content: space-between;
+  }
+
+  .search-box {
+    width: 100%;
+  }
+
+  .search-box input {
+    width: 100%;
+  }
+
+  .page-header h1 {
+    font-size: 28px;
+  }
+
+  .subtitle {
+    font-size: 14px;
+  }
+
+  .content-area {
+    padding: 16px;
+  }
+
+  .filter-box {
+    padding: 18px;
+  }
+
+  .filter-box .row {
+    gap: 10px;
+  }
+
+  .btn-mongodb-primary,
+  .btn-mongodb-outline {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .d-flex.gap-3 {
+    flex-direction: column;
+  }
+
+  .stat-card {
+    min-height: 150px;
+  }
+
+  .map-container {
+    height: 280px !important;
+  }
+
+  .user-details .name {
+    font-size: 14px;
+  }
+
+  .user-details .role {
+    font-size: 12px;
+  }
+
+  .table-mongodb {
+    min-width: 900px;
+  }
+}
+
+/* ==============================
+   CELULARES PEQUENOS
+   ============================== */
+
+@media (max-width: 480px) {
+  .content-area {
+    padding: 12px;
+  }
+
+  .page-header h1 {
+    font-size: 24px;
+  }
+
+  .top-bar {
+    padding: 14px;
+  }
+
+  .search-box {
+    padding: 10px;
+  }
+
+  .user-info {
+    gap: 8px;
+  }
+
+  .user-avatar {
+    width: 38px;
+    height: 38px;
+  }
+
+  .notification-bell {
+    width: 38px;
+    height: 38px;
+  }
+
+  .card-mongodb,
+  .filter-box {
+    border-radius: 14px;
+  }
+
+  .sidebar {
+    width: 240px;
+    left: -240px;
+  }
+
+  .sidebar.sidebar-open {
+    left: 0;
+  }
+}
