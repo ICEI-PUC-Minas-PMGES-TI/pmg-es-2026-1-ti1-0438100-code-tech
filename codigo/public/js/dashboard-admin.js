@@ -15,7 +15,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function carregarDashboardAdmin() {
   fetch("json/dashboard-admin.json")
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Arquivo JSON não encontrado");
+      }
+
+      return response.json();
+    })
     .then(data => {
       renderizarDashboardAdmin(data.ocorrencias);
     })
@@ -73,6 +79,51 @@ function renderizarDashboardAdmin(ocorrencias) {
   carregarMapa(ocorrencias);
 }
 
+const categorias = {
+  "Buraco": {
+    nome: "Buraco",
+    cor: "#dc3545",
+    icone: "img/buraco.png"
+  },
+
+  "Vazamento": {
+    nome: "Vazamento",
+    cor: "#006cfa",
+    icone: "img/vazamento.png"
+  },
+
+  "Falta de Água": {
+    nome: "Falta de Água",
+    cor: "#ffc107",
+    icone: "img/agua.png"
+  },
+
+  "Outros": {
+    nome: "Outros",
+    cor: "#5c6c75",
+    icone: "img/outros.png"
+  }
+};
+
+function criarIconeCategoria(tipo) {
+  const categoria = categorias[tipo] || categorias["Outros"];
+
+  return L.divIcon({
+    className: "",
+    html: `
+      <div
+        class="mapa-icone"
+        style="border-color: ${categoria.cor};"
+      >
+        <img src="${categoria.icone}" alt="${categoria.nome}">
+      </div>
+    `,
+    iconSize: [44, 44],
+    iconAnchor: [22, 44],
+    popupAnchor: [0, -44]
+  });
+}
+
 function carregarMapa(ocorrencias) {
   const elementoMapa = document.getElementById("map");
 
@@ -92,28 +143,17 @@ function carregarMapa(ocorrencias) {
       return;
     }
 
-    let cor = "gray";
+    const categoria = categorias[ocorrencia.tipo] || categorias["Outros"];
 
-    if (ocorrencia.tipo === "Buraco") {
-      cor = "red";
-    } else if (ocorrencia.tipo === "Vazamento") {
-      cor = "blue";
-    } else if (ocorrencia.tipo === "Falta de Água") {
-      cor = "orange";
-    }
-
-    L.circleMarker(
+    L.marker(
       [ocorrencia.latitude, ocorrencia.longitude],
       {
-        radius: 10,
-        color: cor,
-        fillColor: cor,
-        fillOpacity: 0.8
+        icon: criarIconeCategoria(ocorrencia.tipo)
       }
     )
       .addTo(map)
       .bindPopup(`
-        <strong>${ocorrencia.tipo}</strong>
+        <strong>${categoria.nome}</strong>
         <br>
         Bairro: ${ocorrencia.bairro}
         <br>

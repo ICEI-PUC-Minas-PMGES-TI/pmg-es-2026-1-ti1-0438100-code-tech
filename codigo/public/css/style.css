@@ -1114,3 +1114,21 @@ body {
   }
 }
 
+.mapa-icone {
+  width: 44px;
+  height: 44px;
+  background-color: white;
+  border: 4px solid;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+
+.mapa-icone img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
