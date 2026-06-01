@@ -29,6 +29,15 @@ function formatDateTime(date) {
   return `${dt.toLocaleDateString('pt-BR')} às ${dt.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`;
 }
 
+function normalizePriorityClass(priority) {
+  return String(priority || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9-]/g, '');
+}
+
 function summarizeAddress(address, bairro) {
   if (!address) return '';
 
@@ -151,7 +160,7 @@ function renderOcorrenciasList() {
       <td>${item.bairro}</td>
       <td>${formatDate(item.createdAt)}</td>
       <td><span class="badge-status badge-${item.status === 'Pendente' ? 'pendente' : item.status === 'Em andamento' ? 'andamento' : 'resolvido'}">${item.status}</span></td>
-      <td><span class="badge-priority badge-${item.priority.toLowerCase()}">${item.priority}</span></td>
+      <td><span class="badge-priority badge-${normalizePriorityClass(item.priority)}">${item.priority}</span></td>
       <td><a href="${buildDetailsLink(item.id)}" class="btn-mongodb-outline" style="padding: 6px 12px; font-size: 12px;">Ver detalhes</a></td>
     `;
     fragment.appendChild(row);
@@ -281,7 +290,7 @@ function populateDetailPage() {
   if (detailAddressElement) detailAddressElement.textContent = ocorrencia.address;
   if (detailBairroElement) detailBairroElement.textContent = ocorrencia.bairro;
   if (detailDateElement) detailDateElement.textContent = formatDateTime(ocorrencia.createdAt);
-  if (detailPriorityElement) detailPriorityElement.innerHTML = '<span class="badge-priority badge-' + ocorrencia.priority.toLowerCase() + '">' + ocorrencia.priority + '</span>';
+  if (detailPriorityElement) detailPriorityElement.innerHTML = '<span class="badge-priority badge-' + normalizePriorityClass(ocorrencia.priority) + '">' + ocorrencia.priority + '</span>';
   if (detailStatusElement) detailStatusElement.innerHTML = '<span class="badge-status badge-' + (ocorrencia.status === 'Pendente' ? 'pendente' : ocorrencia.status === 'Em andamento' ? 'andamento' : 'resolvido') + '">' + ocorrencia.status + '</span>';
   if (detailDescriptionElement) detailDescriptionElement.textContent = ocorrencia.description;
   if (detailReportedElement) detailReportedElement.textContent = 'Você';
