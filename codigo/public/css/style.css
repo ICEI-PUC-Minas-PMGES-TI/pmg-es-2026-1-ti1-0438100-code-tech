@@ -17,11 +17,6 @@
   --light-input: #e8edeb;
   --pure-white: #ffffff;
 
-  --shadow-forest: rgba(0, 30, 43, 0.12) 0px 26px 44px,
-    rgba(0, 0, 0, 0.13) 0px 7px 13px;
-  --shadow-standard: rgba(0, 0, 0, 0.15) 0px 3px 20px;
-  --shadow-subtle: rgba(0, 0, 0, 0.1) 0px 2px 4px;
-
   --sidebar-width: 220px;
 }
 
@@ -50,25 +45,27 @@ body {
 .app-layout {
   display: flex;
   min-height: 100vh;
+  width: 100%;
 }
 
 /* ==============================
-   SIDEBAR
+   SIDEBAR DESKTOP
    ============================== */
 
 .sidebar {
   width: var(--sidebar-width);
+  min-width: var(--sidebar-width);
   background: var(--forest-black);
   color: var(--pure-white);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 32px 0;
-  position: fixed;
+  position: sticky;
   top: 0;
-  left: 0;
-  bottom: 0;
+  height: 100vh;
   z-index: 100;
+  flex-shrink: 0;
 }
 
 .sidebar-nav {
@@ -132,14 +129,47 @@ body {
 }
 
 /* ==============================
+   OFFCANVAS MOBILE
+   ============================== */
+
+.offcanvas-sidebar {
+  background: var(--forest-black);
+  color: var(--pure-white);
+}
+
+.offcanvas-sidebar .offcanvas-title {
+  color: var(--pure-white);
+  font-weight: 600;
+}
+
+.offcanvas-sidebar .sidebar-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.offcanvas-sidebar .sidebar-nav a {
+  color: var(--silver-teal);
+}
+
+.offcanvas-sidebar .sidebar-nav a:hover,
+.offcanvas-sidebar .sidebar-nav a.active {
+  color: var(--pure-white);
+  background: var(--deep-teal);
+  border-left-color: var(--mongodb-green);
+}
+
+/* ==============================
    CONTEÚDO PRINCIPAL
    ============================== */
 
 .main-content {
-  margin-left: var(--sidebar-width);
   flex: 1;
   background: var(--pure-white);
   min-height: 100vh;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 /* ==============================
@@ -156,6 +186,7 @@ body {
   position: sticky;
   top: 0;
   z-index: 50;
+  width: 100%;
 }
 
 .mobile-menu-btn {
@@ -170,6 +201,7 @@ body {
 .search-box {
   position: relative;
   width: 380px;
+  max-width: 100%;
 }
 
 .search-box input {
@@ -294,6 +326,7 @@ body {
 
 .content-area {
   padding: 24px 32px;
+  width: 100%;
 }
 
 /* ==============================
@@ -307,6 +340,7 @@ body {
   padding: 24px;
   box-shadow: rgba(0, 30, 43, 0.06) 0px 4px 12px;
   transition: all 0.2s ease;
+  max-width: 100%;
 }
 
 .card-mongodb:hover {
@@ -380,6 +414,8 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  text-align: center;
+  justify-content: center;
 }
 
 .btn-mongodb-primary:hover {
@@ -402,6 +438,8 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  text-align: center;
+  justify-content: center;
 }
 
 .btn-mongodb-outline:hover {
@@ -419,6 +457,8 @@ body {
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
+  text-align: center;
+  justify-content: center;
 }
 
 .btn-mongodb-danger:hover {
@@ -429,8 +469,14 @@ body {
    TABELAS
    ============================== */
 
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
 .table-mongodb {
   width: 100%;
+  min-width: 850px;
   border-collapse: separate;
   border-spacing: 0;
 }
@@ -537,6 +583,7 @@ body {
   background: var(--pure-white);
   outline: none;
   width: 100%;
+  max-width: 100%;
   transition: border-color 0.2s;
 }
 
@@ -551,6 +598,12 @@ body {
   color: var(--forest-black);
   margin-bottom: 6px;
   display: block;
+}
+
+.select-mongodb,
+.dropdown-mongodb {
+  width: 100%;
+  max-width: 100%;
 }
 
 .select-mongodb {
@@ -568,6 +621,9 @@ body {
   border-radius: 16px;
   padding: 20px 24px;
   margin-bottom: 24px;
+  width: 100%;
+  max-width: 100%;
+  overflow: visible;
 }
 
 .filter-box h3 {
@@ -575,6 +631,22 @@ body {
   font-weight: 500;
   color: var(--forest-black);
   margin-bottom: 16px;
+}
+
+.filtro-dropdown {
+  width: 100%;
+  position: relative;
+}
+
+.filtro-menu {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.filtro-menu .dropdown-item {
+  white-space: normal;
+  word-break: break-word;
 }
 
 /* ==============================
@@ -613,12 +685,12 @@ body {
 }
 
 /* ==============================
-   MAPA
+   MAPA E GRÁFICOS
    ============================== */
 
 .map-container {
   width: 100%;
-  height: 300px;
+  min-height: 300px;
   background: var(--light-input);
   border-radius: 16px;
   display: flex;
@@ -640,6 +712,7 @@ body {
 .chart-container {
   position: relative;
   width: 100%;
+  min-height: 250px;
 }
 
 /* ==============================
@@ -726,7 +799,7 @@ body {
 .detail-grid,
 .detalhe-responsivo {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 24px;
 }
 
@@ -770,6 +843,7 @@ body {
   display: flex;
   gap: 12px;
   margin-top: 12px;
+  flex-wrap: wrap;
 }
 
 .image-gallery .thumb {
@@ -829,109 +903,6 @@ body {
   font-family: 'Source Code Pro', monospace;
   font-size: 12px;
   color: var(--cool-gray);
-}
-
-/* ==============================
-   AJUSTES COM BOOTSTRAP
-   Responsividade controlada pelos HTMLs
-   ============================== */
-
-.table-responsive {
-  width: 100%;
-  overflow-x: auto;
-}
-
-.table-mongodb {
-  min-width: 850px;
-}
-
-.filter-box {
-  width: 100%;
-  max-width: 100%;
-  overflow: visible;
-}
-
-.filtro-dropdown {
-  width: 100%;
-  position: relative;
-}
-
-.filtro-menu {
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
-}
-
-.filtro-menu .dropdown-item {
-  white-space: normal;
-  word-break: break-word;
-}
-
-.form-control-mongodb,
-.select-mongodb,
-.dropdown-mongodb {
-  width: 100%;
-  max-width: 100%;
-}
-
-.btn-mongodb-primary,
-.btn-mongodb-outline,
-.btn-mongodb-danger {
-  text-align: center;
-  justify-content: center;
-}
-
-.card-mongodb {
-  max-width: 100%;
-}
-
-.map-container {
-  width: 100%;
-  min-height: 300px;
-}
-
-.chart-container {
-  width: 100%;
-  min-height: 250px;
-}
-
-.detail-grid,
-.detalhe-responsivo {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 24px;
-}
-
-.detail-info-table {
-  width: 100%;
-  table-layout: fixed;
-}
-
-.detail-info-table td {
-  word-break: break-word;
-  overflow-wrap: break-word;
-}
-
-.image-gallery {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.content-area {
-  width: 100%;
-}
-
-.top-bar {
-  width: 100%;
-}
-
-.search-box {
-  max-width: 100%;
-}
-
-.search-box input {
-  width: 100%;
 }
 
 /* ==============================
