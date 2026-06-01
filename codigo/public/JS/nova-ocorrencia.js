@@ -5,6 +5,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const endereco = document.getElementById("endereco");
   const tipo = document.getElementById("tipo");
   const descricao = document.getElementById("descricao");
+  const contadorDescricao = document.getElementById("contadorDescricao");
+  const erroDescricao = document.getElementById("erroDescricao");
   const coordenadas = document.getElementById("coordenadas");
   const progress = document.getElementById("progress");
   const progressBar = document.getElementById("progressBar");
@@ -188,8 +190,18 @@ endereco.addEventListener("keydown", function (evento) {
     progressBar.style.width = total + "%";
   }
 
-  tipo.addEventListener("change", atualizarProgresso);
-  descricao.addEventListener("input", atualizarProgresso);
+ tipo.addEventListener("change", atualizarProgresso);
+
+descricao.addEventListener("input", function () {
+
+  contadorDescricao.textContent = descricao.value.length;
+
+  if (descricao.value.trim().length >= 20) {
+    erroDescricao.textContent = "";
+  }
+
+  atualizarProgresso();
+});
 
   // UPLOAD DE FOTOS
   dragDrop.addEventListener("click", function () {
@@ -216,20 +228,27 @@ endereco.addEventListener("keydown", function (evento) {
   });
 
   function adicionarFotos(arquivos) {
-    Array.from(arquivos).forEach(arquivo => {
-      if (!arquivo.type.startsWith("image/")) return;
 
-      const leitor = new FileReader();
-
-      leitor.onload = function (evento) {
-        fotos.push(evento.target.result);
-        mostrarFotos();
-        atualizarProgresso();
-      };
-
-      leitor.readAsDataURL(arquivo);
-    });
+  if (fotos.length + arquivos.length > 5) {
+    alert("Você pode enviar no máximo 5 fotos.");
+    return;
   }
+
+  Array.from(arquivos).forEach(arquivo => {
+
+    if (!arquivo.type.startsWith("image/")) return;
+
+    const leitor = new FileReader();
+
+    leitor.onload = function (evento) {
+      fotos.push(evento.target.result);
+      mostrarFotos();
+      atualizarProgresso();
+    };
+
+    leitor.readAsDataURL(arquivo);
+  });
+}
 
   function mostrarFotos() {
     fotosContainer.innerHTML = "";
@@ -276,10 +295,11 @@ endereco.addEventListener("keydown", function (evento) {
       return;
     }
 
-    if (descricao.value.trim() === "") {
-      alert("Descreva a ocorrência.");
-      return;
-    }
+  if (descricao.value.trim().length < 20) {
+  erroDescricao.textContent =
+    "A descrição deve conter pelo menos 20 caracteres.";
+  return;
+}
 
     if (latitude === null || longitude === null) {
       alert("Marque a localização no mapa.");
@@ -329,4 +349,8 @@ endereco.addEventListener("keydown", function (evento) {
     atualizarProgresso();
   });
 
+  contadorDescricao.textContent = 0;
+
 });
+
+

@@ -167,9 +167,28 @@
                 </div>
 
                 <div class="card-body">
-                  <textarea class="form-control" id="descricao" rows="3" placeholder="Descreva a ocorrência em detalhes..." required></textarea>
-                </div>
-              </div>
+                <textarea
+                  class="form-control"
+                  id="descricao"
+                  rows="3"
+                  maxlength="500"
+                  placeholder="Descreva a ocorrência em detalhes..."
+                  required>
+                </textarea>
+
+      <div class="text-end mt-1">
+        
+        <small class="text-muted">
+          
+          <span id="contadorDescricao">0</span>/500 caracteres
+        
+        </small>
+       
+      </div>
+      
+      <div id="erroDescricao" class="text-danger small mt-1"></div>
+              
+             </div>
 
               <!-- FOTOS -->
               <div class="card border-0 shadow-sm mb-3">
@@ -190,7 +209,15 @@
                   <input type="file" id="inputFotos" multiple accept="image/*" hidden>
 
                   <div class="row g-2 mt-3" id="fotosContainer"></div>
+
+                  <small class="text-muted d-block mt-2">
+                       
+                    Máximo de 5 fotos por ocorrência
+                 
+                  </small>
+                
                 </div>
+              
               </div>
 
               <!-- BOTÕES -->
