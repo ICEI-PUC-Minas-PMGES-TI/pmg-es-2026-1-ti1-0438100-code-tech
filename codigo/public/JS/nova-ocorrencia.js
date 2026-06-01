@@ -17,6 +17,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const btnBuscar = document.querySelector(".input-group .btn-mongodb-primary");
 
+  //Exibição da data
+
+ document.getElementById("dataAtual").textContent =
+  new Date().toLocaleDateString("pt-BR");
+
   // VARIÁVEIS
   let latitude = null;
   let longitude = null;
