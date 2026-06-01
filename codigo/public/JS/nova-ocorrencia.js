@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const contadorDescricao = document.getElementById("contadorDescricao");
   const erroDescricao = document.getElementById("erroDescricao");
   const coordenadas = document.getElementById("coordenadas");
+  const erroMapa = document.getElementById("erroMapa");
   const progress = document.getElementById("progress");
   const progressBar = document.getElementById("progressBar");
   const dragDrop = document.getElementById("dragDrop");
@@ -92,6 +93,7 @@ function montarEnderecoBusca(texto) {
     marcador = L.marker([latitude, longitude]).addTo(mapa);
 
     coordenadas.textContent = `Lat: ${latitude.toFixed(4)} | Lng: ${longitude.toFixed(4)}`;
+    erroMapa.textContent = "";
   }
 
   // REMOVE LISTA DE SUGESTÕES
@@ -302,9 +304,12 @@ descricao.addEventListener("input", function () {
 }
 
     if (latitude === null || longitude === null) {
-      alert("Marque a localização no mapa.");
-      return;
-    }
+
+  erroMapa.textContent =
+    "Selecione uma localização no mapa.";
+
+  return;
+}
 
     const ocorrencia = {
       endereco: endereco.value,
