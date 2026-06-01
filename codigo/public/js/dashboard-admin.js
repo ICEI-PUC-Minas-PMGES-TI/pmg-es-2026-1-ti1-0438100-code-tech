@@ -13,7 +13,65 @@ document.addEventListener("DOMContentLoaded", () => {
   carregarDashboardAdmin();
 });
 
+const categorias = {
+  "Buraco": {
+    nome: "Buraco",
+    cor: "#dc3545",
+    icone: "img/buraco.png"
+  },
+  "Vazamento": {
+    nome: "Vazamento",
+    cor: "#006cfa",
+    icone: "img/vazamento.png"
+  },
+  "Falta de Água": {
+    nome: "Falta de Água",
+    cor: "#ffc107",
+    icone: "img/agua.png"
+  },
+  "Outros": {
+    nome: "Outros",
+    cor: "#5c6c75",
+    icone: "img/outros.png"
+  }
+};
+
+let mapaDashboard = null;
+
+function buscarOcorrenciasLocal() {
+  return JSON.parse(localStorage.getItem("ocorrencias")) || [];
+}
+
+function salvarOcorrenciasLocal(ocorrencias) {
+  localStorage.setItem("ocorrencias", JSON.stringify(ocorrencias));
+}
+
+function normalizarOcorrencia(ocorrencia) {
+  return {
+    id: ocorrencia.id || Date.now(),
+    usuarioId: ocorrencia.usuarioId || 1,
+    tipo: ocorrencia.tipo || "Outros",
+    endereco: ocorrencia.endereco || ocorrencia.rua || "Não informado",
+    bairro: ocorrencia.bairro || "Não informado",
+    data: ocorrencia.data || new Date().toLocaleDateString("pt-BR"),
+    status: ocorrencia.status || "Pendente",
+    prioridade: ocorrencia.prioridade || "Baixa",
+    descricao: ocorrencia.descricao || "Sem descrição",
+    curtidas: ocorrencia.curtidas || 0,
+    engajamento: ocorrencia.engajamento || 0,
+    latitude: ocorrencia.latitude || -19.9167,
+    longitude: ocorrencia.longitude || -43.9345
+  };
+}
+
 function carregarDashboardAdmin() {
+  const ocorrenciasLocal = buscarOcorrenciasLocal();
+
+  if (ocorrenciasLocal.length > 0) {
+    renderizarDashboardAdmin(ocorrenciasLocal.map(normalizarOcorrencia));
+    return;
+  }
+
   fetch("json/dashboard-admin.json")
     .then(response => {
       if (!response.ok) {
@@ -23,7 +81,11 @@ function carregarDashboardAdmin() {
       return response.json();
     })
     .then(data => {
-      renderizarDashboardAdmin(data.ocorrencias);
+      const listaOcorrencias = data.ocorrencias || [];
+      const ocorrenciasNormalizadas = listaOcorrencias.map(normalizarOcorrencia);
+
+      salvarOcorrenciasLocal(ocorrenciasNormalizadas);
+      renderizarDashboardAdmin(ocorrenciasNormalizadas);
     })
     .catch(error => {
       console.log("Erro ao carregar dashboard:", error);
@@ -43,7 +105,11 @@ function renderizarDashboardAdmin(ocorrencias) {
   let totalFaltaAgua = 0;
   let totalOutros = 0;
 
-  ocorrencias.forEach(ocorrencia => {
+  const ocorrenciasOrdenadas = [...ocorrencias]
+    .map(normalizarOcorrencia)
+    .sort((a, b) => (b.engajamento || 0) - (a.engajamento || 0));
+
+  ocorrenciasOrdenadas.forEach(ocorrencia => {
     if (ocorrencia.tipo === "Buraco") {
       totalBuracos++;
     } else if (ocorrencia.tipo === "Vazamento") {
@@ -62,8 +128,13 @@ function renderizarDashboardAdmin(ocorrencias) {
           <td>${ocorrencia.bairro}</td>
           <td>${ocorrencia.status}</td>
           <td>
-            <button class="btn btn-dark btn-sm">
-              Ver
+            <button
+              class="btn btn-outline-dark btn-sm btn-reacao"
+              onclick="curtirDashboard('${ocorrencia.id}')"
+              title="Curtir ocorrência"
+            >
+              <i class="bi bi-hand-thumbs-up"></i>
+              ${ocorrencia.curtidas || 0}
             </button>
           </td>
         </tr>
@@ -71,39 +142,32 @@ function renderizarDashboardAdmin(ocorrencias) {
     }
   });
 
-  document.getElementById("totalBuracos").innerText = totalBuracos;
-  document.getElementById("totalVazamentos").innerText = totalVazamentos;
-  document.getElementById("totalFaltaAgua").innerText = totalFaltaAgua;
-  document.getElementById("totalOutros").innerText = totalOutros;
+  const totalBuracosEl = document.getElementById("totalBuracos");
+  const totalVazamentosEl = document.getElementById("totalVazamentos");
+  const totalFaltaAguaEl = document.getElementById("totalFaltaAgua");
+  const totalOutrosEl = document.getElementById("totalOutros");
 
-  carregarMapa(ocorrencias);
+  if (totalBuracosEl) totalBuracosEl.innerText = totalBuracos;
+  if (totalVazamentosEl) totalVazamentosEl.innerText = totalVazamentos;
+  if (totalFaltaAguaEl) totalFaltaAguaEl.innerText = totalFaltaAgua;
+  if (totalOutrosEl) totalOutrosEl.innerText = totalOutros;
+
+  carregarMapa(ocorrenciasOrdenadas);
 }
 
-const categorias = {
-  "Buraco": {
-    nome: "Buraco",
-    cor: "#dc3545",
-    icone: "img/buraco.png"
-  },
+function curtirDashboard(id) {
+  const ocorrencias = buscarOcorrenciasLocal().map(normalizarOcorrencia);
 
-  "Vazamento": {
-    nome: "Vazamento",
-    cor: "#006cfa",
-    icone: "img/vazamento.png"
-  },
+  ocorrencias.forEach(ocorrencia => {
+    if (String(ocorrencia.id) === String(id)) {
+      ocorrencia.curtidas = (ocorrencia.curtidas || 0) + 1;
+      ocorrencia.engajamento = (ocorrencia.engajamento || 0) + 1;
+    }
+  });
 
-  "Falta de Água": {
-    nome: "Falta de Água",
-    cor: "#ffc107",
-    icone: "img/agua.png"
-  },
-
-  "Outros": {
-    nome: "Outros",
-    cor: "#5c6c75",
-    icone: "img/outros.png"
-  }
-};
+  salvarOcorrenciasLocal(ocorrencias);
+  renderizarDashboardAdmin(ocorrencias);
+}
 
 function criarIconeCategoria(tipo) {
   const categoria = categorias[tipo] || categorias["Outros"];
@@ -111,10 +175,7 @@ function criarIconeCategoria(tipo) {
   return L.divIcon({
     className: "",
     html: `
-      <div
-        class="mapa-icone"
-        style="border-color: ${categoria.cor};"
-      >
+      <div class="mapa-icone" style="border-color: ${categoria.cor};">
         <img src="${categoria.icone}" alt="${categoria.nome}">
       </div>
     `,
@@ -132,11 +193,15 @@ function carregarMapa(ocorrencias) {
     return;
   }
 
-  const map = L.map("map").setView([-19.9167, -43.9345], 11);
+  if (mapaDashboard) {
+    mapaDashboard.remove();
+  }
+
+  mapaDashboard = L.map("map").setView([-19.9167, -43.9345], 11);
 
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution: "&copy; OpenStreetMap"
-  }).addTo(map);
+  }).addTo(mapaDashboard);
 
   ocorrencias.forEach(ocorrencia => {
     if (!ocorrencia.latitude || !ocorrencia.longitude) {
@@ -151,25 +216,33 @@ function carregarMapa(ocorrencias) {
         icon: criarIconeCategoria(ocorrencia.tipo)
       }
     )
-      .addTo(map)
+      .addTo(mapaDashboard)
       .bindPopup(`
         <strong>${categoria.nome}</strong>
         <br>
         Bairro: ${ocorrencia.bairro}
         <br>
         Status: ${ocorrencia.status}
+        <br>
+        Curtidas: ${ocorrencia.curtidas || 0}
+        <br>
+        Engajamento: ${ocorrencia.engajamento || 0}
         <br><br>
         ${ocorrencia.descricao}
       `);
   });
 
   setTimeout(() => {
-    map.invalidateSize();
+    mapaDashboard.invalidateSize();
   }, 300);
 }
 
 function toggleSidebar() {
   const sidebar = document.querySelector(".sidebar");
-
   sidebar.classList.toggle("sidebar-open");
+}
+
+function logout() {
+  localStorage.removeItem("usuarioLogado");
+  window.location.href = "dashboard-admin.html";
 }

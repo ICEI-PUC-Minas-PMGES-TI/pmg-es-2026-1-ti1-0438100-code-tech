@@ -25,7 +25,11 @@
       "status": "Pendente",
       "latitude": -19.916,
       "longitude": -43.934,
-      "curtidas": 0
+      "curtidas": 0,
+      "endereco": "Avenida principal",
+      "data": "01/06/2026",
+      "prioridade": "Baixa",
+      "engajamento": 0
     },
     {
       "id": 2022,
@@ -36,7 +40,11 @@
       "status": "Em andamento",
       "latitude": -19.935,
       "longitude": -44.053,
-      "curtidas": 0
+      "curtidas": 0,
+      "endereco": "Próximo ao semáforo",
+      "data": "01/06/2026",
+      "prioridade": "Baixa",
+      "engajamento": 0
     },
     {
       "id": 2023,
@@ -45,9 +53,13 @@
       "descricao": "Rua sem abastecimento",
       "bairro": "Industrial",
       "status": "Resolvido",
-      "latitude": -19.920,
-      "longitude": -44.040,
-      "curtidas": 0
+      "latitude": -19.92,
+      "longitude": -44.04,
+      "curtidas": 0,
+      "endereco": "Rua Industrial",
+      "data": "01/06/2026",
+      "prioridade": "Baixa",
+      "engajamento": 0
     },
     {
       "id": 2024,
@@ -56,9 +68,13 @@
       "descricao": "Poste com risco de queda",
       "bairro": "Alvorada",
       "status": "Pendente",
-      "latitude": -19.950,
-      "longitude": -44.020,
-      "curtidas": 0
+      "latitude": -19.95,
+      "longitude": -44.02,
+      "curtidas": 0,
+      "endereco": "Rua Alvorada",
+      "data": "01/06/2026",
+      "prioridade": "Baixa",
+      "engajamento": 0
     }
   ]
 }
