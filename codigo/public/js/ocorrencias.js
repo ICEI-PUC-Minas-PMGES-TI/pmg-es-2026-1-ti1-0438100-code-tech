@@ -12,7 +12,6 @@ function salvarOcorrencias(ocorrencias) {
 
 function carregarOcorrencias() {
   const ocorrencias = buscarOcorrencias();
-
   renderizarTabela(ocorrencias);
 }
 
@@ -31,31 +30,23 @@ function renderizarTabela(ocorrencias) {
           <strong>#${ocorrencia.id}</strong>
         </td>
 
-        <td>
-          ${ocorrencia.tipo || "Não informado"}
-        </td>
+        <td>${ocorrencia.tipo}</td>
 
-        <td>
-          ${ocorrencia.endereco || "Não informado"}
-        </td>
+        <td>${ocorrencia.endereco}</td>
 
-        <td>
-          ${ocorrencia.bairro || "Não informado"}
-        </td>
+        <td>${ocorrencia.bairro}</td>
 
-        <td>
-          ${ocorrencia.data || "Sem data"}
-        </td>
+        <td>${ocorrencia.data}</td>
 
         <td>
           <span class="badge-status ${badgeStatus}">
-            ${ocorrencia.status || "Pendente"}
+            ${ocorrencia.status}
           </span>
         </td>
 
         <td>
           <span class="badge-priority ${badgePrioridade}">
-            ${ocorrencia.prioridade || "Baixa"}
+            ${ocorrencia.prioridade}
           </span>
         </td>
 
@@ -63,26 +54,15 @@ function renderizarTabela(ocorrencias) {
           <div class="d-flex gap-2 align-items-center flex-wrap">
 
             <button
-              class="btn btn-outline-dark btn-sm btn-reacao"
+              class="btn btn-outline-dark btn-sm"
               onclick="curtirOcorrencia('${ocorrencia.id}')"
-              title="Curtir ocorrência"
             >
-              <i class="bi bi-hand-thumbs-up"></i>
-              ${ocorrencia.curtidas || 0}
-            </button>
-
-            <button
-              class="btn btn-outline-secondary btn-sm"
-              disabled
-              title="Engajamento da ocorrência"
-            >
-              Eng. ${ocorrencia.engajamento || 0}
+              👍 ${ocorrencia.curtidas || 0}
             </button>
 
             <button
               class="action-icon action-icon-delete"
               onclick="excluirOcorrencia('${ocorrencia.id}')"
-              title="Excluir ocorrência"
             >
               <i class="bi bi-trash3-fill"></i>
             </button>
@@ -140,7 +120,6 @@ function curtirOcorrencia(id) {
   ocorrencias.forEach((ocorrencia) => {
     if (String(ocorrencia.id) === String(id)) {
       ocorrencia.curtidas = (ocorrencia.curtidas || 0) + 1;
-      ocorrencia.engajamento = (ocorrencia.engajamento || 0) + 1;
     }
   });
 
@@ -157,14 +136,12 @@ function filtrarOcorrencias() {
   let ocorrencias = buscarOcorrencias();
 
   ocorrencias = ocorrencias.filter((ocorrencia) => {
-    const bairroOcorrencia = (ocorrencia.bairro || "").toLowerCase();
-
     return (
       (tipo === "" || ocorrencia.tipo === tipo) &&
       (status === "" || ocorrencia.status === status) &&
       (
         bairro === "" ||
-        bairroOcorrencia.includes(bairro)
+        ocorrencia.bairro.toLowerCase().includes(bairro)
       )
     );
   });
@@ -184,6 +161,12 @@ function limparFiltros() {
   carregarOcorrencias();
 }
 
+function toggleSidebar() {
+  const sidebar = document.querySelector(".sidebar");
+
+  sidebar.classList.toggle("sidebar-open");
+}
+
 function selecionarTipo(valor, texto) {
   document.getElementById("filtroTipo").value = valor;
   document.getElementById("textoFiltroTipo").innerText = texto;
@@ -192,10 +175,4 @@ function selecionarTipo(valor, texto) {
 function selecionarStatus(valor, texto) {
   document.getElementById("filtroStatus").value = valor;
   document.getElementById("textoFiltroStatus").innerText = texto;
-}
-
-function toggleSidebar() {
-  const sidebar = document.querySelector(".sidebar");
-
-  sidebar.classList.toggle("sidebar-open");
 }
