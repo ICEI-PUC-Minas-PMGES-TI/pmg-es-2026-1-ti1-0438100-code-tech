@@ -98,7 +98,7 @@
           <div class="mb-3">
             <label class="form-label-mongodb">Endereço:</label>
             <div class="d-flex gap-2">
-              <input type="text" class="form-control-mongodb" placeholder="Rua Timbiras, 150 - Funcionaram" style="flex: 1;">
+              <input type="text" id="inputEndereco" class="form-control-mongodb" placeholder="Rua Timbiras, 150 - Funcionários" style="flex: 1;">
               <button class="btn-mongodb-primary" style="border-radius: 8px; white-space: nowrap;">
                 Buscar Endereço
               </button>
@@ -106,27 +106,43 @@
           </div>
 
           <div class="mb-3">
+            <label class="form-label-mongodb">Bairro:</label>
+            <select id="inputBairro" class="form-control-mongodb select-mongodb">
+              <option>Comiteco</option>
+              <option>Boa Viagem</option>
+              <option>Pantanal</option>
+              <option>Barreto</option>
+              <option>Queiroz</option>
+              <option>Vila Rica</option>
+              <option>Venda Nova</option>
+              <option>Pampulha</option>
+              <option>Centro</option>
+              <option>Barreiro</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
             <label class="form-label-mongodb">Tipo:</label>
-            <select class="form-control-mongodb select-mongodb">
+            <select id="inputTipo" class="form-control-mongodb select-mongodb">
               <option>Buraco</option>
               <option>Vazamento</option>
-              <option>Falta de Água</option>
+              <option>Falta de Agua</option>
               <option>Outros</option>
             </select>
           </div>
 
           <div class="mb-3">
             <label class="form-label-mongodb">Prioridade:</label>
-            <select class="form-control-mongodb select-mongodb">
+            <select id="inputPrioridade" class="form-control-mongodb select-mongodb">
               <option>Baixa</option>
-              <option>Média</option>
+              <option>Media</option>
               <option>Alta</option>
             </select>
           </div>
 
           <div class="mb-3">
             <label class="form-label-mongodb">Descrição:</label>
-            <textarea class="form-control-mongodb" rows="4" placeholder="Descreva a Ocorrência em detalhes..." style="resize: vertical;"></textarea>
+            <textarea id="inputDescricao" class="form-control-mongodb" rows="4" placeholder="Descreva a Ocorrência em detalhes..." style="resize: vertical;"></textarea>
           </div>
 
           <div class="mb-4">
@@ -138,7 +154,7 @@
           </div>
 
           <div class="d-flex gap-3">
-            <button class="btn-mongodb-primary" style="flex: 1; justify-content: center;">
+            <button id="btnRegistrar" class="btn-mongodb-primary" style="flex: 1; justify-content: center;">
               <i class="bi bi-check-lg"></i> Registrar Ocorrência
             </button>
             <a href="ocorrencias.html" class="btn-mongodb-outline" style="flex: 0;">
@@ -151,5 +167,28 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/dados.js"></script>
+  <script>
+    document.getElementById('btnRegistrar').addEventListener('click', function (e) {
+      e.preventDefault();
+      const endereco = document.getElementById('inputEndereco').value.trim();
+      if (!endereco) {
+        alert('Informe o endereço da ocorrência.');
+        return;
+      }
+      const hoje = new Date();
+      const iso = hoje.toISOString().slice(0, 10);
+      salvarNovaOcorrencia({
+        tipo: document.getElementById('inputTipo').value,
+        bairro: document.getElementById('inputBairro').value,
+        endereco: endereco,
+        data: iso,
+        status: 'Pendente',
+        prioridade: document.getElementById('inputPrioridade').value,
+        descricao: document.getElementById('inputDescricao').value.trim(),
+      });
+      window.location.href = 'ocorrencias.html';
+    });
+  </script>
 </body>
 </html>

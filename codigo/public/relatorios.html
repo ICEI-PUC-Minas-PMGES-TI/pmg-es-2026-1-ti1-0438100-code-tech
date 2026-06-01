@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Relátorios - TIAW</title>
+  <title>Relatórios - TIAW</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Code+Pro:wght@400;500;600&display=swap" rel="stylesheet">
@@ -31,7 +31,7 @@
           <li>
             <a href="relatorios.html" class="active">
               <i class="bi bi-bar-chart-line"></i>
-              <span>Relátorios</span>
+              <span>Relatórios</span>
             </a>
           </li>
           <li>
@@ -83,14 +83,15 @@
       <div class="page-header">
         <div class="page-header-row">
           <div>
-            <h1>Relátorios</h1>
-            <p class="subtitle">Análise e estatástica das Ocorrências</p>
+            <h1>Relatórios</h1>
+            <p class="subtitle">Análise e estatística das Ocorrências</p>
           </div>
           <div class="d-flex gap-2 align-items-center">
-            <select class="dropdown-mongodb">
-              <option>Últimos 30 dias</option>
-              <option>Últimos 7 dias</option>
-              <option>Últimos 90 dias</option>
+            <select class="dropdown-mongodb" id="filtroPeriodo">
+              <option value="30" selected>Últimos 30 dias</option>
+              <option value="7">Últimos 7 dias</option>
+              <option value="90">Últimos 90 dias</option>
+              <option value="0">Todos os períodos</option>
             </select>
             <button class="btn-mongodb-primary">
               <i class="bi bi-download"></i> Exportar
@@ -105,29 +106,29 @@
           <div class="col-md-3 col-6">
             <div class="stat-card">
               <div class="stat-label">Total</div>
-              <div class="stat-value">129</div>
+              <div class="stat-value" id="statTotal">0</div>
               <div class="stat-percent">Ocorrências</div>
             </div>
           </div>
           <div class="col-md-3 col-6">
             <div class="stat-card">
               <div class="stat-label">Resolvidos</div>
-              <div class="stat-value">129</div>
-              <div class="stat-percent">63,7%</div>
+              <div class="stat-value" id="statResolvidos">0</div>
+              <div class="stat-percent" id="statResolvidosPct">0%</div>
             </div>
           </div>
           <div class="col-md-3 col-6">
             <div class="stat-card">
-              <div class="stat-label">Buracos</div>
-              <div class="stat-value">129</div>
-              <div class="stat-percent">36,3%</div>
+              <div class="stat-label">Categoria líder</div>
+              <div class="stat-value" id="statCategoriaLider" style="font-size: 22px;">-</div>
+              <div class="stat-percent" id="statCategoriaPct">0%</div>
             </div>
           </div>
           <div class="col-md-3 col-6">
             <div class="stat-card">
-              <div class="stat-label">Buracos</div>
-              <div class="stat-value">129</div>
-              <div class="stat-percent">Com Ocorrências</div>
+              <div class="stat-label">Bairro líder</div>
+              <div class="stat-value" id="statBairroLider" style="font-size: 22px;">-</div>
+              <div class="stat-percent" id="statBairroQtd">0 Ocorrências</div>
             </div>
           </div>
         </div>
@@ -173,7 +174,7 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="js/contagem-por-categoria.js"></script>
+  <script src="js/dados.js"></script>
   <script>
     const colors = {
       forestBlack: '#001e2b',
@@ -185,160 +186,119 @@
       lightInput: '#e8edeb',
     };
 
-    const chartFont = {
-      family: "'Source Code Pro', 'Inter', monospace",
-      size: 11,
-      weight: 500,
-    };
+    const chartFont = { family: "'Source Code Pro', 'Inter', monospace", size: 11, weight: 500 };
 
     Chart.defaults.font.family = "'Inter', sans-serif";
     Chart.defaults.font.size = 12;
     Chart.defaults.color = colors.coolGray;
 
-    // no futuro, precisa pegar esses dados de alguma api ou local mesmo
-    const problemasExemplo = [
-      { categoria: 'Buracos' }, { categoria: 'Buracos' }, { categoria: 'Buracos' },
-      { categoria: 'Vazamento' }, { categoria: 'Vazamento' },
-      { categoria: 'Agua' }, { categoria: 'Outros' }, { categoria: 'Outros' },
-    ];
-    const totais = contarPorCategoria(problemasExemplo);
-    const porTipo = contagemParaChart(totais);
-
-    new Chart(document.getElementById('doughnutChart'), {
+    const doughnut = new Chart(document.getElementById('doughnutChart'), {
       type: 'doughnut',
-      data: {
-        labels: porTipo.labels,
-        datasets: [{
-          data: porTipo.data,
-          backgroundColor: [
-            colors.forestBlack,
-            colors.coolGray,
-            colors.silverTeal,
-            colors.lightInput,
-          ],
-          borderWidth: 0,
-          hoverOffset: 8,
-        }]
-      },
+      data: { labels: [], datasets: [{ data: [], backgroundColor: [colors.forestBlack, colors.coolGray, colors.silverTeal, colors.lightInput], borderWidth: 0, hoverOffset: 8 }] },
       options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        cutout: '65%',
-        plugins: {
-          legend: {
-            position: 'right',
-            labels: {
-              padding: 16,
-              usePointStyle: true,
-              pointStyle: 'circle',
-              font: { size: 13, weight: 400 },
-            }
-          }
-        }
+        responsive: true, maintainAspectRatio: false, cutout: '65%',
+        plugins: { legend: { position: 'right', labels: { padding: 16, usePointStyle: true, pointStyle: 'circle', font: { size: 13, weight: 400 } } } }
       }
     });
 
-    new Chart(document.getElementById('barChart'), {
+    const barChart = new Chart(document.getElementById('barChart'), {
       type: 'bar',
-      data: {
-        labels: ['Venda nova', 'Pampulha', 'Centro', 'Barreiro', 'Outros'],
-        datasets: [{
-          data: [32, 30, 26, 24, 22],
-          backgroundColor: colors.coolGray,
-          borderRadius: 4,
-          barThickness: 36,
-        }]
-      },
+      data: { labels: [], datasets: [{ data: [], backgroundColor: colors.coolGray, borderRadius: 4, barThickness: 36 }] },
       options: {
-        responsive: true,
-        maintainAspectRatio: false,
+        responsive: true, maintainAspectRatio: false,
         plugins: { legend: { display: false } },
         scales: {
-          y: {
-            beginAtZero: true,
-            max: 40,
-            ticks: { stepSize: 10, font: chartFont },
-            grid: { color: '#f0f0f0' },
-            border: { display: false },
-          },
-          x: {
-            grid: { display: false },
-            ticks: { font: { size: 11 } },
-            border: { display: false },
-          }
+          y: { beginAtZero: true, ticks: { stepSize: 1, font: chartFont, precision: 0 }, grid: { color: '#f0f0f0' }, border: { display: false } },
+          x: { grid: { display: false }, ticks: { font: { size: 11 } }, border: { display: false } }
         }
       }
     });
 
-    new Chart(document.getElementById('horizontalBarChart'), {
+    const horizontalBarChart = new Chart(document.getElementById('horizontalBarChart'), {
       type: 'bar',
-      data: {
-        labels: ['Venda Nova', 'Pampulha', 'Centro', 'Barreiro'],
-        datasets: [{
-          data: [50, 42, 38, 18],
-          backgroundColor: colors.coolGray,
-          borderRadius: 4,
-          barThickness: 20,
-        }]
-      },
+      data: { labels: [], datasets: [{ data: [], backgroundColor: colors.coolGray, borderRadius: 4, barThickness: 20 }] },
       options: {
-        indexAxis: 'y',
-        responsive: true,
-        maintainAspectRatio: false,
+        indexAxis: 'y', responsive: true, maintainAspectRatio: false,
         plugins: { legend: { display: false } },
         scales: {
-          x: {
-            beginAtZero: true,
-            max: 60,
-            ticks: { stepSize: 10, font: chartFont },
-            grid: { color: '#f0f0f0' },
-            border: { display: false },
-          },
-          y: {
-            grid: { display: false },
-            ticks: { font: { size: 12 } },
-            border: { display: false },
-          }
+          x: { beginAtZero: true, ticks: { stepSize: 1, font: chartFont, precision: 0 }, grid: { color: '#f0f0f0' }, border: { display: false } },
+          y: { grid: { display: false }, ticks: { font: { size: 12 } }, border: { display: false } }
         }
       }
     });
 
-    new Chart(document.getElementById('lineChart'), {
+    const lineChart = new Chart(document.getElementById('lineChart'), {
       type: 'line',
-      data: {
-        labels: ['01/04', '05/04', '10/04', '15/04', '20/04', '25/04', '30/04'],
-        datasets: [{
-          data: [30, 45, 42, 70, 65, 55, 48],
-          borderColor: colors.coolGray,
-          backgroundColor: 'transparent',
-          borderWidth: 2,
-          pointBackgroundColor: colors.coolGray,
-          pointBorderColor: '#fff',
-          pointBorderWidth: 2,
-          pointRadius: 5,
-          tension: 0.3,
-        }]
-      },
+      data: { labels: [], datasets: [{ data: [], borderColor: colors.coolGray, backgroundColor: 'transparent', borderWidth: 2, pointBackgroundColor: colors.coolGray, pointBorderColor: '#fff', pointBorderWidth: 2, pointRadius: 5, tension: 0.3 }] },
       options: {
-        responsive: true,
-        maintainAspectRatio: false,
+        responsive: true, maintainAspectRatio: false,
         plugins: { legend: { display: false } },
         scales: {
-          y: {
-            beginAtZero: true,
-            max: 80,
-            ticks: { stepSize: 20, font: chartFont },
-            grid: { color: '#f0f0f0' },
-            border: { display: false },
-          },
-          x: {
-            grid: { display: false },
-            ticks: { font: { size: 11 } },
-            border: { display: false },
-          }
+          y: { beginAtZero: true, ticks: { stepSize: 1, font: chartFont, precision: 0 }, grid: { color: '#f0f0f0' }, border: { display: false } },
+          x: { grid: { display: false }, ticks: { font: { size: 11 } }, border: { display: false } }
         }
       }
     });
+
+    function evolucaoPorSemana(lista, periodo) {
+      const dias = periodo || 90;
+      const bucketDias = Math.max(1, Math.round(dias / 7));
+      const fim = new Date('2026-06-01T00:00:00');
+      const labels = [];
+      const valores = [];
+      for (let i = 6; i >= 0; i--) {
+        const inicio = new Date(fim); inicio.setDate(inicio.getDate() - (i + 1) * bucketDias + 1);
+        const fimBucket = new Date(fim); fimBucket.setDate(fimBucket.getDate() - i * bucketDias);
+        const qtd = lista.filter(o => {
+          const d = new Date(o.data);
+          return d >= inicio && d <= fimBucket;
+        }).length;
+        labels.push(`${String(fimBucket.getDate()).padStart(2,'0')}/${String(fimBucket.getMonth()+1).padStart(2,'0')}`);
+        valores.push(qtd);
+      }
+      return { labels, valores };
+    }
+
+    function atualizarRelatorios() {
+      const periodo = parseInt(document.getElementById('filtroPeriodo').value, 10);
+      const lista = filtrarPorPeriodo(getOcorrencias(), periodo);
+
+      document.getElementById('statTotal').textContent = lista.length;
+      const resolvidos = lista.filter(o => o.status === 'Resolvido').length;
+      document.getElementById('statResolvidos').textContent = resolvidos;
+      document.getElementById('statResolvidosPct').textContent = porcentagemResolvidos(lista).toFixed(1).replace('.', ',') + '%';
+
+      const lider = categoriaLider(lista);
+      document.getElementById('statCategoriaLider').textContent = lider.tipo;
+      const pctLider = lista.length ? (lider.total / lista.length) * 100 : 0;
+      document.getElementById('statCategoriaPct').textContent = pctLider.toFixed(1).replace('.', ',') + '%';
+
+      const bairro = bairroLider(lista);
+      document.getElementById('statBairroLider').textContent = bairro.bairro;
+      document.getElementById('statBairroQtd').textContent = bairro.total + ' Ocorrências';
+
+      const contagem = contarPorTipo(lista);
+      doughnut.data.labels = Object.keys(contagem);
+      doughnut.data.datasets[0].data = Object.values(contagem);
+      doughnut.update();
+
+      const top = topBairros(lista, 5);
+      barChart.data.labels = top.map(([b]) => b);
+      barChart.data.datasets[0].data = top.map(([, v]) => v);
+      barChart.update();
+
+      horizontalBarChart.data.labels = top.map(([b]) => b);
+      horizontalBarChart.data.datasets[0].data = top.map(([, v]) => v);
+      horizontalBarChart.update();
+
+      const evol = evolucaoPorSemana(lista, periodo);
+      lineChart.data.labels = evol.labels;
+      lineChart.data.datasets[0].data = evol.valores;
+      lineChart.update();
+    }
+
+    document.getElementById('filtroPeriodo').addEventListener('change', atualizarRelatorios);
+    atualizarRelatorios();
   </script>
 </body>
 </html>
