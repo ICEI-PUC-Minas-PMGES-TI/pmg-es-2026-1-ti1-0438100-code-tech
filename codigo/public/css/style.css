@@ -123,6 +123,7 @@ body {
 .main-content {
   margin-left: var(--sidebar-width);
   flex: 1;
+  min-width: 0;
   background: var(--pure-white);
   min-height: 100vh;
 }
@@ -763,6 +764,16 @@ body {
   .sidebar-nav a span,
   .sidebar-bottom a span {
     display: none;
+  }
+  .sidebar-nav a {
+    justify-content: center;
+    padding: 12px 0;
+  }
+  .sidebar-bottom {
+    padding: 0;
+  }
+  .sidebar-bottom a {
+    justify-content: center;
   }
   .main-content {
     margin-left: 60px;
