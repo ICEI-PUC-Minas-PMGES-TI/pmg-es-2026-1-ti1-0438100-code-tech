@@ -159,7 +159,7 @@ body {
 }
 
 .mobile-menu-btn {
-  display: none;
+  display: inline-flex;
   border: none;
   background-color: transparent;
   color: var(--forest-black);
@@ -832,287 +832,111 @@ body {
 }
 
 /* ==============================
-   RESPONSIVIDADE - NOTEBOOKS
+   AJUSTES COM BOOTSTRAP
+   Responsividade controlada pelos HTMLs
    ============================== */
 
-@media (max-width: 1024px) {
-  :root {
-    --sidebar-width: 60px;
-  }
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
 
-  .sidebar {
-    width: 60px;
-    overflow: hidden;
-  }
+.table-mongodb {
+  min-width: 850px;
+}
 
-  .sidebar-nav a {
-    justify-content: center;
-    padding: 12px 0;
-  }
+.filter-box {
+  width: 100%;
+  max-width: 100%;
+  overflow: visible;
+}
 
-  .sidebar-nav a span,
-  .sidebar-bottom a span {
-    display: none;
-  }
+.filtro-dropdown {
+  width: 100%;
+  position: relative;
+}
 
-  .sidebar-bottom {
-    padding: 0;
-  }
+.filtro-menu {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
 
-  .sidebar-bottom a {
-    justify-content: center;
-  }
+.filtro-menu .dropdown-item {
+  white-space: normal;
+  word-break: break-word;
+}
 
-  .main-content {
-    margin-left: 60px;
-  }
+.form-control-mongodb,
+.select-mongodb,
+.dropdown-mongodb {
+  width: 100%;
+  max-width: 100%;
+}
+
+.btn-mongodb-primary,
+.btn-mongodb-outline,
+.btn-mongodb-danger {
+  text-align: center;
+  justify-content: center;
+}
+
+.card-mongodb {
+  max-width: 100%;
+}
+
+.map-container {
+  width: 100%;
+  min-height: 300px;
+}
+
+.chart-container {
+  width: 100%;
+  min-height: 250px;
+}
+
+.detail-grid,
+.detalhe-responsivo {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.detail-info-table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.detail-info-table td {
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.image-gallery {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.content-area {
+  width: 100%;
+}
+
+.top-bar {
+  width: 100%;
+}
+
+.search-box {
+  max-width: 100%;
+}
+
+.search-box input {
+  width: 100%;
 }
 
 /* ==============================
-   RESPONSIVIDADE - TABLETS
+   ÍCONES DO MAPA
    ============================== */
-
-@media (max-width: 992px) {
-  :root {
-    --sidebar-width: 220px;
-  }
-
-  .app-layout {
-    display: block;
-  }
-
-  .sidebar {
-    position: fixed;
-    top: 0;
-    left: -260px;
-    width: 260px;
-    height: 100vh;
-    display: flex;
-    z-index: 999;
-    transition: left 0.3s ease;
-  }
-
-  .sidebar.sidebar-open {
-    left: 0;
-  }
-
-  .sidebar-nav a {
-    justify-content: flex-start;
-    padding: 12px 24px;
-  }
-
-  .sidebar-nav a span,
-  .sidebar-bottom a span {
-    display: inline;
-  }
-
-  .sidebar-bottom {
-    padding: 0 24px;
-  }
-
-  .sidebar-bottom a {
-    justify-content: flex-start;
-  }
-
-  .main-content {
-    margin-left: 0;
-    width: 100%;
-  }
-
-  .mobile-menu-btn {
-    display: block;
-  }
-
-  .top-bar {
-    padding: 14px 20px;
-    gap: 16px;
-  }
-
-  .search-box {
-    flex: 1;
-    width: auto;
-  }
-
-  .page-header-row {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-  }
-
-  .content-area {
-    padding: 20px;
-  }
-
-  .card-mongodb {
-    overflow-x: auto;
-  }
-
-  .table-mongodb {
-    min-width: 850px;
-  }
-
-  .legend-item {
-    font-size: 12px;
-  }
-}
-
-/* ==============================
-   RESPONSIVIDADE - CELULARES
-   ============================== */
-
-@media (max-width: 768px) {
-  .top-bar {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .top-bar-right {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-  }
-
-  .search-box {
-    width: 100%;
-  }
-
-  .search-box input {
-    width: 100%;
-  }
-
-  .page-header {
-    padding: 18px 16px 0;
-  }
-
-  .page-header h1 {
-    font-size: 26px;
-  }
-
-  .subtitle {
-    font-size: 14px;
-  }
-
-  .content-area {
-    padding: 16px;
-  }
-
-  .filter-box {
-    width: 100%;
-    max-width: 100%;
-    overflow: hidden;
-    padding: 18px;
-  }
-
-  .filter-box .row {
-    flex-direction: column;
-    margin: 0;
-    gap: 12px;
-  }
-
-  .filter-box .col-md-4,
-  .filter-box .col-md-12 {
-    width: 100%;
-    max-width: 100%;
-    padding-left: 0;
-    padding-right: 0;
-  }
-
-  .form-control-mongodb,
-  .select-mongodb {
-    width: 100%;
-    max-width: 100%;
-    min-height: 48px;
-    font-size: 15px;
-    box-sizing: border-box;
-  }
-
-  .btn-mongodb-primary,
-  .btn-mongodb-outline,
-  .btn-mongodb-danger {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .d-flex.gap-3 {
-    flex-direction: column;
-  }
-
-  .stat-card {
-    min-height: 140px;
-  }
-
-  .map-container {
-    height: 280px !important;
-  }
-
-  .table-mongodb {
-    min-width: 900px;
-  }
-
-  .user-details .name {
-    font-size: 14px;
-  }
-
-  .user-details .role {
-    font-size: 12px;
-  }
-
-  .detail-grid,
-  .detalhe-responsivo {
-    grid-template-columns: 1fr;
-    gap: 18px;
-  }
-
-  .detalhe-card-imagem,
-  .detalhe-card-info {
-    width: 100%;
-    max-width: 100%;
-  }
-
-  .detail-info-table tr {
-    display: block;
-    margin-bottom: 14px;
-  }
-
-  .detail-info-table td {
-    display: block;
-    width: 100% !important;
-    padding: 4px 0;
-  }
-
-  .detail-info-table td:first-child {
-    font-size: 13px;
-    color: var(--cool-gray);
-  }
-
-  .detail-info-table td:last-child {
-    font-size: 15px;
-  }
-
-  .image-gallery {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-
-  .image-gallery .thumb {
-    width: 64px;
-    height: 64px;
-  }
-
-  .description-box,
-  .history-box {
-    width: 100%;
-  }
-
-  .content-area > .d-flex.gap-3.justify-content-center {
-    flex-direction: column;
-  }
-
-  .content-area > .d-flex.gap-3.justify-content-center button {
-    width: 100%;
-  }
-}
 
 .mapa-icone {
   width: 44px;
@@ -1131,4 +955,20 @@ body {
   width: 28px;
   height: 28px;
   object-fit: contain;
+}
+
+/* ==============================
+   BOTÃO DE REAÇÃO
+   ============================== */
+
+.btn-reacao {
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  transition: 0.2s ease;
+}
+
+.btn-reacao:hover {
+  transform: scale(1.05);
 }
