@@ -29,6 +29,39 @@ function formatDateTime(date) {
   return `${dt.toLocaleDateString('pt-BR')} às ${dt.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`;
 }
 
+function summarizeAddress(address, bairro) {
+  if (!address) return '';
+
+  var cleaned = address.replace(/\s+/g, ' ').trim();
+  cleaned = cleaned.replace(/,\s*(brasil|brazil|br)\.?$/i, '');
+
+  var parts = cleaned.split(',').map(function(part) {
+    return part.trim();
+  }).filter(Boolean);
+
+  var cepIndex = parts.findIndex(function(part) {
+    return /(?:cep\s*)?\d{5}-?\d{3}/i.test(part);
+  });
+
+  if (cepIndex !== -1) {
+    parts = parts.slice(0, cepIndex + 1);
+  } else if (parts.length > 5) {
+    parts = parts.slice(0, 5);
+  }
+
+  if (bairro && !parts.some(function(part) {
+    return part.toLowerCase().includes(bairro.toLowerCase());
+  })) {
+    if (parts.length > 1) {
+      parts.splice(1, 0, bairro);
+    } else {
+      parts.push(bairro);
+    }
+  }
+
+  return parts.join(', ');
+}
+
 function getQueryParam(name) {
   var search = window.location.search.substring(1);
   var params = search ? search.split('&') : [];
@@ -114,7 +147,7 @@ function renderOcorrenciasList() {
     row.innerHTML = `
       <td><strong>${item.id}</strong></td>
       <td>${item.type}</td>
-      <td>${item.address}</td>
+      <td>${summarizeAddress(item.address, item.bairro)}</td>
       <td>${item.bairro}</td>
       <td>${formatDate(item.createdAt)}</td>
       <td><span class="badge-status badge-${item.status === 'Pendente' ? 'pendente' : item.status === 'Em andamento' ? 'andamento' : 'resolvido'}">${item.status}</span></td>
