@@ -124,6 +124,17 @@
                 <td>Reportado por:</td>
                 <td>Ana Ferreira Lima (Moradora)</td>
               </tr>
+              <tr>
+                <td>Confirmações:</td>
+                <td>
+                  <div style="display:flex; align-items:center; gap:10px;">
+                    <span id="confirmacoes-label" style="font-size:13px; color:var(--cool-gray);">Confirmado por <strong id="confirmacoes-count">3</strong> moradores</span>
+                    <button id="btn-confirmar" title="Confirmar esta ocorrência" style="background:none;border:1px solid var(--silver-teal);border-radius:100px;padding:3px 12px;font-size:12px;cursor:pointer;color:var(--forest-black);display:flex;align-items:center;gap:5px;transition:background .15s;">
+                      <i class="bi bi-hand-thumbs-up"></i> Confirmar
+                    </button>
+                  </div>
+                </td>
+              </tr>
             </table>
           </div>
         </div>
@@ -230,6 +241,35 @@
           </div>
 
         </div>
+
+        <!-- Ocorrências similares -->
+        <div style="padding: 0 0 32px;">
+          <h5 style="font-size:14px; font-weight:600; color:var(--cool-gray); text-transform:uppercase; letter-spacing:.06em; margin-bottom:12px;">
+            <i class="bi bi-geo-alt" style="margin-right:5px;"></i>Ocorrências similares no Comiteco
+          </h5>
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+
+            <a href="detalhes.html" class="card-mongodb" style="flex:1;min-width:160px;max-width:240px;text-decoration:none;color:inherit;padding:14px 16px;">
+              <div style="font-size:11px;color:var(--cool-gray);margin-bottom:4px;">ID #1019 · há 3 dias</div>
+              <div style="font-size:13px;font-weight:600;">Buraco na Rua Ituiutaba</div>
+              <div style="margin-top:6px;"><span class="badge-priority badge-media" style="font-size:11px;">Média</span></div>
+            </a>
+
+            <a href="detalhes.html" class="card-mongodb" style="flex:1;min-width:160px;max-width:240px;text-decoration:none;color:inherit;padding:14px 16px;">
+              <div style="font-size:11px;color:var(--cool-gray);margin-bottom:4px;">ID #1021 · há 1 dia</div>
+              <div style="font-size:13px;font-weight:600;">Cratera Av. Comiteco</div>
+              <div style="margin-top:6px;"><span class="badge-priority badge-alta" style="font-size:11px;">Alta</span></div>
+            </a>
+
+            <a href="detalhes.html" class="card-mongodb" style="flex:1;min-width:160px;max-width:240px;text-decoration:none;color:inherit;padding:14px 16px;">
+              <div style="font-size:11px;color:var(--cool-gray);margin-bottom:4px;">ID #1025 · hoje</div>
+              <div style="font-size:13px;font-weight:600;">Buraco Rua das Flores</div>
+              <div style="margin-top:6px;"><span class="badge-priority badge-baixa" style="font-size:11px;">Baixa</span></div>
+            </a>
+
+          </div>
+        </div>
+
       </div>
     </main>
   </div>

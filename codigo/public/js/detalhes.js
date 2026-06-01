@@ -49,6 +49,7 @@
     restaurarPrioridade();
     configurarBotaoMarcarLido();
     configurarDropdownPrioridade();
+    configurarConfirmacoes();
   });
 
   /* =============================================================
@@ -225,6 +226,47 @@
     var estado = lerEstado();
     if (!estado.prioridade) return;
     aplicarPrioridade(estado.prioridade);
+  }
+
+  /* =============================================================
+     FUNCIONALIDADE 3 — Confirmar ocorrência (upvote)
+     =============================================================
+     Elementos usados:
+       #btn-confirmar        → botão "Confirmar"
+       #confirmacoes-count   → número exibido
+  */
+
+  function configurarConfirmacoes() {
+    var btn   = document.getElementById('btn-confirmar');
+    var count = document.getElementById('confirmacoes-count');
+    if (!btn || !count) return;
+
+    var estado = lerEstado();
+    var total  = estado.confirmacoes !== undefined ? estado.confirmacoes : 3;
+    count.textContent = total;
+
+    if (estado.confirmado) {
+      _marcarConfirmado(btn);
+    }
+
+    btn.addEventListener('click', function () {
+      if (btn.disabled) return;
+      total += 1;
+      count.textContent = total;
+      var e = lerEstado();
+      e.confirmacoes = total;
+      e.confirmado   = true;
+      salvarEstado(e);
+      _marcarConfirmado(btn);
+    });
+  }
+
+  function _marcarConfirmado(btn) {
+    btn.disabled = true;
+    btn.style.background     = 'var(--silver-teal)';
+    btn.style.color          = 'var(--forest-black)';
+    btn.style.borderColor    = 'var(--silver-teal)';
+    btn.innerHTML            = '<i class="bi bi-hand-thumbs-up-fill"></i> Confirmado';
   }
 
   /* =============================================================
