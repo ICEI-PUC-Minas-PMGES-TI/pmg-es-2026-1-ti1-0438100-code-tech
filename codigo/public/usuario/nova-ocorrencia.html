@@ -125,10 +125,12 @@
 
           <div class="mb-4">
             <label class="form-label-mongodb">Fotos:</label>
-            <div style="border: 2px dashed var(--silver-teal); border-radius: 12px; padding: 32px; text-align: center; cursor: pointer; transition: border-color 0.2s;" onmouseover="this.style.borderColor='var(--dark-green)'" onmouseout="this.style.borderColor='var(--silver-teal)'">
+            <div id="photo-upload-area" style="border: 2px dashed var(--silver-teal); border-radius: 12px; padding: 32px; text-align: center; cursor: pointer; transition: border-color 0.2s;" onmouseover="this.style.borderColor='var(--dark-green)'" onmouseout="this.style.borderColor='var(--silver-teal)';">
               <i class="bi bi-cloud-arrow-up" style="font-size: 32px; color: var(--cool-gray); display: block; margin-bottom: 8px;"></i>
               <span style="font-size: 14px; color: var(--cool-gray);">Arraste fotos aqui ou clique para enviar</span>
             </div>
+            <input id="input-photos" type="file" accept="image/*" multiple hidden>
+            <div id="photo-preview" style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px;"></div>
           </div>
 
           <div class="d-flex gap-3">

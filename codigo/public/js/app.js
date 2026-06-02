@@ -2,6 +2,8 @@ const STORAGE_KEY = 'tiaw_ocorrencias_v1';
 
 const defaultStatus = 'Pendente';
 
+var selectedPhotosData = [];
+
 function getStoredOcorrencias() {
   var raw = localStorage.getItem(STORAGE_KEY);
   if (!raw) return [];
@@ -402,6 +404,108 @@ function initLocationMap() {
   }, 100);
 }
 
+function bindPhotoUploader() {
+  var uploadArea = document.getElementById('photo-upload-area');
+  var fileInput = document.getElementById('input-photos');
+  var previewContainer = document.getElementById('photo-preview');
+  if (!uploadArea || !fileInput || !previewContainer) return;
+
+  uploadArea.addEventListener('click', function() {
+    fileInput.click();
+  });
+
+  uploadArea.addEventListener('dragover', function(event) {
+    event.preventDefault();
+    uploadArea.style.borderColor = 'var(--dark-green)';
+  });
+
+  uploadArea.addEventListener('dragleave', function(event) {
+    event.preventDefault();
+    uploadArea.style.borderColor = 'var(--silver-teal)';
+  });
+
+  uploadArea.addEventListener('drop', function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    uploadArea.style.borderColor = 'var(--silver-teal)';
+    handlePhotoFiles(Array.from(event.dataTransfer.files));
+  });
+
+  fileInput.addEventListener('change', function() {
+    handlePhotoFiles(Array.from(this.files));
+  });
+
+  function handlePhotoFiles(files) {
+    var images = files.filter(function(file) {
+      return file.type.indexOf('image/') === 0;
+    });
+    if (!images.length) return;
+
+    var availableSlots = 5 - selectedPhotosData.length;
+    if (availableSlots <= 0) {
+      alert('Você pode anexar no máximo 5 fotos.');
+      return;
+    }
+
+    images.slice(0, availableSlots).forEach(function(file) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        selectedPhotosData.push({ name: file.name, src: e.target.result });
+        renderPhotoPreview();
+      };
+      reader.readAsDataURL(file);
+    });
+
+    fileInput.value = '';
+  }
+
+  function renderPhotoPreview() {
+    previewContainer.innerHTML = '';
+    selectedPhotosData.forEach(function(photo, index) {
+      var item = document.createElement('div');
+      item.style.position = 'relative';
+      item.style.width = '90px';
+      item.style.height = '90px';
+      item.style.border = '1px solid var(--silver-teal)';
+      item.style.borderRadius = '12px';
+      item.style.overflow = 'hidden';
+      item.style.background = '#fff';
+
+      var img = document.createElement('img');
+      img.src = photo.src;
+      img.alt = photo.name;
+      img.style.width = '100%';
+      img.style.height = '100%';
+      img.style.objectFit = 'cover';
+      img.style.display = 'block';
+
+      var removeButton = document.createElement('button');
+      removeButton.type = 'button';
+      removeButton.textContent = '×';
+      removeButton.style.position = 'absolute';
+      removeButton.style.top = '6px';
+      removeButton.style.right = '6px';
+      removeButton.style.width = '24px';
+      removeButton.style.height = '24px';
+      removeButton.style.border = 'none';
+      removeButton.style.borderRadius = '50%';
+      removeButton.style.background = 'rgba(0,0,0,0.6)';
+      removeButton.style.color = '#fff';
+      removeButton.style.cursor = 'pointer';
+      removeButton.style.fontSize = '14px';
+      removeButton.style.lineHeight = '20px';
+      removeButton.addEventListener('click', function() {
+        selectedPhotosData.splice(index, 1);
+        renderPhotoPreview();
+      });
+
+      item.appendChild(img);
+      item.appendChild(removeButton);
+      previewContainer.appendChild(item);
+    });
+  }
+}
+
 function bindRegisterForm() {
   var button = document.getElementById('btn-register-occurrence');
   if (!button) return;
@@ -417,6 +521,7 @@ function bindRegisterForm() {
     var type = typeInput ? typeInput.value : '';
     var priority = priorityInput ? priorityInput.value : '';
     var description = descriptionInput ? descriptionInput.value.trim() : '';
+    var photos = selectedPhotosData.slice();
 
     if (!address || !bairro || !type || !priority || !description) {
       alert('Por favor, preencha todos os campos antes de registrar a ocorrência.');
@@ -445,6 +550,7 @@ function bindRegisterForm() {
       priority: priority,
       status: defaultStatus,
       description: description,
+      photos: photos,
       lat: lat,
       lng: lng,
       createdAt: Date.now(),
