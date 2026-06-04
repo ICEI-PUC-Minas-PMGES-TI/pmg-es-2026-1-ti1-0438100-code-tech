@@ -327,21 +327,43 @@ descricao.addEventListener("input", function () {
       status: "Pendente"
     };
 
-    const ocorrencias =
-      JSON.parse(localStorage.getItem("ocorrencias")) || [];
+  fetch("http://localhost:3000/ocorrencias", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify(ocorrencia)
+})
 
-    ocorrencias.push(ocorrencia);
+.then(() => {
 
-    localStorage.setItem(
-      "ocorrencias",
-      JSON.stringify(ocorrencias)
-    );
+  const modal = new bootstrap.Modal(
+    document.getElementById("modalSucesso")
+  );
 
-    const modal = new bootstrap.Modal(
-      document.getElementById("modalSucesso")
-    );
+  modal.show();
 
-    modal.show();
+  form.reset();
+  fotos = [];
+  fotosContainer.innerHTML = "";
+  coordenadas.textContent = "Lat: -- | Lng: --";
+
+  latitude = null;
+  longitude = null;
+
+  if (marcador) {
+    mapa.removeLayer(marcador);
+    marcador = null;
+  }
+
+  contadorDescricao.textContent = 0;
+  atualizarProgresso();
+
+})
+.catch((erro) => {
+  console.error(erro);
+  alert("Erro ao salvar ocorrência.");
+});
 
     form.reset();
     fotos = [];

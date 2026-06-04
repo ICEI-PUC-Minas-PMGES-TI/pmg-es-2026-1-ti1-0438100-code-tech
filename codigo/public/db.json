@@ -21,13 +21,23 @@
       "id": 1,
       "tipo": "Buraco",
       "descricao": "Buraco grande na avenida causando trânsito.",
-      "rua": "Rua das Palmeiras",
-      "numero": "250",
-      "bairro": "Centro",
-      "cidade": "Belo Horizonte",
+
+      "rua": "Rua Rio Xingu",
+      "numero": "1047",
+      "bairro": "Riacho das Pedras",
+      "cidade": "Contagem",
+      "estado": "Minas Gerais",
+
+      "latitude": -19.93,
+      "longitude": -44.03,
+
       "prioridade": "Alta",
       "status": "Pendente",
+
       "data": "2026-05-24",
+
+      "fotos": [],
+
       "usuarioId": 1,
       "categoriaId": 1
     }
@@ -42,12 +52,12 @@
     {
       "id": 2,
       "nome": "Vazamento",
-      "descricao": "Problemas relacionados a vazamento de água"
+      "descricao": "Problemas relacionados a vazamentos"
     },
     {
       "id": 3,
-      "nome": "rachadura",
-      "descricao": "Problemas relacionados a rachadura de vias"
+      "nome": "Rachadura",
+      "descricao": "Problemas relacionados a rachaduras"
     }
   ],
 
