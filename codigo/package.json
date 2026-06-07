@@ -1,0 +1,11 @@
+{
+  "name": "pmg-es-2026-1-ti1-0438100-code-tech",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "json-server": "^0.17.4"
+  }
+}

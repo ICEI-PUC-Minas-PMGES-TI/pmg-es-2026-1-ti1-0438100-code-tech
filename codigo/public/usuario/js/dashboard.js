@@ -1,3 +1,3 @@
-document.addEventListener('DOMContentLoaded', function() {
-  renderDashboardOverview();
+document.addEventListener('DOMContentLoaded', async function() {
+  await renderDashboardOverview();
 });

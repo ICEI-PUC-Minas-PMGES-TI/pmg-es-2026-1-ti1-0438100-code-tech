@@ -1,23 +1,61 @@
-const STORAGE_KEY = 'tiaw_ocorrencias_v1';
+const API_BASE_URL = window.location.protocol.startsWith('http') ? window.location.origin : 'http://localhost:3000';
+const API_OCORRENCIAS_URL = API_BASE_URL + '/ocorrencias';
 
 const defaultStatus = 'Pendente';
 
-function getStoredOcorrencias() {
-  var raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw) return [];
-  try {
-    return JSON.parse(raw);
-  } catch (error) {
-    return [];
-  }
-}
-
-function saveStoredOcorrencias(items) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-}
+var selectedPhotosData = [];
 
 function generateOcorrenciaId() {
   return `OC${Date.now()}`;
+}
+
+async function apiRequest(path, options = {}) {
+  try {
+    const response = await fetch(API_BASE_URL + path, options);
+    if (!response.ok) {
+      console.error('API request failed:', response.status, response.statusText);
+      return null;
+    }
+    if (response.status === 204) {
+      return null;
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('API request error:', error);
+    return null;
+  }
+}
+
+async function getStoredOcorrencias() {
+  const data = await apiRequest('/ocorrencias?_sort=createdAt&_order=desc');
+  return Array.isArray(data) ? data : [];
+}
+
+async function getOcorrenciaById(id) {
+  if (!id) return null;
+  return await apiRequest('/ocorrencias/' + encodeURIComponent(id));
+}
+
+async function addOcorrencia(item) {
+  return await apiRequest('/ocorrencias', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(item),
+  });
+}
+
+async function updateOcorrencia(id, item) {
+  return await apiRequest('/ocorrencias/' + encodeURIComponent(id), {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(item),
+  });
+}
+
+async function deleteOcorrencia(id) {
+  return await apiRequest('/ocorrencias/' + encodeURIComponent(id), {
+    method: 'DELETE',
+  });
 }
 
 function formatDate(date) {
@@ -27,6 +65,48 @@ function formatDate(date) {
 function formatDateTime(date) {
   const dt = new Date(date);
   return `${dt.toLocaleDateString('pt-BR')} às ${dt.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`;
+}
+
+function normalizePriorityClass(priority) {
+  return String(priority || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9-]/g, '');
+}
+
+function summarizeAddress(address, bairro) {
+  if (!address) return '';
+
+  var cleaned = address.replace(/\s+/g, ' ').trim();
+  cleaned = cleaned.replace(/,\s*(brasil|brazil|br)\.?$/i, '');
+
+  var parts = cleaned.split(',').map(function(part) {
+    return part.trim();
+  }).filter(Boolean);
+
+  var cepIndex = parts.findIndex(function(part) {
+    return /(?:cep\s*)?\d{5}-?\d{3}/i.test(part);
+  });
+
+  if (cepIndex !== -1) {
+    parts = parts.slice(0, cepIndex + 1);
+  } else if (parts.length > 5) {
+    parts = parts.slice(0, 5);
+  }
+
+  if (bairro && !parts.some(function(part) {
+    return part.toLowerCase().includes(bairro.toLowerCase());
+  })) {
+    if (parts.length > 1) {
+      parts.splice(1, 0, bairro);
+    } else {
+      parts.push(bairro);
+    }
+  }
+
+  return parts.join(', ');
 }
 
 function getQueryParam(name) {
@@ -45,8 +125,9 @@ function buildDetailsLink(id) {
   return 'detalhes.html?id=' + encodeURIComponent(id);
 }
 
-function getCurrentOcorrencias() {
-  return getStoredOcorrencias().sort(function(a, b) { return b.createdAt - a.createdAt; });
+async function getCurrentOcorrencias() {
+  const items = await getStoredOcorrencias();
+  return items.slice().sort(function(a, b) { return b.createdAt - a.createdAt; });
 }
 
 function parseFilterDate(value) {
@@ -89,9 +170,9 @@ function applyFilters(items) {
   });
 }
 
-function renderOcorrenciasList() {
+async function renderOcorrenciasList() {
   const rowsContainer = document.getElementById('ocorrencias-table-body');
-  const items = getCurrentOcorrencias();
+  const items = await getCurrentOcorrencias();
   if (!rowsContainer) return;
 
   const filtered = applyFilters(items);
@@ -114,11 +195,11 @@ function renderOcorrenciasList() {
     row.innerHTML = `
       <td><strong>${item.id}</strong></td>
       <td>${item.type}</td>
-      <td>${item.address}</td>
+      <td>${summarizeAddress(item.address, item.bairro)}</td>
       <td>${item.bairro}</td>
       <td>${formatDate(item.createdAt)}</td>
       <td><span class="badge-status badge-${item.status === 'Pendente' ? 'pendente' : item.status === 'Em andamento' ? 'andamento' : 'resolvido'}">${item.status}</span></td>
-      <td><span class="badge-priority badge-${item.priority.toLowerCase()}">${item.priority}</span></td>
+      <td><span class="badge-priority badge-${normalizePriorityClass(item.priority)}">${item.priority}</span></td>
       <td><a href="${buildDetailsLink(item.id)}" class="btn-mongodb-outline" style="padding: 6px 12px; font-size: 12px;">Ver detalhes</a></td>
     `;
     fragment.appendChild(row);
@@ -127,8 +208,8 @@ function renderOcorrenciasList() {
   rowsContainer.appendChild(fragment);
 }
 
-function renderDashboardOverview() {
-  const items = getCurrentOcorrencias();
+async function renderDashboardOverview() {
+  const items = await getCurrentOcorrencias();
   const counts = {
     buraco: 0,
     vazamento: 0,
@@ -219,11 +300,10 @@ function renderDashboardOverview() {
     });
   }
 
-function populateDetailPage() {
+async function populateDetailPage() {
   const detailId = getQueryParam('id');
   if (!detailId) return;
-  const items = getStoredOcorrencias();
-  const ocorrencia = items.find(item => item.id === detailId);
+  const ocorrencia = await getOcorrenciaById(detailId);
   if (!ocorrencia) {
     const area = document.querySelector('.content-area');
     if (area) {
@@ -248,7 +328,7 @@ function populateDetailPage() {
   if (detailAddressElement) detailAddressElement.textContent = ocorrencia.address;
   if (detailBairroElement) detailBairroElement.textContent = ocorrencia.bairro;
   if (detailDateElement) detailDateElement.textContent = formatDateTime(ocorrencia.createdAt);
-  if (detailPriorityElement) detailPriorityElement.innerHTML = '<span class="badge-priority badge-' + ocorrencia.priority.toLowerCase() + '">' + ocorrencia.priority + '</span>';
+  if (detailPriorityElement) detailPriorityElement.innerHTML = '<span class="badge-priority badge-' + normalizePriorityClass(ocorrencia.priority) + '">' + ocorrencia.priority + '</span>';
   if (detailStatusElement) detailStatusElement.innerHTML = '<span class="badge-status badge-' + (ocorrencia.status === 'Pendente' ? 'pendente' : ocorrencia.status === 'Em andamento' ? 'andamento' : 'resolvido') + '">' + ocorrencia.status + '</span>';
   if (detailDescriptionElement) detailDescriptionElement.textContent = ocorrencia.description;
   if (detailReportedElement) detailReportedElement.textContent = 'Você';
@@ -272,9 +352,8 @@ function populateDetailPage() {
 
   const cancelButton = document.getElementById('btn-cancel-occurrence');
   if (cancelButton) {
-    cancelButton.addEventListener('click', () => {
-      const filtered = items.filter(item => item.id !== ocorrencia.id);
-      saveStoredOcorrencias(filtered);
+    cancelButton.addEventListener('click', async () => {
+      await deleteOcorrencia(ocorrencia.id);
       window.location.href = 'ocorrencias.html';
     });
   }
@@ -360,6 +439,108 @@ function initLocationMap() {
   }, 100);
 }
 
+function bindPhotoUploader() {
+  var uploadArea = document.getElementById('photo-upload-area');
+  var fileInput = document.getElementById('input-photos');
+  var previewContainer = document.getElementById('photo-preview');
+  if (!uploadArea || !fileInput || !previewContainer) return;
+
+  uploadArea.addEventListener('click', function() {
+    fileInput.click();
+  });
+
+  uploadArea.addEventListener('dragover', function(event) {
+    event.preventDefault();
+    uploadArea.style.borderColor = 'var(--dark-green)';
+  });
+
+  uploadArea.addEventListener('dragleave', function(event) {
+    event.preventDefault();
+    uploadArea.style.borderColor = 'var(--silver-teal)';
+  });
+
+  uploadArea.addEventListener('drop', function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    uploadArea.style.borderColor = 'var(--silver-teal)';
+    handlePhotoFiles(Array.from(event.dataTransfer.files));
+  });
+
+  fileInput.addEventListener('change', function() {
+    handlePhotoFiles(Array.from(this.files));
+  });
+
+  function handlePhotoFiles(files) {
+    var images = files.filter(function(file) {
+      return file.type.indexOf('image/') === 0;
+    });
+    if (!images.length) return;
+
+    var availableSlots = 5 - selectedPhotosData.length;
+    if (availableSlots <= 0) {
+      alert('Você pode anexar no máximo 5 fotos.');
+      return;
+    }
+
+    images.slice(0, availableSlots).forEach(function(file) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        selectedPhotosData.push({ name: file.name, src: e.target.result });
+        renderPhotoPreview();
+      };
+      reader.readAsDataURL(file);
+    });
+
+    fileInput.value = '';
+  }
+
+  function renderPhotoPreview() {
+    previewContainer.innerHTML = '';
+    selectedPhotosData.forEach(function(photo, index) {
+      var item = document.createElement('div');
+      item.style.position = 'relative';
+      item.style.width = '90px';
+      item.style.height = '90px';
+      item.style.border = '1px solid var(--silver-teal)';
+      item.style.borderRadius = '12px';
+      item.style.overflow = 'hidden';
+      item.style.background = '#fff';
+
+      var img = document.createElement('img');
+      img.src = photo.src;
+      img.alt = photo.name;
+      img.style.width = '100%';
+      img.style.height = '100%';
+      img.style.objectFit = 'cover';
+      img.style.display = 'block';
+
+      var removeButton = document.createElement('button');
+      removeButton.type = 'button';
+      removeButton.textContent = '×';
+      removeButton.style.position = 'absolute';
+      removeButton.style.top = '6px';
+      removeButton.style.right = '6px';
+      removeButton.style.width = '24px';
+      removeButton.style.height = '24px';
+      removeButton.style.border = 'none';
+      removeButton.style.borderRadius = '50%';
+      removeButton.style.background = 'rgba(0,0,0,0.6)';
+      removeButton.style.color = '#fff';
+      removeButton.style.cursor = 'pointer';
+      removeButton.style.fontSize = '14px';
+      removeButton.style.lineHeight = '20px';
+      removeButton.addEventListener('click', function() {
+        selectedPhotosData.splice(index, 1);
+        renderPhotoPreview();
+      });
+
+      item.appendChild(img);
+      item.appendChild(removeButton);
+      previewContainer.appendChild(item);
+    });
+  }
+}
+
 function bindRegisterForm() {
   var button = document.getElementById('btn-register-occurrence');
   if (!button) return;
@@ -375,6 +556,7 @@ function bindRegisterForm() {
     var type = typeInput ? typeInput.value : '';
     var priority = priorityInput ? priorityInput.value : '';
     var description = descriptionInput ? descriptionInput.value.trim() : '';
+    var photos = selectedPhotosData.slice();
 
     if (!address || !bairro || !type || !priority || !description) {
       alert('Por favor, preencha todos os campos antes de registrar a ocorrência.');
@@ -394,7 +576,6 @@ function bindRegisterForm() {
       lng = lngInput ? lngInput.value : '';
     }
 
-    var items = getStoredOcorrencias();
     var newItem = {
       id: generateOcorrenciaId(),
       type: type,
@@ -403,14 +584,14 @@ function bindRegisterForm() {
       priority: priority,
       status: defaultStatus,
       description: description,
+      photos: photos,
       lat: lat,
       lng: lng,
       createdAt: Date.now(),
       history: [{ time: formatDateTime(Date.now()), message: 'Ocorrência registrada.' }],
     };
 
-    items.unshift(newItem);
-    saveStoredOcorrencias(items);
+    await addOcorrencia(newItem);
     window.location.href = 'ocorrencias.html';
   });
 }
