@@ -1,0 +1,40 @@
+{
+  "usuarios": [
+    {
+      "id": 1,
+      "nome": "Admin",
+      "email": "admin@exemplo.com",
+      "perfil": "Administrador"
+    }
+  ],
+  "ocorrencias": [
+    {
+      "id": 1023,
+      "tipo": "Buraco",
+      "endereco": "Rua dos campos, 256",
+      "bairro": "Comiteco",
+      "data": "10/04/2026",
+      "status": "Pendente",
+      "prioridade": "Alta"
+    },
+    {
+      "id": 1022,
+      "tipo": "Vazamento",
+      "endereco": "Av Alonso Peres, 55",
+      "bairro": "Boa Viagem",
+      "data": "05/04/2026",
+      "status": "Em andamento",
+      "prioridade": "média"
+    },
+    {
+      "id": 1021,
+      "tipo": "Falta de Água",
+      "endereco": "Rua das flores, 229",
+      "bairro": "Pantanal",
+      "data": "03/04/2026",
+      "status": "Pendente",
+      "prioridade": "Alta"
+    }
+  ]
+}
+
