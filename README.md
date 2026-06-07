@@ -74,4 +74,17 @@ Lucas Dias e Hector: slides
 * Henrique Almeida Louzada
 * Luca Soares de Paiva Lacerda
 
+## Usando JSON Server
+
+O projeto agora inclui um servidor de desenvolvimento com `json-server` e um arquivo `db.json` de exemplo.
+
+Para iniciar o servidor local:
+
+```bash
+npm install
+npm start
+```
+
+O JSON Server ficará disponível em `http://localhost:3000` e expõe a rota `/ocorrencias`.
+
 

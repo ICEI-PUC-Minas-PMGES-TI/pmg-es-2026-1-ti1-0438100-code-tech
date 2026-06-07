@@ -1,0 +1,24 @@
+{
+  "ocorrencias": [
+    {
+      "id": 1,
+      "titulo": "Buraco na Avenida Afonso Pena",
+      "descricao": "Grande buraco próximo ao semáforo que está causando riscos a veículos.",
+      "categoria": "Buraco",
+      "status": "aberto",
+      "prioridade": "alta",
+      "localizacao": "Avenida Afonso Pena, Belo Horizonte",
+      "dataRegistro": "2026-06-07T09:00:00Z"
+    },
+    {
+      "id": 2,
+      "titulo": "Vazamento de água na Rua das Flores",
+      "descricao": "Água vazando continuamente na via, causando alagamento e dano ao pavimento.",
+      "categoria": "Vazamento",
+      "status": "em andamento",
+      "prioridade": "média",
+      "localizacao": "Rua das Flores, Belo Horizonte",
+      "dataRegistro": "2026-06-06T14:30:00Z"
+    }
+  ]
+}
