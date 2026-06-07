@@ -1,0 +1,37 @@
+{
+  "ocorrencias": [
+    {
+      "id": "OC1680000000000",
+      "type": "Buraco",
+      "address": "Rua dos Ipês, 123, Bairro Novo, Belo Horizonte, MG",
+      "bairro": "Bairro Novo",
+      "priority": "Alta",
+      "status": "Pendente",
+      "description": "Buraco grande na pista que ameaça pedestres e veículos.",
+      "photos": [],
+      "lat": -19.920,
+      "lng": -43.940,
+      "createdAt": 1680000000000,
+      "history": [
+        { "time": "27/03/2024 às 14:23", "message": "Ocorrência registrada." }
+      ]
+    },
+    {
+      "id": "OC1680000001000",
+      "type": "Vazamento",
+      "address": "Av. Amazonas, 789, Centro, Belo Horizonte, MG",
+      "bairro": "Centro",
+      "priority": "Média",
+      "status": "Em andamento",
+      "description": "Vazamento de água em cano exposto próximo ao ponto de ônibus.",
+      "photos": [],
+      "lat": -19.9205,
+      "lng": -43.935,
+      "createdAt": 1680000001000,
+      "history": [
+        { "time": "27/03/2024 às 15:10", "message": "Ocorrência registrada." },
+        { "time": "27/03/2024 às 16:00", "message": "Equipe de manutenção acionada." }
+      ]
+    }
+  ]
+}

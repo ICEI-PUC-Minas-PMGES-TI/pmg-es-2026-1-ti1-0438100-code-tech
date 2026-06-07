@@ -1,25 +1,61 @@
-const STORAGE_KEY = 'tiaw_ocorrencias_v1';
+const API_BASE_URL = window.location.protocol.startsWith('http') ? window.location.origin : 'http://localhost:3000';
+const API_OCORRENCIAS_URL = API_BASE_URL + '/ocorrencias';
 
 const defaultStatus = 'Pendente';
 
 var selectedPhotosData = [];
 
-function getStoredOcorrencias() {
-  var raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw) return [];
+function generateOcorrenciaId() {
+  return `OC${Date.now()}`;
+}
+
+async function apiRequest(path, options = {}) {
   try {
-    return JSON.parse(raw);
+    const response = await fetch(API_BASE_URL + path, options);
+    if (!response.ok) {
+      console.error('API request failed:', response.status, response.statusText);
+      return null;
+    }
+    if (response.status === 204) {
+      return null;
+    }
+    return await response.json();
   } catch (error) {
-    return [];
+    console.error('API request error:', error);
+    return null;
   }
 }
 
-function saveStoredOcorrencias(items) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+async function getStoredOcorrencias() {
+  const data = await apiRequest('/ocorrencias?_sort=createdAt&_order=desc');
+  return Array.isArray(data) ? data : [];
 }
 
-function generateOcorrenciaId() {
-  return `OC${Date.now()}`;
+async function getOcorrenciaById(id) {
+  if (!id) return null;
+  return await apiRequest('/ocorrencias/' + encodeURIComponent(id));
+}
+
+async function addOcorrencia(item) {
+  return await apiRequest('/ocorrencias', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(item),
+  });
+}
+
+async function updateOcorrencia(id, item) {
+  return await apiRequest('/ocorrencias/' + encodeURIComponent(id), {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(item),
+  });
+}
+
+async function deleteOcorrencia(id) {
+  return await apiRequest('/ocorrencias/' + encodeURIComponent(id), {
+    method: 'DELETE',
+  });
 }
 
 function formatDate(date) {
@@ -89,8 +125,9 @@ function buildDetailsLink(id) {
   return 'detalhes.html?id=' + encodeURIComponent(id);
 }
 
-function getCurrentOcorrencias() {
-  return getStoredOcorrencias().sort(function(a, b) { return b.createdAt - a.createdAt; });
+async function getCurrentOcorrencias() {
+  const items = await getStoredOcorrencias();
+  return items.slice().sort(function(a, b) { return b.createdAt - a.createdAt; });
 }
 
 function parseFilterDate(value) {
@@ -133,9 +170,9 @@ function applyFilters(items) {
   });
 }
 
-function renderOcorrenciasList() {
+async function renderOcorrenciasList() {
   const rowsContainer = document.getElementById('ocorrencias-table-body');
-  const items = getCurrentOcorrencias();
+  const items = await getCurrentOcorrencias();
   if (!rowsContainer) return;
 
   const filtered = applyFilters(items);
@@ -171,8 +208,8 @@ function renderOcorrenciasList() {
   rowsContainer.appendChild(fragment);
 }
 
-function renderDashboardOverview() {
-  const items = getCurrentOcorrencias();
+async function renderDashboardOverview() {
+  const items = await getCurrentOcorrencias();
   const counts = {
     buraco: 0,
     vazamento: 0,
@@ -263,11 +300,10 @@ function renderDashboardOverview() {
     });
   }
 
-function populateDetailPage() {
+async function populateDetailPage() {
   const detailId = getQueryParam('id');
   if (!detailId) return;
-  const items = getStoredOcorrencias();
-  const ocorrencia = items.find(item => item.id === detailId);
+  const ocorrencia = await getOcorrenciaById(detailId);
   if (!ocorrencia) {
     const area = document.querySelector('.content-area');
     if (area) {
@@ -316,9 +352,8 @@ function populateDetailPage() {
 
   const cancelButton = document.getElementById('btn-cancel-occurrence');
   if (cancelButton) {
-    cancelButton.addEventListener('click', () => {
-      const filtered = items.filter(item => item.id !== ocorrencia.id);
-      saveStoredOcorrencias(filtered);
+    cancelButton.addEventListener('click', async () => {
+      await deleteOcorrencia(ocorrencia.id);
       window.location.href = 'ocorrencias.html';
     });
   }
@@ -541,7 +576,6 @@ function bindRegisterForm() {
       lng = lngInput ? lngInput.value : '';
     }
 
-    var items = getStoredOcorrencias();
     var newItem = {
       id: generateOcorrenciaId(),
       type: type,
@@ -557,8 +591,7 @@ function bindRegisterForm() {
       history: [{ time: formatDateTime(Date.now()), message: 'Ocorrência registrada.' }],
     };
 
-    items.unshift(newItem);
-    saveStoredOcorrencias(items);
+    await addOcorrencia(newItem);
     window.location.href = 'ocorrencias.html';
   });
 }
