@@ -18,7 +18,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const btnBuscar = document.querySelector(".input-group .btn-mongodb-primary");
 
   //Exibição da data
-
  document.getElementById("dataAtual").textContent =
   new Date().toLocaleDateString("pt-BR");
 
@@ -28,6 +27,37 @@ document.addEventListener("DOMContentLoaded", function () {
   let marcador = null;
   let timeout = null;
   let fotos = [];
+
+  // SISTEMA DE NOTIFICAÇÕES
+  function criarNotificacao(tipo, mensagem) {
+    const notificacao = document.createElement("div");
+    notificacao.className = `alert alert-${tipo} alert-dismissible fade show`;
+    notificacao.setAttribute("role", "alert");
+    notificacao.style.position = "fixed";
+    notificacao.style.top = "20px";
+    notificacao.style.right = "20px";
+    notificacao.style.zIndex = "9999";
+    notificacao.style.minWidth = "300px";
+    notificacao.style.boxShadow = "0 4px 12px rgba(0,0,0,0.15)";
+
+    let icone = "";
+    if (tipo === "danger") icone = '<i class="bi bi-exclamation-circle"></i>';
+    if (tipo === "warning") icone = '<i class="bi bi-exclamation-triangle"></i>';
+    if (tipo === "info") icone = '<i class="bi bi-info-circle"></i>';
+    if (tipo === "success") icone = '<i class="bi bi-check-circle"></i>';
+
+    notificacao.innerHTML = `
+      ${icone} <strong>${mensagem}</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+
+    document.body.appendChild(notificacao);
+
+    // Remover automaticamente após 5 segundos
+    setTimeout(() => {
+      notificacao.remove();
+    }, 5000);
+  }
 
   // MAPA
   const mapa = L.map("mapa").setView([-19.9167, -43.9345], 7);
@@ -49,9 +79,9 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // MELHORA A BUSCA
-function montarEnderecoBusca(texto) {
-  return `${texto}, Minas Gerais, Brasil`;
-}
+  function montarEnderecoBusca(texto) {
+    return `${texto}, Minas Gerais, Brasil`;
+  }
 
   // FORMATA O ENDEREÇO
   function formatarEndereco(item, textoDigitado = "") {
@@ -115,55 +145,54 @@ function montarEnderecoBusca(texto) {
     const texto = endereco.value.trim();
 
     if (texto === "") {
-      alert("Digite um endereço.");
+      criarNotificacao("warning", "Digite um endereço.");
       return;
     }
 
     fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(montarEnderecoBusca(texto))}&format=json&addressdetails=1&limit=5&countrycodes=br&accept-language=pt-BR`)
-  .then(resposta => resposta.json())
-  .then(dados => {
+      .then(resposta => resposta.json())
+      .then(dados => {
 
-    if (dados.length === 0) {
-      alert("Endereço não encontrado.");
-      return;
-    }
+        if (dados.length === 0) {
+          criarNotificacao("danger", "Endereço não encontrado.");
+          return;
+        }
 
-    // tenta pegar resultado mais completo
-    const resultado =
-      dados.find(item =>
-        item.address &&
-        item.address.road &&
-        (
-          item.address.city ||
-          item.address.town
-        )
-      ) || dados[0];
+        // tenta pegar resultado mais completo
+        const resultado =
+          dados.find(item =>
+            item.address &&
+            item.address.road &&
+            (
+              item.address.city ||
+              item.address.town
+            )
+          ) || dados[0];
 
-    latitude = parseFloat(resultado.lat);
-    longitude = parseFloat(resultado.lon);
+        latitude = parseFloat(resultado.lat);
+        longitude = parseFloat(resultado.lon);
 
-    endereco.value =
-      formatarEndereco(resultado, texto);
+        endereco.value =
+          formatarEndereco(resultado, texto);
 
-    atualizarMapa();
-
-    atualizarProgresso();
-  })
-  .catch(() => {
-    alert("Erro ao buscar endereço.");
+        atualizarMapa();
+        atualizarProgresso();
+      })
+      .catch(() => {
+        criarNotificacao("danger", "Erro ao buscar endereço.");
+      });
   });
-});
 
-// BUSCAR AO APERTAR ENTER
-endereco.addEventListener("keydown", function (evento) {
+  // BUSCAR AO APERTAR ENTER
+  endereco.addEventListener("keydown", function (evento) {
 
-  if (evento.key === "Enter") {
+    if (evento.key === "Enter") {
 
-    evento.preventDefault();
+      evento.preventDefault();
 
-    btnBuscar.click();
-  }
-});
+      btnBuscar.click();
+    }
+  });
 
   // CLICAR NO MAPA
   mapa.on("click", function (evento) {
@@ -183,7 +212,7 @@ endereco.addEventListener("keydown", function (evento) {
       });
   });
 
-  // PROGRESSO
+  // PROGRESSOa
   function atualizarProgresso() {
     let total = 0;
 
@@ -197,18 +226,18 @@ endereco.addEventListener("keydown", function (evento) {
     progressBar.style.width = total + "%";
   }
 
- tipo.addEventListener("change", atualizarProgresso);
+  tipo.addEventListener("change", atualizarProgresso);
 
-descricao.addEventListener("input", function () {
+  descricao.addEventListener("input", function () {
 
-  contadorDescricao.textContent = descricao.value.length;
+    contadorDescricao.textContent = descricao.value.length;
 
-  if (descricao.value.trim().length >= 20) {
-    erroDescricao.textContent = "";
-  }
+    if (descricao.value.trim().length >= 20) {
+      erroDescricao.textContent = "";
+    }
 
-  atualizarProgresso();
-});
+    atualizarProgresso();
+  });
 
   // UPLOAD DE FOTOS
   dragDrop.addEventListener("click", function () {
@@ -236,26 +265,26 @@ descricao.addEventListener("input", function () {
 
   function adicionarFotos(arquivos) {
 
-  if (fotos.length + arquivos.length > 5) {
-    alert("Você pode enviar no máximo 5 fotos.");
-    return;
+    if (fotos.length + arquivos.length > 5) {
+      criarNotificacao("warning", "Você pode enviar no máximo 5 fotos.");
+      return;
+    }
+
+    Array.from(arquivos).forEach(arquivo => {
+
+      if (!arquivo.type.startsWith("image/")) return;
+
+      const leitor = new FileReader();
+
+      leitor.onload = function (evento) {
+        fotos.push(evento.target.result);
+        mostrarFotos();
+        atualizarProgresso();
+      };
+
+      leitor.readAsDataURL(arquivo);
+    });
   }
-
-  Array.from(arquivos).forEach(arquivo => {
-
-    if (!arquivo.type.startsWith("image/")) return;
-
-    const leitor = new FileReader();
-
-    leitor.onload = function (evento) {
-      fotos.push(evento.target.result);
-      mostrarFotos();
-      atualizarProgresso();
-    };
-
-    leitor.readAsDataURL(arquivo);
-  });
-}
 
   function mostrarFotos() {
     fotosContainer.innerHTML = "";
@@ -293,28 +322,26 @@ descricao.addEventListener("input", function () {
     evento.preventDefault();
 
     if (endereco.value.trim() === "") {
-      alert("Preencha o endereço.");
+      criarNotificacao("warning", "Preencha o endereço.");
       return;
     }
 
     if (tipo.value === "") {
-      alert("Selecione o tipo.");
+      criarNotificacao("warning", "Selecione o tipo.");
       return;
     }
 
-  if (descricao.value.trim().length < 20) {
-  erroDescricao.textContent =
-    "A descrição deve conter pelo menos 20 caracteres.";
-  return;
-}
+    if (descricao.value.trim().length < 20) {
+      erroDescricao.textContent =
+        "A descrição deve conter pelo menos 20 caracteres.";
+      return;
+    }
 
     if (latitude === null || longitude === null) {
-
-  erroMapa.textContent =
-    "Selecione uma localização no mapa.";
-
-  return;
-}
+      erroMapa.textContent =
+        "Selecione uma localização no mapa.";
+      return;
+    }
 
     const ocorrencia = {
       endereco: endereco.value,
@@ -327,62 +354,45 @@ descricao.addEventListener("input", function () {
       status: "Pendente"
     };
 
-  fetch("http://localhost:3000/ocorrencias", {
-    method: "POST",
-    headers: {
+    fetch("http://localhost:3000/ocorrencias", {
+      method: "POST",
+      headers: {
         "Content-Type": "application/json"
-    },
-    body: JSON.stringify(ocorrencia)
-})
+      },
+      body: JSON.stringify(ocorrencia)
+    })
+      .then(() => {
 
-.then(() => {
+        const modal = new bootstrap.Modal(
+          document.getElementById("modalSucesso")
+        );
 
-  const modal = new bootstrap.Modal(
-    document.getElementById("modalSucesso")
-  );
+        modal.show();
 
-  modal.show();
+        form.reset();
+        fotos = [];
+        fotosContainer.innerHTML = "";
+        coordenadas.textContent = "Lat: -- | Lng: --";
 
-  form.reset();
-  fotos = [];
-  fotosContainer.innerHTML = "";
-  coordenadas.textContent = "Lat: -- | Lng: --";
+        latitude = null;
+        longitude = null;
 
-  latitude = null;
-  longitude = null;
+        if (marcador) {
+          mapa.removeLayer(marcador);
+          marcador = null;
+        }
 
-  if (marcador) {
-    mapa.removeLayer(marcador);
-    marcador = null;
-  }
+        contadorDescricao.textContent = 0;
+        atualizarProgresso();
 
-  contadorDescricao.textContent = 0;
-  atualizarProgresso();
+      })
+      .catch((erro) => {
+        console.error(erro);
+        criarNotificacao("danger", "Erro ao salvar ocorrência.");
+      });
 
-})
-.catch((erro) => {
-  console.error(erro);
-  alert("Erro ao salvar ocorrência.");
-});
-
-    form.reset();
-    fotos = [];
-    fotosContainer.innerHTML = "";
-    coordenadas.textContent = "Lat: -- | Lng: --";
-
-    latitude = null;
-    longitude = null;
-
-    if (marcador) {
-      mapa.removeLayer(marcador);
-      marcador = null;
-    }
-
-    atualizarProgresso();
   });
 
   contadorDescricao.textContent = 0;
 
 });
-
-
