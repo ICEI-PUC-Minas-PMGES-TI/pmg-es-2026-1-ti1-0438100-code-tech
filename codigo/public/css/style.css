@@ -30,6 +30,13 @@
   box-sizing: border-box;
 }
 
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+}
+
 body {
   font-family: 'Euclid Circular A', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   font-weight: 300;
@@ -44,8 +51,9 @@ body {
 
 .app-layout {
   display: flex;
-  min-height: 100vh;
   width: 100%;
+  min-height: 100vh;
+  align-items: stretch;
 }
 
 /* ==============================
@@ -64,6 +72,7 @@ body {
   position: sticky;
   top: 0;
   height: 100vh;
+  min-height: 100vh;
   z-index: 100;
   flex-shrink: 0;
 }
@@ -165,10 +174,10 @@ body {
 
 .main-content {
   flex: 1;
-  background: var(--pure-white);
-  min-height: 100vh;
   width: 100%;
   max-width: 100%;
+  min-height: 100vh;
+  background: var(--pure-white);
   overflow-x: hidden;
 }
 
@@ -177,9 +186,9 @@ body {
    ============================== */
 
 .top-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  height: 72px;
+  min-height: 72px;
+  max-height: 72px;
   padding: 16px 32px;
   border-bottom: 1px solid var(--light-input);
   background: var(--pure-white);
@@ -187,6 +196,12 @@ body {
   top: 0;
   z-index: 50;
   width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  overflow: visible;
 }
 
 .mobile-menu-btn {
@@ -200,7 +215,7 @@ body {
 
 .search-box {
   position: relative;
-  width: 380px;
+  width: 420px;
   max-width: 100%;
 }
 
@@ -233,7 +248,17 @@ body {
 .top-bar-right {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 20px;
+  flex-shrink: 0;
+}
+
+/* ==============================
+   NOTIFICAÇÕES
+   ============================== */
+
+.notification-wrapper {
+  position: relative;
 }
 
 .notification-bell {
@@ -241,12 +266,14 @@ body {
   color: var(--teal-gray);
   font-size: 20px;
   cursor: pointer;
+  border: none;
+  background: transparent;
 }
 
 .notification-bell .badge-dot {
   position: absolute;
-  top: -2px;
-  right: -4px;
+  top: -8px;
+  right: -8px;
   width: 16px;
   height: 16px;
   background: var(--dark-green);
@@ -258,6 +285,70 @@ body {
   justify-content: center;
   font-weight: 600;
 }
+
+.notificacoes-box {
+  display: none;
+  position: absolute;
+  top: 36px;
+  right: 0;
+  width: 280px;
+  background: var(--pure-white);
+  border: 1px solid var(--silver-teal);
+  border-radius: 14px;
+  box-shadow: rgba(0, 30, 43, 0.18) 0px 8px 24px;
+  padding: 16px;
+  z-index: 200;
+}
+
+.notificacoes-box.notificacoes-aberta {
+  display: block;
+}
+
+.notificacoes-box h4 {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--forest-black);
+}
+
+.notificacao-item {
+  border-bottom: 1px solid var(--light-input);
+  padding: 10px 0;
+}
+
+.notificacao-item:last-child {
+  border-bottom: none;
+}
+
+.notificacao-item strong {
+  display: block;
+  font-size: 13px;
+  color: var(--dark-green);
+  margin-bottom: 4px;
+}
+
+.notificacao-item span {
+  display: block;
+  font-size: 13px;
+  color: var(--forest-black);
+}
+
+.notificacao-item small {
+  display: block;
+  font-size: 12px;
+  color: var(--cool-gray);
+  margin-top: 2px;
+}
+
+.notificacao-vazia {
+  font-size: 13px;
+  color: var(--cool-gray);
+  margin: 0;
+}
+
+/* ==============================
+   USUÁRIO
+   ============================== */
 
 .user-info {
   display: flex;
@@ -302,6 +393,7 @@ body {
 
 .page-header {
   padding: 24px 32px 0;
+  margin: 0;
 }
 
 .page-header h1 {
@@ -326,6 +418,7 @@ body {
 
 .content-area {
   padding: 24px 32px;
+  margin: 0;
   width: 100%;
 }
 
@@ -615,6 +708,21 @@ body {
   padding-right: 36px;
 }
 
+.dropdown-mongodb {
+  border: 1px solid var(--silver-teal);
+  border-radius: 8px;
+  padding: 8px 32px 8px 14px;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--forest-black);
+  background: var(--pure-white);
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%235c6c75' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+}
+
 .filter-box {
   background: var(--pure-white);
   border: 1px solid var(--silver-teal);
@@ -732,21 +840,6 @@ body {
 
 .back-link:hover {
   color: var(--dark-green);
-}
-
-.dropdown-mongodb {
-  border: 1px solid var(--silver-teal);
-  border-radius: 8px;
-  padding: 8px 32px 8px 14px;
-  font-size: 14px;
-  font-weight: 400;
-  color: var(--forest-black);
-  background: var(--pure-white);
-  cursor: pointer;
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%235c6c75' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 10px center;
 }
 
 .accent-underline {
@@ -942,77 +1035,4 @@ body {
 
 .btn-reacao:hover {
   transform: scale(1.05);
-}
-
-.notification-wrapper {
-  position: relative;
-}
-
-.notification-bell {
-  position: relative;
-  color: var(--teal-gray);
-  font-size: 20px;
-  cursor: pointer;
-  border: none;
-  background: transparent;
-}
-
-.notificacoes-box {
-  display: none;
-  position: absolute;
-  top: 36px;
-  right: 0;
-  width: 280px;
-  background: var(--pure-white);
-  border: 1px solid var(--silver-teal);
-  border-radius: 14px;
-  box-shadow: rgba(0, 30, 43, 0.18) 0px 8px 24px;
-  padding: 16px;
-  z-index: 200;
-}
-
-.notificacoes-box.notificacoes-aberta {
-  display: block;
-}
-
-.notificacoes-box h4 {
-  font-size: 15px;
-  font-weight: 600;
-  margin-bottom: 12px;
-  color: var(--forest-black);
-}
-
-.notificacao-item {
-  border-bottom: 1px solid var(--light-input);
-  padding: 10px 0;
-}
-
-.notificacao-item:last-child {
-  border-bottom: none;
-}
-
-.notificacao-item strong {
-  display: block;
-  font-size: 13px;
-  color: var(--dark-green);
-  margin-bottom: 4px;
-}
-
-.notificacao-item span {
-  display: block;
-  font-size: 13px;
-  color: var(--forest-black);
-}
-
-.notificacao-item small {
-  display: block;
-  font-size: 12px;
-  color: var(--cool-gray);
-  margin-top: 2px;
-}
-
-.notificacao-vazia {
-  font-size: 13px;
-  color: var(--cool-gray);
-  margin: 0;
 }
