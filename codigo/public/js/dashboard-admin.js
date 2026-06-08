@@ -151,8 +151,9 @@ function renderizarDashboardAdmin(ocorrencias) {
   if (totalVazamentosEl) totalVazamentosEl.innerText = totalVazamentos;
   if (totalFaltaAguaEl) totalFaltaAguaEl.innerText = totalFaltaAgua;
   if (totalOutrosEl) totalOutrosEl.innerText = totalOutros;
-
+  
   carregarMapa(ocorrenciasOrdenadas);
+  atualizarNotificacoes(ocorrenciasOrdenadas);
 }
 
 function curtirDashboard(id) {
@@ -245,4 +246,69 @@ function toggleSidebar() {
 function logout() {
   localStorage.removeItem("usuarioLogado");
   window.location.href = "dashboard-admin.html";
+}
+
+function atualizarNotificacoes(ocorrencias) {
+  const contador = document.getElementById("contadorNotificacoes");
+  const lista = document.getElementById("listaNotificacoes");
+
+  if (!contador || !lista) {
+    return;
+  }
+
+  const notificacoes = ocorrencias.filter((ocorrencia) => {
+    return (
+      ocorrencia.status === "Pendente" ||
+      ocorrencia.prioridade === "Alta" ||
+      ocorrencia.engajamento >= 3
+    );
+  });
+
+  contador.innerText = notificacoes.length;
+
+  lista.innerHTML = "";
+
+  if (notificacoes.length === 0) {
+    lista.innerHTML = `
+      <p class="notificacao-vazia">
+        Nenhuma notificação no momento.
+      </p>
+    `;
+
+    return;
+  }
+
+  notificacoes.forEach((ocorrencia) => {
+    let motivo = "Ocorrência pendente";
+
+    if (ocorrencia.prioridade === "Alta") {
+      motivo = "Prioridade alta";
+    }
+
+    if (ocorrencia.engajamento >= 3) {
+      motivo = "Alta visibilidade";
+    }
+
+    lista.innerHTML += `
+      <div class="notificacao-item">
+        <strong>${motivo}</strong>
+        <span>
+          #${ocorrencia.id} - ${ocorrencia.tipo}
+        </span>
+        <small>
+          ${ocorrencia.bairro} | ${ocorrencia.status}
+        </small>
+      </div>
+    `;
+  });
+}
+
+function toggleNotificacoes() {
+  const box = document.getElementById("notificacoesBox");
+
+  if (!box) {
+    return;
+  }
+
+  box.classList.toggle("notificacoes-aberta");
 }
