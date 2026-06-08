@@ -4,7 +4,8 @@
   "description": "Painel Infra BH com JSON Server para dados de desenvolvimento.",
   "private": true,
   "scripts": {
-    "start": "json-server --watch db.json --port 3000"
+    "start": "node codigo/index.js",
+    "start:api": "json-server --watch db.json --port 3000"
   },
   "devDependencies": {
     "json-server": "^0.17.3"

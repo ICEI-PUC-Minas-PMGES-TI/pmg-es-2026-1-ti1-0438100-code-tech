@@ -269,7 +269,7 @@ async function renderDashboardOverview() {
   let dashboardMap;
   let dashboardMarkers = [];
 
-  function initDashboardMap() {
+  async function initDashboardMap() {
     var mapContainer = document.getElementById('dashboard-map');
     if (!mapContainer || typeof L === 'undefined') return;
 
@@ -285,7 +285,7 @@ async function renderDashboardOverview() {
     dashboardMarkers.forEach(function(m) { try { dashboardMap.removeLayer(m); } catch (e) {} });
     dashboardMarkers = [];
 
-    var items = getCurrentOcorrencias();
+    var items = await getCurrentOcorrencias();
     items.forEach(function(item) {
       if (!item.lat || !item.lng) return;
       var lat = parseFloat(item.lat);
@@ -544,7 +544,7 @@ function bindPhotoUploader() {
 function bindRegisterForm() {
   var button = document.getElementById('btn-register-occurrence');
   if (!button) return;
-  button.addEventListener('click', function() {
+  button.addEventListener('click', async function() {
     var addressInput = document.getElementById('input-address');
     var bairroInput = document.getElementById('input-bairro');
     var typeInput = document.getElementById('input-type');
