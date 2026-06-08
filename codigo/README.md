@@ -1,98 +1,136 @@
-# Código Fonte
+# InfraBH - Entrega Sprint 2 Individual
 
-A pasta `codigo` serve para a manter o programa que vocês vão construir no contexto dessa disciplina. Se necessário, descreva neste arquivo aspectos relevantes da estrutura de diretórios criada para organização do código do seu projeto.
+## Aluno
 
-**IMPORTANTE**: O uso do JSON Server e do ambiente baseado no Node.js é obrigatório.
+Felipe Gabriel Nogueira Aquino
 
-Uma sugestão da estrutura de diretórios para o projeto é a seguinte:
+## Projeto
 
-```plaintext
-codigo/  (essa pasta aqui)
-│
-├── db/
-│   └── db.json (estruturas de dados)
-│
-├── public/ (seu site - front end)
-│   ├── assets/
-│   │   ├── css/
-│   │   │   ├── styles.css
-│   │   │   └── (outros arquivos .css)
-│   │   │
-│   │   ├── js/
-│   │   │   ├── app.js
-│   │   │   └── (outros arquivos .js)
-│   │   │
-│   │   ├── images/
-│   │   │   ├── logo.png
-│   │   │   └── (outras imagens)
-│   │   │
-│   │   └── fonts/
-│   │       ├── font1.ttf
-│   │       └── (outras fontes)
-│   │
-│   ├── modulos/
-│   │   ├── modulo-1/
-│   │   │   └── (arquivos do módulo)
-│   │   │
-│   │   └── modulo-2/
-│   │       └── (arquivos do módulo)
-│   │
-│   ├── index.html (página inicial front end)
-│   ├── about.html
-│   ├── contact.html
-│   └── (outras páginas)
-│
-│── index.js (app back end)
-│── package.json (configuração back end)
-└── README.md (este arquivo aqui)
+InfraBH - Sistema de acompanhamento de ocorrências urbanas.
+
+## Funcionalidade individual entregue
+
+A funcionalidade desenvolvida nesta Sprint 2 foi o **Dashboard Administrativo de Ocorrências**, com visualização de dados, mapa, listagem de ocorrências, filtros, sistema de curtidas, engajamento e notificações.
+
+## Descrição da funcionalidade
+
+O Dashboard Administrativo permite que o administrador visualize as ocorrências urbanas registradas no sistema. A tela apresenta cards com totais por categoria, mapa com marcadores personalizados, tabela de ocorrências, botão de curtidas e cálculo de engajamento.
+
+Também foi implementado um sistema de notificações, exibindo ocorrências importantes, como pendentes, de prioridade alta ou com maior engajamento.
+
+## Principais recursos implementados
+
+* Dashboard administrativo responsivo.
+* Cards com quantidade de ocorrências por tipo.
+* Mapa de ocorrências com Leaflet.
+* Marcadores personalizados por categoria.
+* Tela de ocorrências com filtros por tipo, status e bairro.
+* Botão de curtida nas ocorrências.
+* Cálculo de engajamento.
+* Caixa de notificações no dashboard.
+* Responsividade com Bootstrap e Offcanvas no menu mobile.
+* Organização dos arquivos em pastas `css`, `js`, `json` e `img`.
+
+## Arquivos principais da entrega
+
+```txt
+codigo/public/dashboard-admin.html
+codigo/public/ocorrencias.html
+codigo/public/detalhes.html
+codigo/public/relatorios.html
+codigo/public/nova-ocorrencia.html
+
+codigo/public/css/style.css
+
+codigo/public/js/dashboard-admin.js
+codigo/public/js/ocorrencias.js
+
+codigo/public/json/dashboard-admin.json
+codigo/public/json/geral.json
+
+codigo/public/img/
 ```
 
-## Parte Front End
+## Tecnologias utilizadas
 
-Para montar seu site, edite os arquivos existentes e crie novos arquivos na pasta `public` que mantem todos os arquivos da parte de Front End do site, a interface que é vista pelo usuário no navegador.
+* HTML5
+* CSS3
+* JavaScript
+* Bootstrap 5
+* Bootstrap Icons
+* Leaflet
+* JSON
+* LocalStorage
+* JSON Server
+* Git e GitHub
 
-Nesta pasta public, sugerimos que você organize os arquivos do seu site da seguinte maneira:
+## Como executar o projeto
 
-* Arquivo `index.html`: arquivo que representa a "home page" do site.
-* Pasta `assets`: os arquivos de formatação (CSS), os scripts (JS), as imagens utilizadas no site (JPG, PNG, GIF, SVG, etc), fontes (TTF) e outros arquivos gerais utilizados por todo o site.
-* Pasta `modulos`: os arquivos utilizados na implementação das funcionalidades do site. Separe uma sub-pasta para cada novo módulo ou funcionalidade. Pode também ser utilizado para dividir o trabalho de cada membro do grupo.
+Primeiro, instale as dependências:
 
+```bash
+npm install
+```
 
-## Parte Back End
+Depois, rode o servidor:
 
-Para esse projeto, vamos utilizar o ambiente de execução **[Node.js](https://nodejs.org/)** para montar um Back End bem simplificado, porém poderoso que utiliza o módulo **[JSON Server](https://github.com/typicode/json-server#readme)**. Não se preocupe, você não precisa conhecer como programar para o ambiente Node.js e nem alterar estes arquivos para colocar o seu site funcionando.
+```bash
+npm start
+```
 
-Na pasta `codigo`, você vai encontrar os seguintes arquivos e pastas associados à estrutura de Back End:
+O JSON Server será executado na porta 3000.
 
-* Pasta `db`: local onde é armazenado o arquivo com as estruturas de dados utilizadas pela aplicação. O conteúdo é composto apenas pelo arquivo `db.json`.
-* Arquivo `index.js`: arquivo que inicializa o módulo JSON Server que oferece um servidor web e a aplicação de back end que fornece uma API RESTful a partir do arquivo `db.json`. Evite alterar o arquivo `index.js`.
-* Arquivo `package.js`: arquivo com as configurações do projeto Node.js.
+Para visualizar as telas, abra o projeto com Live Server no VS Code ou acesse a pasta:
 
-## Configuração e execução do ambiente
+```txt
+codigo/public/dashboard-admin.html
+```
 
-Para executar o JSON Server e permitir o acesso ao seu site, você deverá instalar o Node.js no seu computador. Para isso siga as instruções no site do [**Node.js**](https://nodejs.org/), fazendo o download da versão LTS (versão mais estável do ambiente).
+## Como testar a funcionalidade
 
-Assim que o Node.js estiver instalado no seu computador, siga os passos a seguir:
+### Teste 1 - Visualizar Dashboard
 
-1. Abra a pasta `codigo` dentro da sua IDE (por exemplo, Visual Studio Code)
-2. Abra uma janela de terminal e certifique-se que a pasta do terminal é a pasta `codigo`
-3. Execute o comando `npm install` para recriar a pasta `node_modules` e instalar todos os pacotes necessários para o ambiente de desenvolvimento (Ex: JSON Server).
-4. Execute o comando `npm start` para iniciar o JSON Server e permitir que você consiga acessar o seu site no navegador.
-5. Para testar o projeto:
-   1. **Site Front End**: abra um navegador e acesse o seu site pela seguinte URL:
-      [http://localhost:3000]()
-   2. **Site Back End**: abra o navegador e acesse as informações da estrutura de usuários por meio da API REST do JSON Server a partir da seguinte URL:
-      [http://localhost:3000/usuarios](http://localhost:3000/usuarios)
+1. Abrir `dashboard-admin.html`.
+2. Verificar os cards de totais.
+3. Verificar se o mapa aparece.
+4. Verificar se a tabela de últimas ocorrências é exibida.
 
+Resultado esperado: o dashboard deve carregar corretamente os dados das ocorrências.
 
-## Dúvidas e Suporte
+### Teste 2 - Curtir ocorrência
 
-Se tiver dúvidas, procure a monitoria para que te ajudem a entender todo o ambiente e te ajudem na implementação do seu projeto.
+1. Abrir `dashboard-admin.html` ou `ocorrencias.html`.
+2. Clicar no botão de curtida de uma ocorrência.
+3. Verificar se o número de curtidas aumenta.
 
-### Documentação JSONServer
-A documentação do JSONServer pode ser consultada na [página do módulo no NPM](https://www.npmjs.com/package/json-server/v/0.17.4).
+Resultado esperado: a curtida deve ser registrada e o engajamento deve aumentar.
 
-### Portal de exemplos da disciplina DIW 
-Temos um site de exemplo de como implementar diversas funcionalidades úteis para projetos Web no contexto da disciplina. Acesse o [site de exemplo](https://github.com/webtech-network/lab-jsonserver). 
+### Teste 3 - Filtrar ocorrências
 
-Para implementação de funcionalidades avançadas, sugerimos o uso das seguintes bibliotecas/APIs: [FullCalendar](https://fullcalendar.io/), [Chart.js](https://www.chartjs.org/), [Mapbox](https://docs.mapbox.com/api/), para citar algumas.
+1. Abrir `ocorrencias.html`.
+2. Selecionar tipo, status ou bairro.
+3. Clicar em “Filtrar”.
+
+Resultado esperado: a tabela deve exibir apenas as ocorrências correspondentes ao filtro.
+
+### Teste 4 - Notificações
+
+1. Abrir `dashboard-admin.html`.
+2. Clicar no ícone de sino.
+3. Verificar a lista de notificações.
+
+Resultado esperado: devem aparecer ocorrências pendentes, de prioridade alta ou com maior engajamento.
+
+### Teste 5 - Responsividade
+
+1. Abrir o projeto no navegador.
+2. Reduzir a largura da tela ou usar o modo responsivo.
+3. Clicar no botão de menu.
+
+Resultado esperado: a sidebar desktop deve sumir em telas pequenas e o menu Offcanvas deve abrir sem cortar o conteúdo.
+
+## Observações
+
+A entrega foi feita com foco na funcionalidade administrativa de acompanhamento de ocorrências. O sistema utiliza `localStorage` para manter curtidas e engajamento durante o uso no navegador.
+
+A pasta `node_modules` não deve ser incluída no ZIP final.
