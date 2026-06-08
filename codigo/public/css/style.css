@@ -288,16 +288,19 @@ body {
 
 .notificacoes-box {
   display: none;
-  position: absolute;
-  top: 36px;
-  right: 0;
-  width: 280px;
+  position: fixed;
+  top: 82px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(320px, calc(100vw - 32px));
+  max-height: 70vh;
+  overflow-y: auto;
   background: var(--pure-white);
   border: 1px solid var(--silver-teal);
   border-radius: 14px;
   box-shadow: rgba(0, 30, 43, 0.18) 0px 8px 24px;
   padding: 16px;
-  z-index: 200;
+  z-index: 9999;
 }
 
 .notificacoes-box.notificacoes-aberta {
@@ -1035,4 +1038,105 @@ body {
 
 .btn-reacao:hover {
   transform: scale(1.05);
+}
+
+/* ==============================
+   CORREÇÃO SIDEBAR MOBILE / OFFCANVAS
+   ============================== */
+
+/* Garante que a sidebar desktop não apareça no mobile */
+.sidebar.d-none {
+  display: none !important;
+}
+
+/* Largura controlada do menu mobile */
+.offcanvas-sidebar {
+  width: 280px !important;
+  max-width: 80vw;
+  background: var(--forest-black);
+  color: var(--pure-white);
+}
+
+/* Evita que o menu mobile ocupe a tela toda */
+.offcanvas.offcanvas-start {
+  width: 280px !important;
+  max-width: 80vw;
+}
+
+/* Mantém os links bonitos dentro do offcanvas */
+.offcanvas-sidebar .sidebar-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.offcanvas-sidebar .sidebar-nav li {
+  margin-bottom: 4px;
+}
+
+.offcanvas-sidebar .sidebar-nav a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 24px;
+  color: var(--silver-teal);
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  border-left: 3px solid transparent;
+}
+
+.offcanvas-sidebar .sidebar-nav a:hover,
+.offcanvas-sidebar .sidebar-nav a.active {
+  color: var(--pure-white);
+  background: var(--deep-teal);
+  border-left-color: var(--mongodb-green);
+}
+
+.offcanvas-sidebar .offcanvas-title {
+  color: var(--pure-white);
+  font-weight: 600;
+}
+
+/* Garante que o conteúdo principal não fique deslocado no mobile */
+.main-content {
+  margin-left: 0 !important;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Botão do menu mobile */
+.mobile-menu-btn {
+  display: inline-flex;
+  border: none;
+  background-color: transparent;
+  color: var(--forest-black);
+  font-size: 28px;
+  cursor: pointer;
+}
+
+/* ==============================
+   CORREÇÃO TOP BAR MOBILE
+   ============================== */
+
+.top-bar {
+  height: auto !important;
+  min-height: 72px !important;
+  max-height: none !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+}
+
+.top-bar .mobile-menu-btn {
+  flex-shrink: 0;
+}
+
+.top-bar .search-box {
+  flex: 1;
+  min-width: 260px;
+}
+
+.page-header {
+  clear: both;
 }
