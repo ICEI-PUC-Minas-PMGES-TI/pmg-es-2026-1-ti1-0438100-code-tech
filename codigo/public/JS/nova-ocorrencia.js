@@ -355,41 +355,51 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     fetch("http://localhost:3000/ocorrencias", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(ocorrencia)
-    })
-      .then(() => {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify(ocorrencia)
+})
+  .then(resposta => {
+    console.log("Resposta recebida:", resposta);
+    return resposta.json();
+  })
+  .then(dados => {
+    console.log("Dados salvos:", dados);
+    
+    const modalElement = document.getElementById("modalSucesso");
+    console.log("Modal encontrado:", modalElement);
+    
+    if (modalElement) {
+      const modal = new bootstrap.Modal(modalElement);
+      modal.show();
+      console.log("Modal exibido");
+    } else {
+      criarNotificacao("danger", "Modal não encontrado no HTML");
+    }
 
-        const modal = new bootstrap.Modal(
-          document.getElementById("modalSucesso")
-        );
+    form.reset();
+    fotos = [];
+    fotosContainer.innerHTML = "";
+    coordenadas.textContent = "Lat: -- | Lng: --";
 
-        modal.show();
+    latitude = null;
+    longitude = null;
 
-        form.reset();
-        fotos = [];
-        fotosContainer.innerHTML = "";
-        coordenadas.textContent = "Lat: -- | Lng: --";
+    if (marcador) {
+      mapa.removeLayer(marcador);
+      marcador = null;
+    }
 
-        latitude = null;
-        longitude = null;
+    contadorDescricao.textContent = 0;
+    atualizarProgresso();
 
-        if (marcador) {
-          mapa.removeLayer(marcador);
-          marcador = null;
-        }
-
-        contadorDescricao.textContent = 0;
-        atualizarProgresso();
-
-      })
-      .catch((erro) => {
-        console.error(erro);
-        criarNotificacao("danger", "Erro ao salvar ocorrência.");
-      });
+  })
+  .catch((erro) => {
+    console.error("Erro:", erro);
+    criarNotificacao("danger", "Erro ao salvar ocorrência.");
+  });
 
   });
 
