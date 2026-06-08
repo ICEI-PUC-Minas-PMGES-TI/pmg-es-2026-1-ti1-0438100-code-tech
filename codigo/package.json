@@ -1,0 +1,13 @@
+{
+  "name": "infra-bh",
+  "version": "1.0.0",
+  "description": "Painel Infra BH com JSON Server para dados de desenvolvimento.",
+  "private": true,
+  "scripts": {
+    "start": "node index.js",
+    "start:api": "json-server --watch db/db.json --port 3000"
+  },
+  "devDependencies": {
+    "json-server": "^0.17.3"
+  }
+}
