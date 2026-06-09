@@ -2,17 +2,19 @@ cff-version: 1.0.1
 message: Please cite this software using these metadata.
 title: Code Tech 
 authors:
-  - family-names: Dias
+  - family-names: Nogueira Xavier 
+    given-names: Hector Paulo
+  - family-names: Dias Nogueira 
     given-names: Lucas
-  - family-names: Rocha
+  - family-names: Rocha Moreia
     given-names: Raul
-  - family-names: Lemos
-    given-names: João
-  - family-names: Drumont
-    given-names: Gabriel
-  - family-names: Aquino
-    given-names: Felipe
-  - family-names: Marzano
+  - family-names: Lemos Faria 
+    given-names: João Pedro
+  - family-names: Drumond Oliveira 
+    given-names: Gabriel Luiz
+  - family-names: Nogueira Aquino
+    given-names: Felipe Gabriel
+  - family-names: Marzano de Jesus
     given-names: Felipe
   - name-suffix: Professor
     affiliation: PUC Minas
