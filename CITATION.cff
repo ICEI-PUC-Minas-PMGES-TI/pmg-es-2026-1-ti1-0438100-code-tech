@@ -16,17 +16,18 @@ authors:
     given-names: Felipe Gabriel
   - family-names: Marzano de Jesus
     given-names: Felipe
+
   - name-suffix: Professor
     affiliation: PUC Minas
-    family-names: Soares
+    family-names: Soares de Paiva Lacerda
     given-names: Lucca
   - name-suffix: Professor
     affiliation: PUC Minas
-    family-names: Faria 
-    given-names: Diego
- - name-suffix: Professor
+    family-names: de Faria Barros
+    given-names: Diego Augusto
+  - name-suffix: Professor
     affiliation: PUC Minas
-    family-names: Louzada 
+    family-names: Almeida Louzada 
     given-names: Henrique
 
 keywords:
