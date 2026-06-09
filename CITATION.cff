@@ -29,11 +29,11 @@ authors:
     family-names: Almeida Louzada 
     given-names: Henrique
   keywords:
-  -Gestão de Problemas Urbanos
-  -Denúncias da Comunidade
-  -Mapeamento Geográfico
-  -Sistema Web
-  -Engenharia de Software
+  - Gestão de Problemas Urbanos
+  - Denúncias da Comunidade
+  - Mapeamento Geográfico
+  - Sistema Web
+  - Engenharia de Software
 repository-code: https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-1-ti1-0438100-code-tech.git
 license: CC-BY-4.0
 version: 1.0.0
