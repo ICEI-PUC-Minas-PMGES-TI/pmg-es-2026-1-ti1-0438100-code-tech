@@ -1,27 +1,31 @@
 cff-version: 1.0.1
 message: Please cite this software using these metadata.
-title: 
+title: Code Tech 
 authors:
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names:
+  - family-names: Dias
+    given-names: Lucas
+  - family-names: Rocha
+    given-names: Raul
+  - family-names: Lemos
+    given-names: João
+  - family-names: Drumont
+    given-names: Gabriel
+  - family-names: Aquino
+    given-names: Felipe
+  - family-names: Marzano
+    given-names:felipe
   - name-suffix: Professor
     affiliation: PUC Minas
-    family-names: 
-    given-names: 
+    family-names: Soares
+    given-names: Lucca
   - name-suffix: Professor
     affiliation: PUC Minas
-    family-names: 
-    given-names: 
+    family-names: Faria 
+    given-names: Diego
+ - name-suffix: Professor
+    affiliation: PUC Minas
+    family-names: Louzada 
+    given-names: Henrique
 keywords:
   - 
   - 
