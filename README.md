@@ -70,6 +70,6 @@ codigo/
 
 - Diego Augusto de Faria Barros
 - Henrique Almeida Louzada
-- Luca Soares de Paiva Lacerda
+- Lucca Soares de Paiva Lacerda
 
 Consulte a [documentação completa](docs/README.md) e o [código-fonte](codigo/README.md).

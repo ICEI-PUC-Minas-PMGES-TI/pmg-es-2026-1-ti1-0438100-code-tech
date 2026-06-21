@@ -1,12 +1,12 @@
-cff-version: 1.0.1
-message: Please cite this software using these metadata.
-title: Code Tech 
+cff-version: 1.2.0
+message: "Se você utilizar este software, cite-o usando estes metadados."
+title: InfraBH
 authors:
   - family-names: Nogueira Xavier 
     given-names: Hector Paulo
   - family-names: Dias Nogueira 
     given-names: Lucas
-  - family-names: Rocha Moreia
+  - family-names: Rocha Moreira
     given-names: Raul
   - family-names: Lemos Faria 
     given-names: João Pedro
@@ -28,7 +28,7 @@ authors:
     affiliation: PUC Minas
     family-names: Almeida Louzada 
     given-names: Henrique
-  keywords:
+keywords:
   - Gestão de Problemas Urbanos
   - Denúncias da Comunidade
   - Mapeamento Geográfico
@@ -37,4 +37,4 @@ authors:
 repository-code: https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-1-ti1-0438100-code-tech.git
 license: CC-BY-4.0
 version: 1.0.0
-date-released: 2022-07-14
+date-released: 2026-06-21
