@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Code+Pro:wght@400;500;600&display=swap" rel="stylesheet">
   <link href="../css/style.css" rel="stylesheet">
 </head>
-<body>
+<body data-page="ocorrencias">
   <div class="app-layout">
     
     <aside class="sidebar">
@@ -34,7 +34,7 @@
             </a>
           </li>
           <li>
-            <a href="nova-ocorrencia.html">
+            <a href="../../usuario/nova-ocorrencia.html">
               <i class="bi bi-plus-circle"></i>
               <span>Nova Ocorrência</span>
             </a>
@@ -48,7 +48,7 @@
         </ul>
       </nav>
       <div class="sidebar-bottom">
-        <a href="#">
+        <a href="#" onclick="logout(event)">
           <i class="bi bi-box-arrow-left"></i>
           <span>Sair</span>
         </a>
@@ -72,8 +72,8 @@
               <i class="bi bi-person"></i>
             </div>
             <div class="user-details">
-              <div class="name">Admin</div>
-              <div class="role">Administrador</div>
+              <div class="name" data-user-name>Admin</div>
+              <div class="role" data-user-role>Administrador</div>
             </div>
           </div>
         </div>
@@ -85,7 +85,7 @@
             <h1>Ocorrências</h1>
             <p class="subtitle">Gerencie todas as Ocorrências reportadas</p>
           </div>
-          <a href="nova-ocorrencia.html" class="btn-mongodb-primary">
+          <a href="../../usuario/nova-ocorrencia.html" class="btn-mongodb-primary">
             <i class="bi bi-plus-lg"></i> Novas Ocorrências
           </a>
         </div>
@@ -246,5 +246,8 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../../js/auth.js"></script>
+  <script src="../../js/app.js"></script>
+  <script src="../js/admin.js"></script>
 </body>
 </html>

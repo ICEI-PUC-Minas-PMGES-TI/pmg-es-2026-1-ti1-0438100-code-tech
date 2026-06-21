@@ -123,6 +123,7 @@ body {
 .main-content {
   margin-left: var(--sidebar-width);
   flex: 1;
+  min-width: 0;
   background: var(--pure-white);
   min-height: 100vh;
 }
@@ -741,6 +742,8 @@ body {
   flex-shrink: 0;
 }
 
+.mobile-nav { display: none; }
+
 @media (max-width: 1024px) {
   .sidebar {
     width: 60px;
@@ -764,12 +767,13 @@ body {
   }
   .main-content {
     margin-left: 0;
+    width: 100%;
   }
   .top-bar {
     padding: 12px 16px;
   }
   .search-box {
-    width: 200px;
+    display: none;
   }
   .content-area {
     padding: 16px;
@@ -777,4 +781,24 @@ body {
   .page-header {
     padding: 16px 16px 0;
   }
+  .main-content { padding-bottom: 76px; }
+  .top-bar-right { margin-left: auto; }
+  .user-details { display: none; }
+  .table-mongodb { min-width: 760px; }
+  .card-mongodb { overflow-x: auto; }
+  .mobile-nav {
+    position: fixed;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    z-index: 2000;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    padding: 8px;
+    background: var(--forest-black);
+    border-radius: 16px;
+    box-shadow: 0 12px 35px rgba(0, 30, 43, .3);
+  }
+  .mobile-nav a { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 2px; color: #dce8e5; font-size: 10px; text-decoration: none; }
+  .mobile-nav i { color: var(--mongodb-green); font-size: 19px; }
 }

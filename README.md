@@ -1,90 +1,75 @@
-# Infra BH
+# InfraBH
 
-(https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-1-ti1-0438100-code-tech)
+Plataforma web colaborativa para registrar, acompanhar e administrar ocorrências de infraestrutura urbana na Região Metropolitana de Belo Horizonte.
 
-## Alunos integrantes da equipe
+## Visão geral
 
-* Hector Paulo Nogueira Xavier
-* Gabriel Luiz Drumond Oliveira 
-* Felipe Gabriel 
-* Felipe Marzanno
-* Raul Rocha
-* João Pedro Lemos
-* Lucas dias
-  
-## O infraBH é um painel administrativo web voltado para a gestão de ocorrências urbanas na região metropolitana de Belo Horizonte. O fluxo começa com login seguro e leva a um dashboard com visão geral dos dados, incluindo indicadores, mapa e lista de ocorrências. A interface utiliza uma sidebar fixa e navegação clara, facilitando o acesso às principais áreas do sistema.
+O InfraBH aproxima moradores e equipes responsáveis pela manutenção urbana. Cidadãos podem registrar problemas com endereço, localização no mapa, categoria, prioridade, descrição e fotos; depois, acompanham o status e confirmam ocorrências semelhantes. Administradores visualizam o panorama completo, recebem notificações prioritárias, analisam relatórios e atualizam o atendimento.
 
-O sistema permite gerenciar ocorrências de forma completa, com criação, edição, filtros e visualização detalhada. Também inclui relatórios com gráficos e configurações administrativas. O wireframe foi projetado com foco em usabilidade, organização e consistência visual, servindo como base para uma aplicação moderna
-e eficiente.
+## Funcionalidades
 
-## Problema:
-Moradores da Região Metropolitana de BH precisam de infraestrutura urbana , mas sofrem com a presença de buracos, vazamentos, problemas, falta de água e etc.
+- Autenticação com perfis de cidadão e administrador.
+- Sessão autenticada com validade de 8 horas e senhas armazenadas como hash.
+- Cadastro de ocorrências com mapa, busca de endereço, fotos e validação.
+- Listagem com busca e filtros por tipo, status, bairro, data e endereço.
+- Página de detalhes com histórico, confirmações e ocorrências similares.
+- Dashboard com indicadores, mapa e registros recentes.
+- Painel administrativo com notificações, alteração de status e exclusão.
+- Relatórios dinâmicos por categoria, bairro, status e prioridade.
+- Interface responsiva para desktop, tablet e celular.
 
-## Objetivo do projeto:
-O objetivo do nosso projeto é suprir as necessidades dos nossos usuários, através de um site cujo a finalidade é retalar problemas com a infraestrutura, para que os administradores busquem uma solução.
+## Tecnologias
 
-## Justificativa:
-O projeto InfraBH foi desenvolvido para resolver um problema comum na Região Metropolitana de Belo Horizonte: a dificuldade dos moradores em reportar e acompanhar problemas de infraestrutura, como buracos, vazamentos e falta de água.
-Atualmente, os canais existentes são pouco eficientes e não oferecem retorno claro, o que desmotiva a população. Pensando nisso, a aplicação foi criada para facilitar o registro dessas ocorrências de forma simples e rápida, além de permitir o acompanhamento do status.
-A escolha desse tema se deve ao seu impacto social, já que melhora a comunicação entre cidadãos e responsáveis pela manutenção urbana, incentivando a participação da população e contribuindo para uma cidade mais organizada.
+HTML5, CSS3, JavaScript, Bootstrap 5, Bootstrap Icons, Leaflet, OpenStreetMap/Nominatim, Chart.js, Node.js e JSON Server.
 
-## Público alvo:
-Moradores da Região Metropolitana de Belo Horizonte,
-Motoristas e motociclistas,
-Órgãos públicos e equipes de manutenção,
-Comerciantes locais,
-População em geral usuária de serviços urbanos.
-## Metodologias:
-Ferramenta utilizadas: Figma, Miro, Pencil.
-                                                                                                                                                                Organização: Gabriel Drumond: wireframe,
-Raul: fluxograma,
-Felipe Marzano e Felipe Gabriel: interação,
-Lucas Dias e Hector: slides
+## Como executar
 
-
-
-## Mapa Steakehoalders e Matriz CSD
-![40102279-6915-4733-8150-04f213ba0043](https://github.com/user-attachments/assets/f1e4b55a-a5d2-40c1-8eb9-387f170863f3)
-![c28df00f-e54b-45b1-b0ee-da60ce7c2ad7](https://github.com/user-attachments/assets/868c0440-7c00-488b-8d9b-e926be59da2d)
-
-## Persona e Proposta de valor 
-![b0179b94-74b5-490c-9844-536708cbb52b](https://github.com/user-attachments/assets/52b528b8-f9e2-47bb-989f-abf1805d28d3)
-![1138d70c-99ef-4ac5-a1d5-4f406d9d2348](https://github.com/user-attachments/assets/c0549f36-403a-4d2a-b8db-42ae06f194bd)
-![92215c6f-dcd4-429f-8949-66a9469c33f8](https://github.com/user-attachments/assets/2b4f336b-fc12-4737-b091-aae34ccd958c)
-
-## Fluxograma 
-![a0280f01-ac24-4a07-ac33-434284d9300f](https://github.com/user-attachments/assets/5929a9d1-465a-4f27-89f1-49c412275cda)
-![5c5511e9-9a43-4027-bf6b-3e1d476fe10a](https://github.com/user-attachments/assets/697a3cb2-212e-458c-8318-5b972b7cb56e)
-
-## Wireframe Usúario 
-![e7d3d285-5106-4c53-81a8-f77d77185e10](https://github.com/user-attachments/assets/6610439f-1d32-4e3d-bf3b-e03538f087f3)
-
-## Wireframe ADM
-![d2cdfe0f-c1ea-44c3-9c7e-8a2a675f8ba6](https://github.com/user-attachments/assets/51e2e20a-bb86-4acf-a31a-67f270f06d56)
-![58d215fe-7139-4134-aa82-c53c22300059](https://github.com/user-attachments/assets/14e8b94b-3dab-44f8-a357-5b7f34161dc6)
-![0e38981b-079a-465f-bc6b-2c7817ba69c2](https://github.com/user-attachments/assets/5a3626f1-f914-4c34-ba6d-e7442c53d90d)
-
-## Prótotipo interativo 
-![6cabcd09-a420-404a-a8cc-64e82b23ecd7](https://github.com/user-attachments/assets/8f90b139-661e-445a-acfc-39178c2b81db)
-
-
-## Professores responsáveis
-
-* Diego Augusto de Faria Barros
-* Henrique Almeida Louzada
-* Luca Soares de Paiva Lacerda
-
-## Usando JSON Server
-
-O projeto agora inclui um servidor de desenvolvimento com `json-server` e um arquivo `db.json` de exemplo.
-
-Para iniciar o servidor local:
+Requisitos: Node.js 18 ou superior e npm.
 
 ```bash
 npm install
 npm start
 ```
 
-O JSON Server ficará disponível em `http://localhost:3000` e expõe a rota `/ocorrencias`.
+Acesse [http://localhost:3000](http://localhost:3000).
 
+### Credenciais de avaliação
 
+| Perfil | E-mail | Senha |
+|---|---|---|
+| Cidadão | `cidadao@infrabh.com` | `Cidadao@123` |
+| Administrador | `admin@infrabh.com` | `Admin@123` |
+
+As credenciais são dados demonstrativos do trabalho acadêmico e devem ser substituídas em uma implantação real. Em produção, defina também a variável de ambiente `AUTH_SECRET`.
+
+## Estrutura
+
+```text
+codigo/
+├── db/db.json             # usuários e ocorrências
+├── index.js               # servidor, login e API REST
+└── public/
+    ├── index.html         # login
+    ├── usuario/           # experiência do cidadão
+    ├── Adm/               # painel administrativo
+    ├── css/               # estilos compartilhados
+    └── js/                # autenticação e regras da aplicação
+```
+
+## Integrantes e contribuições
+
+- **Felipe Gabriel Nogueira Aquino:** dashboard administrativo, indicadores, mapa, curtidas/confirmações, engajamento, notificações e refinamentos de layout.
+- **Lucas Dias:** contagem dinâmica por categoria, integração dos dados com JSON Server e organização de recursos.
+- **Gabriel Luiz Drumond Oliveira:** cadastro de ocorrência, mapa e endereço, upload por clique/arrastar, validações, contador de descrição e retorno de sucesso.
+- **Hector Paulo Nogueira Xavier:** filtros de ocorrências e configuração do JSON Server.
+- **João Pedro Lemos Faria:** detalhes da ocorrência, mapa/fotos, ações, confirmações e ocorrências similares.
+- **Felipe Marzano:** separação das áreas de cidadão e administrador, integração REST, anexos, listagens, filtros e fluxo completo das ocorrências.
+- **Raul Rocha:** responsividade das interfaces em celular, tablet e desktop.
+
+## Professores responsáveis
+
+- Diego Augusto de Faria Barros
+- Henrique Almeida Louzada
+- Luca Soares de Paiva Lacerda
+
+Consulte a [documentação completa](docs/README.md) e o [código-fonte](codigo/README.md).

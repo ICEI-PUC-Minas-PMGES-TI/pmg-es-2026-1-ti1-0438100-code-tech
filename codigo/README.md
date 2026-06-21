@@ -1,102 +1,45 @@
-# Código Fonte
+# Código-fonte do InfraBH
 
-A pasta `codigo` serve para a manter o programa que vocês vão construir no contexto dessa disciplina. Se necessário, descreva neste arquivo aspectos relevantes da estrutura de diretórios criada para organização do código do seu projeto.
+## Organização
 
-**IMPORTANTE**: O uso do JSON Server e do ambiente baseado no Node.js é obrigatório.
-
-Uma sugestão da estrutura de diretórios para o projeto é a seguinte:
-
-```plaintext
-codigo/  (essa pasta aqui)
-│
-├── db/
-│   └── db.json (estruturas de dados)
-│
-├── public/ (seu site - front end)
-│   ├── assets/
-│   │   ├── css/
-│   │   │   ├── styles.css
-│   │   │   └── (outros arquivos .css)
-│   │   │
-│   │   ├── js/
-│   │   │   ├── app.js
-│   │   │   └── (outros arquivos .js)
-│   │   │
-│   │   ├── images/
-│   │   │   ├── logo.png
-│   │   │   └── (outras imagens)
-│   │   │
-│   │   └── fonts/
-│   │       ├── font1.ttf
-│   │       └── (outras fontes)
-│   │
-│   ├── modulos/
-│   │   ├── modulo-1/
-│   │   │   └── (arquivos do módulo)
-│   │   │
-│   │   └── modulo-2/
-│   │       └── (arquivos do módulo)
-│   │
-│   ├── index.html (página inicial front end)
-│   ├── about.html
-│   ├── contact.html
-│   └── (outras páginas)
-│
-│── index.js (app back end)
-│── package.json (configuração back end)
-└── README.md (este arquivo aqui)
+```text
+codigo/
+├── db/db.json                 # base do JSON Server
+├── index.js                   # servidor, autenticação e API
+├── package.json               # configuração alternativa para execução pela pasta codigo
+└── public/
+    ├── index.html             # login
+    ├── css/                   # estilos compartilhados e login
+    ├── js/                    # sessão, autenticação e regras comuns
+    ├── usuario/               # dashboard e fluxos do cidadão
+    └── Adm/                   # dashboard e gestão administrativa
 ```
 
-## Parte Front End
+## Execução
 
-Para montar seu site, edite os arquivos existentes e crie novos arquivos na pasta `public` que mantem todos os arquivos da parte de Front End do site, a interface que é vista pelo usuário no navegador.
+Preferencialmente, execute pela raiz do repositório:
 
-Nesta pasta public, sugerimos que você organize os arquivos do seu site da seguinte maneira:
+```bash
+npm install
+npm start
+```
 
-* Arquivo `index.html`: arquivo que representa a "home page" do site.
-* Pasta `assets`: os arquivos de formatação (CSS), os scripts (JS), as imagens utilizadas no site (JPG, PNG, GIF, SVG, etc), fontes (TTF) e outros arquivos gerais utilizados por todo o site.
-* Pasta `modulos`: os arquivos utilizados na implementação das funcionalidades do site. Separe uma sub-pasta para cada novo módulo ou funcionalidade. Pode também ser utilizado para dividir o trabalho de cada membro do grupo.
+O servidor será iniciado em `http://localhost:3000` e entregará tanto a interface quanto a API REST.
 
+## Rotas principais
 
-## Parte Back End
+- `POST /login`: valida credenciais e retorna sessão assinada.
+- `GET /ocorrencias`: lista ocorrências autorizadas.
+- `POST /ocorrencias`: cria uma ocorrência e associa o usuário autenticado.
+- `PUT /ocorrencias/:id`: atualiza dados e status.
+- `DELETE /ocorrencias/:id`: remove o registro.
 
-Para esse projeto, vamos utilizar o ambiente de execução **[Node.js](https://nodejs.org/)** para montar um Back End bem simplificado, porém poderoso que utiliza o módulo **[JSON Server](https://github.com/typicode/json-server#readme)**. Não se preocupe, você não precisa conhecer como programar para o ambiente Node.js e nem alterar estes arquivos para colocar o seu site funcionando.
+Todas as rotas de ocorrências exigem o cabeçalho `Authorization: Bearer <token>`.
 
-Na pasta `codigo`, você vai encontrar os seguintes arquivos e pastas associados à estrutura de Back End:
+## Verificação rápida
 
-* Pasta `db`: local onde é armazenado o arquivo com as estruturas de dados utilizadas pela aplicação. O conteúdo é composto apenas pelo arquivo `db.json`.
-* Arquivo `index.js`: arquivo que inicializa o módulo JSON Server que oferece um servidor web e a aplicação de back end que fornece uma API RESTful a partir do arquivo `db.json`. Evite alterar o arquivo `index.js`.
-* Arquivo `package.js`: arquivo com as configurações do projeto Node.js.
+```bash
+npm run check
+```
 
-## Configuração e execução do ambiente
-
-Para executar o JSON Server e permitir o acesso ao seu site, você deverá instalar o Node.js no seu computador. Para isso siga as instruções no site do [**Node.js**](https://nodejs.org/), fazendo o download da versão LTS (versão mais estável do ambiente).
-
-Assim que o Node.js estiver instalado no seu computador, siga os passos a seguir:
-
-1. Abra a pasta `codigo` dentro da sua IDE (por exemplo, Visual Studio Code)
-2. Abra uma janela de terminal e certifique-se que a pasta do terminal é a pasta `codigo`
-3. Execute o comando `npm install` para recriar a pasta `node_modules` e instalar todos os pacotes necessários para o ambiente de desenvolvimento (Ex: JSON Server).
-5. Execute o comando `npm start` para iniciar o servidor local e permitir que você consiga acessar o seu site no navegador.
-6. Para testar o projeto:
-   1. **Site Front End**: abra um navegador e acesse o seu site pela URL:
-      [http://localhost:3000/usuario/dashboard.html](http://localhost:3000/usuario/dashboard.html)
-   2. **Minhas Ocorrências**: abra o navegador em:
-      [http://localhost:3000/usuario/ocorrencias.html](http://localhost:3000/usuario/ocorrencias.html)
-   3. **Nova Ocorrência**: abra o navegador em:
-      [http://localhost:3000/usuario/nova-ocorrencia.html](http://localhost:3000/usuario/nova-ocorrencia.html)
-   4. **API de Ocorrências**: acesse também a rota REST:
-      [http://localhost:3000/ocorrencias](http://localhost:3000/ocorrencias)
-
-
-## Dúvidas e Suporte
-
-Se tiver dúvidas, procure a monitoria para que te ajudem a entender todo o ambiente e te ajudem na implementação do seu projeto.
-
-### Documentação JSONServer
-A documentação do JSONServer pode ser consultada na [página do módulo no NPM](https://www.npmjs.com/package/json-server/v/0.17.4).
-
-### Portal de exemplos da disciplina DIW 
-Temos um site de exemplo de como implementar diversas funcionalidades úteis para projetos Web no contexto da disciplina. Acesse o [site de exemplo](https://github.com/webtech-network/lab-jsonserver). 
-
-Para implementação de funcionalidades avançadas, sugerimos o uso das seguintes bibliotecas/APIs: [FullCalendar](https://fullcalendar.io/), [Chart.js](https://www.chartjs.org/), [Mapbox](https://docs.mapbox.com/api/), para citar algumas.
+Para os testes manuais, use as credenciais demonstrativas documentadas no [README principal](../README.md).

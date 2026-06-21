@@ -1,13 +1,16 @@
 {
   "name": "infra-bh",
   "version": "1.0.0",
-  "description": "Painel Infra BH com JSON Server para dados de desenvolvimento.",
+  "description": "InfraBH — gestão colaborativa de ocorrências urbanas.",
   "private": true,
   "scripts": {
     "start": "node codigo/index.js",
-    "start:api": "json-server --watch db.json --port 3000"
+    "check": "node --check codigo/index.js && node --check codigo/public/js/app.js && node --check codigo/public/js/auth.js"
   },
-  "devDependencies": {
-    "json-server": "^0.17.3"
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "json-server": "0.17.4"
   }
 }

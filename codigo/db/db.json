@@ -1,4 +1,22 @@
 {
+  "usuarios": [
+    {
+      "id": "USR-ADMIN-001",
+      "nome": "Administrador InfraBH",
+      "email": "admin@infrabh.com",
+      "role": "admin",
+      "salt": "infrabh-admin-2026",
+      "passwordHash": "0c181632e5e603c02c0bf6cd6c4e377d0482f0e0250cff610e65c9bca80e84a856bb7ed1c3cd86207a15e75cf86fb72afdac0f163f0d4b9c7ddf50e22dbee179"
+    },
+    {
+      "id": "USR-CIDADAO-001",
+      "nome": "Cidadão de Belo Horizonte",
+      "email": "cidadao@infrabh.com",
+      "role": "cidadao",
+      "salt": "infrabh-cidadao-2026",
+      "passwordHash": "ed251b885f10c315e9260d71344a23bab68c47f42a4481433e2bfe6283b741c9949a403213cb7af48bd6740793a2a994c935b379b43adfeaea0c346703e9b537"
+    }
+  ],
   "ocorrencias": [
     {
       "id": "OC1680000000000",
@@ -9,12 +27,17 @@
       "status": "Pendente",
       "description": "Buraco grande na pista que ameaça pedestres e veículos.",
       "photos": [],
-      "lat": -19.920,
-      "lng": -43.940,
+      "lat": -19.92,
+      "lng": -43.94,
       "createdAt": 1680000000000,
       "history": [
-        { "time": "27/03/2024 às 14:23", "message": "Ocorrência registrada." }
-      ]
+        {
+          "time": "27/03/2024 às 14:23",
+          "message": "Ocorrência registrada."
+        }
+      ],
+      "confirmacoes": 12,
+      "usuarioId": "USR-CIDADAO-001"
     },
     {
       "id": "OC1680000001000",
@@ -29,9 +52,17 @@
       "lng": -43.935,
       "createdAt": 1680000001000,
       "history": [
-        { "time": "27/03/2024 às 15:10", "message": "Ocorrência registrada." },
-        { "time": "27/03/2024 às 16:00", "message": "Equipe de manutenção acionada." }
-      ]
+        {
+          "time": "27/03/2024 às 15:10",
+          "message": "Ocorrência registrada."
+        },
+        {
+          "time": "27/03/2024 às 16:00",
+          "message": "Equipe de manutenção acionada."
+        }
+      ],
+      "confirmacoes": 8,
+      "usuarioId": "USR-CIDADAO-001"
     }
   ]
 }

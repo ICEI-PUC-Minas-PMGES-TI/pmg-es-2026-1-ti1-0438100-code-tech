@@ -1,157 +1,65 @@
-document.addEventListener('DOMContentLoaded', function() {
-  const colors = {
-    forestBlack: '#001e2b',
-    mongoGreen: '#00ed64',
-    darkGreen: '#00684a',
-    actionBlue: '#006cfa',
-    coolGray: '#5c6c75',
-    silverTeal: '#b8c4c2',
-    lightInput: '#e8edeb',
-  };
+document.addEventListener('DOMContentLoaded', async function () {
+  const items = await getCurrentOcorrencias();
+  const colors = ['#001e2b', '#006cfa', '#00a35c', '#f59e0b', '#7c3aed', '#5c6c75'];
 
-  const chartFont = {
-    family: "'Source Code Pro', 'Inter', monospace",
-    size: 11,
-    weight: 500,
-  };
+  function countBy(field) {
+    return items.reduce(function (counts, item) {
+      const key = item[field] || 'Não informado';
+      counts[key] = (counts[key] || 0) + 1;
+      return counts;
+    }, {});
+  }
+
+  function sortedEntries(object) {
+    return Object.entries(object).sort(function (a, b) { return b[1] - a[1]; });
+  }
+
+  function createChart(id, config) {
+    const canvas = document.getElementById(id);
+    if (canvas) new Chart(canvas, config);
+  }
+
+  const categories = sortedEntries(countBy('type'));
+  const neighborhoods = sortedEntries(countBy('bairro')).slice(0, 6);
+  const statuses = sortedEntries(countBy('status'));
+  const priorities = sortedEntries(countBy('priority'));
 
   Chart.defaults.font.family = "'Inter', sans-serif";
-  Chart.defaults.font.size = 12;
-  Chart.defaults.color = colors.coolGray;
+  Chart.defaults.color = '#5c6c75';
 
-  new Chart(document.getElementById('doughnutChart'), {
+  createChart('doughnutChart', {
     type: 'doughnut',
     data: {
-      labels: ['Buracos', 'Vazamento', 'Água', 'Outros'],
-      datasets: [{
-        data: [42, 25, 18, 15],
-        backgroundColor: [
-          colors.forestBlack,
-          colors.coolGray,
-          colors.silverTeal,
-          colors.lightInput,
-        ],
-        borderWidth: 0,
-        hoverOffset: 8,
-      }]
+      labels: categories.map(entry => entry[0]),
+      datasets: [{ data: categories.map(entry => entry[1]), backgroundColor: colors, borderWidth: 0 }],
     },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      cutout: '65%',
-      plugins: {
-        legend: {
-          position: 'right',
-          labels: {
-            padding: 16,
-            usePointStyle: true,
-            pointStyle: 'circle',
-            font: { size: 13, weight: 400 },
-          }
-        }
-      }
-    }
+    options: { responsive: true, maintainAspectRatio: false, cutout: '62%', plugins: { legend: { position: 'right' } } },
   });
 
-  new Chart(document.getElementById('barChart'), {
+  createChart('barChart', {
     type: 'bar',
     data: {
-      labels: ['Venda nova', 'Pampulha', 'Centro', 'Barreiro', 'Outros'],
-      datasets: [{
-        data: [32, 30, 26, 24, 22],
-        backgroundColor: colors.coolGray,
-        borderRadius: 4,
-        barThickness: 36,
-      }]
+      labels: neighborhoods.map(entry => entry[0]),
+      datasets: [{ label: 'Ocorrências', data: neighborhoods.map(entry => entry[1]), backgroundColor: '#00684a', borderRadius: 5 }],
     },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: {
-        y: {
-          beginAtZero: true,
-          max: 40,
-          ticks: { stepSize: 10, font: chartFont },
-          grid: { color: '#f0f0f0' },
-          border: { display: false },
-        },
-        x: {
-          grid: { display: false },
-          ticks: { font: { size: 11 } },
-          border: { display: false },
-        }
-      }
-    }
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } },
   });
 
-  new Chart(document.getElementById('horizontalBarChart'), {
+  createChart('horizontalBarChart', {
     type: 'bar',
     data: {
-      labels: ['Venda Nova', 'Pampulha', 'Centro', 'Barreiro'],
-      datasets: [{
-        data: [50, 42, 38, 18],
-        backgroundColor: colors.coolGray,
-        borderRadius: 4,
-        barThickness: 20,
-      }]
+      labels: statuses.map(entry => entry[0]),
+      datasets: [{ label: 'Ocorrências', data: statuses.map(entry => entry[1]), backgroundColor: '#006cfa', borderRadius: 5 }],
     },
-    options: {
-      indexAxis: 'y',
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: {
-        x: {
-          beginAtZero: true,
-          max: 60,
-          ticks: { stepSize: 10, font: chartFont },
-          grid: { color: '#f0f0f0' },
-          border: { display: false },
-        },
-        y: {
-          grid: { display: false },
-          ticks: { font: { size: 12 } },
-          border: { display: false },
-        }
-      }
-    }
+    options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true, ticks: { precision: 0 } } } },
   });
 
-  new Chart(document.getElementById('lineChart'), {
-    type: 'line',
+  createChart('lineChart', {
+    type: 'bar',
     data: {
-      labels: ['01/04', '05/04', '10/04', '15/04', '20/04', '25/04', '30/04'],
-      datasets: [{
-        data: [30, 45, 42, 70, 65, 55, 48],
-        borderColor: colors.coolGray,
-        backgroundColor: 'transparent',
-        borderWidth: 2,
-        pointBackgroundColor: colors.coolGray,
-        pointBorderColor: '#fff',
-        pointBorderWidth: 2,
-        pointRadius: 5,
-        tension: 0.3,
-      }]
+      labels: priorities.map(entry => entry[0]),
+      datasets: [{ label: 'Ocorrências', data: priorities.map(entry => entry[1]), backgroundColor: '#00a35c', borderRadius: 5 }],
     },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: {
-        y: {
-          beginAtZero: true,
-          max: 80,
-          ticks: { stepSize: 20, font: chartFont },
-          grid: { color: '#f0f0f0' },
-          border: { display: false },
-        },
-        x: {
-          grid: { display: false },
-          ticks: { font: { size: 11 } },
-          border: { display: false },
-        }
-      }
-    }
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } },
   });
 });

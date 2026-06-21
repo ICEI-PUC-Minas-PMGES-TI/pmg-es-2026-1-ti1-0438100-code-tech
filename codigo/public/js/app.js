@@ -11,7 +11,14 @@ function generateOcorrenciaId() {
 
 async function apiRequest(path, options = {}) {
   try {
-    const response = await fetch(API_BASE_URL + path, options);
+    const session = window.InfraBHAuth ? window.InfraBHAuth.getSession() : null;
+    const headers = Object.assign({}, options.headers || {});
+    if (session && session.token) headers.Authorization = `Bearer ${session.token}`;
+    const response = await fetch(API_BASE_URL + path, Object.assign({}, options, { headers }));
+    if (response.status === 401) {
+      if (window.InfraBHAuth) window.InfraBHAuth.logout();
+      return null;
+    }
     if (!response.ok) {
       console.error('API request failed:', response.status, response.statusText);
       return null;
@@ -27,7 +34,11 @@ async function apiRequest(path, options = {}) {
 }
 
 async function getStoredOcorrencias() {
-  const data = await apiRequest('/ocorrencias?_sort=createdAt&_order=desc');
+  const session = window.InfraBHAuth ? window.InfraBHAuth.getSession() : null;
+  const ownerFilter = session && session.usuario.role !== 'admin'
+    ? `&usuarioId=${encodeURIComponent(session.usuario.id)}`
+    : '';
+  const data = await apiRequest('/ocorrencias?_sort=createdAt&_order=desc' + ownerFilter);
   return Array.isArray(data) ? data : [];
 }
 
@@ -65,6 +76,12 @@ function formatDate(date) {
 function formatDateTime(date) {
   const dt = new Date(date);
   return `${dt.toLocaleDateString('pt-BR')} às ${dt.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`;
+}
+
+function escapeHtml(value) {
+  return String(value == null ? '' : value).replace(/[&<>'"]/g, function (character) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[character];
+  });
 }
 
 function normalizePriorityClass(priority) {
@@ -193,13 +210,13 @@ async function renderOcorrenciasList() {
   filtered.forEach(item => {
     const row = document.createElement('tr');
     row.innerHTML = `
-      <td><strong>${item.id}</strong></td>
-      <td>${item.type}</td>
-      <td>${summarizeAddress(item.address, item.bairro)}</td>
-      <td>${item.bairro}</td>
+      <td><strong>${escapeHtml(item.id)}</strong></td>
+      <td>${escapeHtml(item.type)}</td>
+      <td>${escapeHtml(summarizeAddress(item.address, item.bairro))}</td>
+      <td>${escapeHtml(item.bairro)}</td>
       <td>${formatDate(item.createdAt)}</td>
-      <td><span class="badge-status badge-${item.status === 'Pendente' ? 'pendente' : item.status === 'Em andamento' ? 'andamento' : 'resolvido'}">${item.status}</span></td>
-      <td><span class="badge-priority badge-${normalizePriorityClass(item.priority)}">${item.priority}</span></td>
+      <td><span class="badge-status badge-${item.status === 'Pendente' ? 'pendente' : item.status === 'Em andamento' ? 'andamento' : 'resolvido'}">${escapeHtml(item.status)}</span></td>
+      <td><span class="badge-priority badge-${normalizePriorityClass(item.priority)}">${escapeHtml(item.priority)}</span></td>
       <td><a href="${buildDetailsLink(item.id)}" class="btn-mongodb-outline" style="padding: 6px 12px; font-size: 12px;">Ver detalhes</a></td>
     `;
     fragment.appendChild(row);
@@ -253,12 +270,12 @@ async function renderDashboardOverview() {
   recent.forEach(item => {
     const row = document.createElement('tr');
     row.innerHTML = `
-      <td><strong>${item.id}</strong></td>
-      <td>${item.type}</td>
-      <td>${item.address}</td>
-      <td>${item.bairro}</td>
+      <td><strong>${escapeHtml(item.id)}</strong></td>
+      <td>${escapeHtml(item.type)}</td>
+      <td>${escapeHtml(item.address)}</td>
+      <td>${escapeHtml(item.bairro)}</td>
       <td>${formatDate(item.createdAt)}</td>
-      <td><span class="badge-status badge-${item.status === 'Pendente' ? 'pendente' : item.status === 'Em andamento' ? 'andamento' : 'resolvido'}">${item.status}</span></td>
+      <td><span class="badge-status badge-${item.status === 'Pendente' ? 'pendente' : item.status === 'Em andamento' ? 'andamento' : 'resolvido'}">${escapeHtml(item.status)}</span></td>
     `;
     fragment.appendChild(row);
   });
@@ -294,7 +311,7 @@ async function renderDashboardOverview() {
       try {
         var color = item.type === 'Vazamento' ? '#006cfa' : item.type === 'Falta de Água' ? '#ffc107' : item.type === 'Buraco' ? '#dc3545' : '#5c6c75';
         var marker = L.circleMarker([lat, lng], { radius: 6, fillColor: color, color: '#fff', weight: 1, fillOpacity: 0.9 }).addTo(dashboardMap);
-        marker.bindPopup('<strong>' + item.id + '</strong><br/>' + item.type + '<br/>' + item.bairro);
+        marker.bindPopup('<strong>' + escapeHtml(item.id) + '</strong><br/>' + escapeHtml(item.type) + '<br/>' + escapeHtml(item.bairro));
         dashboardMarkers.push(marker);
       } catch (e) {}
     });
@@ -334,6 +351,37 @@ async function populateDetailPage() {
   if (detailReportedElement) detailReportedElement.textContent = 'Você';
   if (detailLocationElement) detailLocationElement.textContent = ocorrencia.bairro + ' — ' + ocorrencia.address;
 
+  const confirmationText = document.getElementById('detail-confirmations');
+  if (confirmationText) confirmationText.textContent = `${ocorrencia.confirmacoes || 0} pessoas confirmaram`;
+
+  const confirmationButton = document.getElementById('btn-confirm-occurrence');
+  if (confirmationButton) {
+    const key = `infrabh.confirmed.${ocorrencia.id}`;
+    if (localStorage.getItem(key)) {
+      confirmationButton.disabled = true;
+      confirmationButton.innerHTML = '<i class="bi bi-check2"></i> Ocorrência confirmada';
+    }
+    confirmationButton.addEventListener('click', async function () {
+      if (localStorage.getItem(key)) return;
+      ocorrencia.confirmacoes = (ocorrencia.confirmacoes || 0) + 1;
+      const updated = await updateOcorrencia(ocorrencia.id, ocorrencia);
+      if (!updated) return;
+      localStorage.setItem(key, 'true');
+      confirmationText.textContent = `${ocorrencia.confirmacoes} pessoas confirmaram`;
+      confirmationButton.disabled = true;
+      confirmationButton.innerHTML = '<i class="bi bi-check2"></i> Ocorrência confirmada';
+    });
+  }
+
+  const similarContainer = document.getElementById('similar-occurrences');
+  if (similarContainer) {
+    const allItems = await getStoredOcorrencias();
+    const similar = allItems.filter(item => item.id !== ocorrencia.id && (item.type === ocorrencia.type || item.bairro === ocorrencia.bairro)).slice(0, 3);
+    similarContainer.innerHTML = similar.length
+      ? similar.map(item => `<a href="${buildDetailsLink(item.id)}" style="display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #e8edeb;text-decoration:none;color:inherit"><span><strong>${escapeHtml(item.type)}</strong><br><small>${escapeHtml(summarizeAddress(item.address, item.bairro))}</small></span><span class="badge-status badge-${item.status === 'Pendente' ? 'pendente' : item.status === 'Em andamento' ? 'andamento' : 'resolvido'}">${escapeHtml(item.status)}</span></a>`).join('')
+      : '<p style="color:var(--cool-gray);margin:12px 0 0;">Nenhuma ocorrência similar encontrada.</p>';
+  }
+
   const historyContainer = document.getElementById('detail-history');
   if (historyContainer) {
     historyContainer.innerHTML = '';
@@ -344,7 +392,7 @@ async function populateDetailPage() {
       history.forEach(entry => {
         const item = document.createElement('div');
         item.className = 'history-item';
-        item.innerHTML = `<span class="time">${entry.time}</span> ${entry.message}`;
+        item.innerHTML = `<span class="time">${escapeHtml(entry.time)}</span> ${escapeHtml(entry.message)}`;
         historyContainer.appendChild(item);
       });
     }
@@ -562,6 +610,15 @@ function bindRegisterForm() {
       alert('Por favor, preencha todos os campos antes de registrar a ocorrência.');
       return;
     }
+    if (description.length < 20) {
+      alert('A descrição precisa ter pelo menos 20 caracteres.');
+      descriptionInput.focus();
+      return;
+    }
+    if (!photos.length) {
+      alert('Anexe pelo menos uma foto do problema.');
+      return;
+    }
 
     var lat = '';
     var lng = '';
@@ -588,11 +645,19 @@ function bindRegisterForm() {
       lat: lat,
       lng: lng,
       createdAt: Date.now(),
+      confirmacoes: 0,
       history: [{ time: formatDateTime(Date.now()), message: 'Ocorrência registrada.' }],
     };
 
-    await addOcorrencia(newItem);
-    window.location.href = 'ocorrencias.html';
+    button.disabled = true;
+    const saved = await addOcorrencia(newItem);
+    button.disabled = false;
+    if (!saved) {
+      alert('Não foi possível registrar a ocorrência. Tente novamente.');
+      return;
+    }
+    button.innerHTML = '<i class="bi bi-check-circle"></i> Ocorrência registrada!';
+    setTimeout(function () { window.location.href = 'ocorrencias.html'; }, 900);
   });
 }
 
@@ -603,6 +668,14 @@ function bindLocationSearch() {
   }
 
   initLocationMap();
+
+  const description = document.getElementById('input-description');
+  const counter = document.getElementById('description-counter');
+  if (description && counter) {
+    const updateCounter = function () { counter.textContent = `${description.value.length}/500 caracteres`; };
+    description.addEventListener('input', updateCounter);
+    updateCounter();
+  }
 }
 
 function resetFilters() {
