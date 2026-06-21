@@ -4,6 +4,7 @@ const API_OCORRENCIAS_URL = API_BASE_URL + '/ocorrencias';
 const defaultStatus = 'Pendente';
 
 var selectedPhotosData = [];
+var lastApiError = '';
 
 function generateOcorrenciaId() {
   return `OC${Date.now()}`;
@@ -11,6 +12,7 @@ function generateOcorrenciaId() {
 
 async function apiRequest(path, options = {}) {
   try {
+    lastApiError = '';
     const session = window.InfraBHAuth ? window.InfraBHAuth.getSession() : null;
     const headers = Object.assign({}, options.headers || {});
     if (session && session.token) headers.Authorization = `Bearer ${session.token}`;
@@ -20,6 +22,8 @@ async function apiRequest(path, options = {}) {
       return null;
     }
     if (!response.ok) {
+      const errorData = await response.json().catch(function () { return {}; });
+      lastApiError = errorData.mensagem || 'Não foi possível concluir a operação.';
       console.error('API request failed:', response.status, response.statusText);
       return null;
     }
@@ -69,6 +73,10 @@ async function deleteOcorrencia(id) {
   });
 }
 
+async function confirmOcorrencia(id) {
+  return await apiRequest('/ocorrencias/' + encodeURIComponent(id) + '/confirmar', { method: 'POST' });
+}
+
 function formatDate(date) {
   return new Date(date).toLocaleDateString('pt-BR');
 }
@@ -91,6 +99,21 @@ function normalizePriorityClass(priority) {
     .replace(/[\u0300-\u036f]/g, '')
     .replace(/\s+/g, '-')
     .replace(/[^a-z0-9-]/g, '');
+}
+
+function moderationLabel(item) {
+  return item.moderationStatus || 'Aguardando aprovação';
+}
+
+function visibleStatus(item) {
+  return moderationLabel(item) === 'Aprovada' ? item.status : moderationLabel(item);
+}
+
+function visibleStatusClass(item) {
+  const value = visibleStatus(item);
+  if (value === 'Aguardando aprovação') return 'andamento';
+  if (value === 'Rejeitada') return 'alta';
+  return value === 'Pendente' ? 'pendente' : value === 'Em andamento' ? 'andamento' : 'resolvido';
 }
 
 function summarizeAddress(address, bairro) {
@@ -215,7 +238,7 @@ async function renderOcorrenciasList() {
       <td>${escapeHtml(summarizeAddress(item.address, item.bairro))}</td>
       <td>${escapeHtml(item.bairro)}</td>
       <td>${formatDate(item.createdAt)}</td>
-      <td><span class="badge-status badge-${item.status === 'Pendente' ? 'pendente' : item.status === 'Em andamento' ? 'andamento' : 'resolvido'}">${escapeHtml(item.status)}</span></td>
+      <td><span class="badge-status badge-${visibleStatusClass(item)}">${escapeHtml(visibleStatus(item))}</span></td>
       <td><span class="badge-priority badge-${normalizePriorityClass(item.priority)}">${escapeHtml(item.priority)}</span></td>
       <td><a href="${buildDetailsLink(item.id)}" class="btn-mongodb-outline" style="padding: 6px 12px; font-size: 12px;">Ver detalhes</a></td>
     `;
@@ -275,7 +298,7 @@ async function renderDashboardOverview() {
       <td>${escapeHtml(item.address)}</td>
       <td>${escapeHtml(item.bairro)}</td>
       <td>${formatDate(item.createdAt)}</td>
-      <td><span class="badge-status badge-${item.status === 'Pendente' ? 'pendente' : item.status === 'Em andamento' ? 'andamento' : 'resolvido'}">${escapeHtml(item.status)}</span></td>
+      <td><span class="badge-status badge-${visibleStatusClass(item)}">${escapeHtml(visibleStatus(item))}</span></td>
     `;
     fragment.appendChild(row);
   });
@@ -351,11 +374,25 @@ async function populateDetailPage() {
   if (detailReportedElement) detailReportedElement.textContent = 'Você';
   if (detailLocationElement) detailLocationElement.textContent = ocorrencia.bairro + ' — ' + ocorrencia.address;
 
+  const contentArea = document.querySelector('.content-area');
+  if (contentArea) {
+    const moderationNotice = document.createElement('div');
+    moderationNotice.className = 'card-mongodb mb-4';
+    const moderation = moderationLabel(ocorrencia);
+    moderationNotice.style.borderLeft = `5px solid ${moderation === 'Aprovada' ? '#00a35c' : moderation === 'Rejeitada' ? '#dc3545' : '#f59e0b'}`;
+    moderationNotice.innerHTML = `<strong>Moderação: ${escapeHtml(moderation)}</strong>${ocorrencia.moderationReason ? `<p style="margin:6px 0 0;color:var(--cool-gray)">${escapeHtml(ocorrencia.moderationReason)}</p>` : ''}`;
+    contentArea.prepend(moderationNotice);
+  }
+
   const confirmationText = document.getElementById('detail-confirmations');
   if (confirmationText) confirmationText.textContent = `${ocorrencia.confirmacoes || 0} pessoas confirmaram`;
 
   const confirmationButton = document.getElementById('btn-confirm-occurrence');
   if (confirmationButton) {
+    if (moderationLabel(ocorrencia) !== 'Aprovada') {
+      confirmationButton.disabled = true;
+      confirmationButton.innerHTML = '<i class="bi bi-hourglass-split"></i> Aguardando aprovação';
+    }
     const key = `infrabh.confirmed.${ocorrencia.id}`;
     if (localStorage.getItem(key)) {
       confirmationButton.disabled = true;
@@ -363,9 +400,9 @@ async function populateDetailPage() {
     }
     confirmationButton.addEventListener('click', async function () {
       if (localStorage.getItem(key)) return;
-      ocorrencia.confirmacoes = (ocorrencia.confirmacoes || 0) + 1;
-      const updated = await updateOcorrencia(ocorrencia.id, ocorrencia);
+      const updated = await confirmOcorrencia(ocorrencia.id);
       if (!updated) return;
+      ocorrencia.confirmacoes = updated.confirmacoes;
       localStorage.setItem(key, 'true');
       confirmationText.textContent = `${ocorrencia.confirmacoes} pessoas confirmaram`;
       confirmationButton.disabled = true;
@@ -376,7 +413,7 @@ async function populateDetailPage() {
   const similarContainer = document.getElementById('similar-occurrences');
   if (similarContainer) {
     const allItems = await getStoredOcorrencias();
-    const similar = allItems.filter(item => item.id !== ocorrencia.id && (item.type === ocorrencia.type || item.bairro === ocorrencia.bairro)).slice(0, 3);
+    const similar = allItems.filter(item => moderationLabel(item) === 'Aprovada' && item.id !== ocorrencia.id && (item.type === ocorrencia.type || item.bairro === ocorrencia.bairro)).slice(0, 3);
     similarContainer.innerHTML = similar.length
       ? similar.map(item => `<a href="${buildDetailsLink(item.id)}" style="display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #e8edeb;text-decoration:none;color:inherit"><span><strong>${escapeHtml(item.type)}</strong><br><small>${escapeHtml(summarizeAddress(item.address, item.bairro))}</small></span><span class="badge-status badge-${item.status === 'Pendente' ? 'pendente' : item.status === 'Em andamento' ? 'andamento' : 'resolvido'}">${escapeHtml(item.status)}</span></a>`).join('')
       : '<p style="color:var(--cool-gray);margin:12px 0 0;">Nenhuma ocorrência similar encontrada.</p>';
@@ -653,10 +690,10 @@ function bindRegisterForm() {
     const saved = await addOcorrencia(newItem);
     button.disabled = false;
     if (!saved) {
-      alert('Não foi possível registrar a ocorrência. Tente novamente.');
+      alert(lastApiError || 'Não foi possível registrar a ocorrência. Tente novamente.');
       return;
     }
-    button.innerHTML = '<i class="bi bi-check-circle"></i> Ocorrência registrada!';
+    button.innerHTML = '<i class="bi bi-check-circle"></i> Enviada para aprovação!';
     setTimeout(function () { window.location.href = 'ocorrencias.html'; }, 900);
   });
 }

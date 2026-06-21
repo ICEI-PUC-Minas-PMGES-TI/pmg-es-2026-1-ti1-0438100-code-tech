@@ -69,6 +69,8 @@ O grupo utilizou Design Thinking para compreender o problema e modelar a soluç�
 | RF-006 | Exibir dashboard com indicadores, mapa e notificações | Alta |
 | RF-007 | Permitir ao administrador alterar status e excluir registros | Alta |
 | RF-008 | Gerar gráficos dinâmicos por categoria, bairro, status e prioridade | Média |
+| RF-009 | Submeter denúncias de cidadãos à aprovação ou rejeição administrativa | Alta |
+| RF-010 | Limitar envios repetidos e validar o padrão mínimo da denúncia | Alta |
 
 ### Requisitos não funcionais
 
@@ -86,9 +88,10 @@ O grupo utilizou Design Thinking para compreender o problema e modelar a soluç�
 1. O usuário acessa a página de login.
 2. O servidor valida e devolve uma sessão com perfil e validade.
 3. O cidadão acessa o dashboard, registra uma ocorrência ou consulta as existentes.
-4. A ocorrência é persistida na API e passa a aparecer nos mapas e relatórios.
-5. O administrador recebe destaque para pendências e itens de prioridade alta.
-6. Ao atualizar o status, o sistema registra o evento no histórico.
+4. A API valida os campos, aplica o limite antispam e grava a denúncia como “Aguardando aprovação”.
+5. O administrador recebe a nova denúncia na fila de moderação e decide aprovar ou rejeitar, informando o motivo quando necessário.
+6. Somente após a aprovação a ocorrência entra nos indicadores, no mapa e no fluxo normal de atendimento.
+7. Ao atualizar a moderação ou o status, o sistema registra o evento no histórico.
 
 ## 5. Metodologia
 
@@ -110,13 +113,13 @@ O trabalho foi dividido por funcionalidades em branches individuais. A integraç
 
 ### Arquitetura
 
-O servidor Node.js entrega os arquivos estáticos e a API REST. O endpoint `POST /login` valida a senha com `scrypt`, gera um token assinado e limitado a oito horas. As rotas `/ocorrencias` exigem esse token. No navegador, a sessão fica no `sessionStorage`; o perfil controla o redirecionamento e a área administrativa.
+O servidor Node.js entrega os arquivos estáticos e a API REST. O endpoint `POST /login` valida a senha com `scrypt`, gera um token assinado e limitado a oito horas. As rotas `/ocorrencias` exigem esse token. No navegador, a sessão fica no `sessionStorage`; o perfil controla o redirecionamento e a área administrativa. Novos registros de cidadãos recebem estado de moderação separado do status de atendimento, impedindo autoaprovação. A API exige dados padronizados, pelo menos uma foto e limita o usuário a três denúncias em dez minutos.
 
 ### Estruturas de dados
 
 **Usuário:** identificador, nome, e-mail, perfil, salt e hash da senha.
 
-**Ocorrência:** identificador, tipo, endereço, bairro, prioridade, status, descrição, fotos, latitude, longitude, datas, confirmações, autor e histórico.
+**Ocorrência:** identificador, tipo, endereço, bairro, prioridade, status de atendimento, estado e motivo da moderação, descrição, fotos, latitude, longitude, datas, confirmações, autor e histórico.
 
 Exemplo simplificado:
 

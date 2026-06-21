@@ -31,10 +31,13 @@ O servidor será iniciado em `http://localhost:3000` e entregará tanto a interf
 - `POST /login`: valida credenciais e retorna sessão assinada.
 - `GET /ocorrencias`: lista ocorrências autorizadas.
 - `POST /ocorrencias`: cria uma ocorrência e associa o usuário autenticado.
+- `POST /ocorrencias/:id/confirmar`: confirma uma ocorrência já aprovada.
 - `PUT /ocorrencias/:id`: atualiza dados e status.
 - `DELETE /ocorrencias/:id`: remove o registro.
 
 Todas as rotas de ocorrências exigem o cabeçalho `Authorization: Bearer <token>`.
+
+Denúncias enviadas por cidadãos são gravadas com `moderationStatus: "Aguardando aprovação"`. Apenas administradores podem alterar esse campo para `Aprovada` ou `Rejeitada`. O servidor também valida os campos, exige foto e limita cada usuário a três envios em dez minutos.
 
 ## Verificação rápida
 

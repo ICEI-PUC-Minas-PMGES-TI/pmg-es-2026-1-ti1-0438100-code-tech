@@ -13,6 +13,10 @@ server.use(jsonServer.bodyParser);
 
 const AUTH_SECRET = process.env.AUTH_SECRET || 'infrabh-projeto-academico-2026';
 const TOKEN_TTL_MS = 8 * 60 * 60 * 1000;
+const SUBMISSION_WINDOW_MS = 10 * 60 * 1000;
+const MAX_SUBMISSIONS_PER_WINDOW = 3;
+const ALLOWED_TYPES = ['Buraco', 'Vazamento', 'Falta de Água', 'Outros'];
+const ALLOWED_PRIORITIES = ['Baixa', 'Média', 'Alta'];
 
 function encode(value) {
   return Buffer.from(JSON.stringify(value)).toString('base64url');
@@ -62,7 +66,7 @@ server.use('/ocorrencias', (req, res, next) => {
   req.session = session;
 
   if (session.role !== 'admin') {
-    const occurrenceId = decodeURIComponent(req.path.replace(/^\//, ''));
+    const occurrenceId = decodeURIComponent(req.path.replace(/^\//, '').split('/')[0]);
     if (req.method === 'GET' && !occurrenceId) {
       req.query.usuarioId = session.id;
     }
@@ -76,8 +80,74 @@ server.use('/ocorrencias', (req, res, next) => {
   next();
 });
 
+server.post('/ocorrencias/:id/confirmar', (req, res) => {
+  const occurrence = router.db.get('ocorrencias').find({ id: req.params.id }).value();
+  if (!occurrence) return res.status(404).json({ mensagem: 'Ocorrência não encontrada.' });
+  if (occurrence.moderationStatus !== 'Aprovada') {
+    return res.status(422).json({ mensagem: 'Somente ocorrências aprovadas podem receber confirmações.' });
+  }
+
+  occurrence.confirmacoes = (occurrence.confirmacoes || 0) + 1;
+  occurrence.updatedAt = Date.now();
+  router.db.get('ocorrencias').find({ id: occurrence.id }).assign(occurrence).write();
+  return res.json(occurrence);
+});
+
 server.use((req, res, next) => {
-  if ((req.method === 'POST' || req.method === 'PUT') && req.path.startsWith('/ocorrencias')) {
+  if (req.path === '/ocorrencias' && req.method === 'POST') {
+    const body = req.body || {};
+    const recentSubmissions = router.db.get('ocorrencias').filter(item => (
+      item.usuarioId === req.session.id && Number(item.createdAt) > Date.now() - SUBMISSION_WINDOW_MS
+    )).size().value();
+
+    if (recentSubmissions >= MAX_SUBMISSIONS_PER_WINDOW) {
+      return res.status(429).json({ mensagem: 'Limite de 3 denúncias a cada 10 minutos. Aguarde antes de enviar novamente.' });
+    }
+    if (!ALLOWED_TYPES.includes(body.type) || !ALLOWED_PRIORITIES.includes(body.priority)) {
+      return res.status(422).json({ mensagem: 'Tipo ou prioridade fora do padrão permitido.' });
+    }
+
+    const address = String(body.address || '').trim();
+    const bairro = String(body.bairro || '').trim();
+    const description = String(body.description || '').trim();
+    const photos = Array.isArray(body.photos) ? body.photos.slice(0, 5) : [];
+    const invalidPhoto = photos.some(photo => !photo || typeof photo.src !== 'string' || photo.src.length > 1500000);
+    if (address.length < 5 || address.length > 250 || bairro.length < 2 || bairro.length > 80 || description.length < 20 || description.length > 500) {
+      return res.status(422).json({ mensagem: 'Endereço, bairro ou descrição não atendem ao padrão do site.' });
+    }
+    if (!photos.length || invalidPhoto) {
+      return res.status(422).json({ mensagem: 'Envie de 1 a 5 fotos válidas, com até aproximadamente 1 MB cada.' });
+    }
+
+    req.body = {
+      id: `OC${Date.now()}`,
+      type: body.type,
+      address,
+      bairro,
+      priority: body.priority,
+      status: 'Pendente',
+      moderationStatus: req.session.role === 'admin' ? 'Aprovada' : 'Aguardando aprovação',
+      moderationReason: '',
+      description,
+      photos,
+      lat: Number(body.lat),
+      lng: Number(body.lng),
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+      confirmacoes: 0,
+      usuarioId: req.session.id,
+      history: [{
+        time: new Date().toLocaleString('pt-BR'),
+        message: req.session.role === 'admin' ? 'Ocorrência registrada e aprovada pelo administrador.' : 'Ocorrência enviada para aprovação.'
+      }]
+    };
+  }
+
+  if ((req.method === 'PUT' || req.method === 'PATCH') && req.path.startsWith('/ocorrencias') && req.session.role !== 'admin') {
+    return res.status(403).json({ mensagem: 'Somente administradores podem alterar uma ocorrência após o envio.' });
+  }
+
+  if ((req.method === 'POST' || req.method === 'PUT' || req.method === 'PATCH') && req.path.startsWith('/ocorrencias')) {
     req.body.updatedAt = Date.now();
     if (req.method === 'POST' && req.session) req.body.usuarioId = req.session.id;
   }

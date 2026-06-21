@@ -11,10 +11,13 @@ O InfraBH aproxima moradores e equipes responsáveis pela manutenção urbana. C
 - Autenticação com perfis de cidadão e administrador.
 - Sessão autenticada com validade de 8 horas e senhas armazenadas como hash.
 - Cadastro de ocorrências com mapa, busca de endereço, fotos e validação.
+- Fila de moderação: denúncias de cidadãos aguardam aprovação ou rejeição administrativa.
+- Proteção básica contra spam, limitada a três envios por usuário a cada dez minutos.
 - Listagem com busca e filtros por tipo, status, bairro, data e endereço.
 - Página de detalhes com histórico, confirmações e ocorrências similares.
 - Dashboard com indicadores, mapa e registros recentes.
 - Painel administrativo com notificações, alteração de status e exclusão.
+- Motivo de rejeição visível ao cidadão para permitir correções futuras.
 - Relatórios dinâmicos por categoria, bairro, status e prioridade.
 - Interface responsiva para desktop, tablet e celular.
 
