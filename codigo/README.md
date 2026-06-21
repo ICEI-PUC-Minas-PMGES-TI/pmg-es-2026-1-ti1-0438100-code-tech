@@ -32,6 +32,7 @@ O servidor será iniciado em `http://localhost:3000` e entregará tanto a interf
 - `GET /ocorrencias`: lista ocorrências autorizadas.
 - `POST /ocorrencias`: cria uma ocorrência e associa o usuário autenticado.
 - `POST /ocorrencias/:id/confirmar`: confirma uma ocorrência já aprovada.
+- `GET /feed`: lista somente denúncias aprovadas para o feed dos cidadãos.
 - `PUT /ocorrencias/:id`: atualiza dados e status.
 - `DELETE /ocorrencias/:id`: remove o registro.
 

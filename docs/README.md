@@ -71,6 +71,7 @@ O grupo utilizou Design Thinking para compreender o problema e modelar a soluç�
 | RF-008 | Gerar gráficos dinâmicos por categoria, bairro, status e prioridade | Média |
 | RF-009 | Submeter denúncias de cidadãos à aprovação ou rejeição administrativa | Alta |
 | RF-010 | Limitar envios repetidos e validar o padrão mínimo da denúncia | Alta |
+| RF-011 | Publicar no feed cidadão somente denúncias aprovadas | Alta |
 
 ### Requisitos não funcionais
 
@@ -89,8 +90,8 @@ O grupo utilizou Design Thinking para compreender o problema e modelar a soluç�
 2. O servidor valida e devolve uma sessão com perfil e validade.
 3. O cidadão acessa o dashboard, registra uma ocorrência ou consulta as existentes.
 4. A API valida os campos, aplica o limite antispam e grava a denúncia como “Aguardando aprovação”.
-5. O administrador recebe a nova denúncia na fila de moderação e decide aprovar ou rejeitar, informando o motivo quando necessário.
-6. Somente após a aprovação a ocorrência entra nos indicadores, no mapa e no fluxo normal de atendimento.
+5. O administrador recebe a nova denúncia em uma página exclusiva de aprovações e decide aprovar ou rejeitar, informando o motivo quando necessário.
+6. Somente após a aprovação a ocorrência entra nos indicadores, no mapa, no feed da cidade e no fluxo normal de atendimento.
 7. Ao atualizar a moderação ou o status, o sistema registra o evento no histórico.
 
 ## 5. Metodologia

@@ -46,6 +46,11 @@ async function getStoredOcorrencias() {
   return Array.isArray(data) ? data : [];
 }
 
+async function getFeedOcorrencias() {
+  const data = await apiRequest('/feed');
+  return Array.isArray(data) ? data : [];
+}
+
 async function getOcorrenciaById(id) {
   if (!id) return null;
   return await apiRequest('/ocorrencias/' + encodeURIComponent(id));

@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "start": "node codigo/index.js",
-    "check": "node --check codigo/index.js && node --check codigo/public/js/app.js && node --check codigo/public/js/auth.js"
+    "check": "node --check codigo/index.js && node --check codigo/public/js/app.js && node --check codigo/public/js/auth.js && node --check codigo/public/Adm/js/admin.js && node --check codigo/public/usuario/js/feed.js"
   },
   "engines": {
     "node": ">=18"

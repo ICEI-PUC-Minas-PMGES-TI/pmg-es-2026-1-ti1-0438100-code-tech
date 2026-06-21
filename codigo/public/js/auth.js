@@ -43,11 +43,12 @@
     const admin = role === 'admin' && isAdminPage();
     const prefix = admin ? '' : '';
     const links = admin
-      ? [['dashboard.html', 'bi-grid-1x2', 'Painel'], ['ocorrencias.html', 'bi-list-ul', 'Ocorrências'], ['../../usuario/nova-ocorrencia.html', 'bi-plus-circle', 'Nova'], ['relatorios.html', 'bi-bar-chart-line', 'Relatórios']]
-      : [['dashboard.html', 'bi-house-door', 'Início'], ['ocorrencias.html', 'bi-list-ul', 'Ocorrências'], ['nova-ocorrencia.html', 'bi-plus-circle', 'Nova'], ['relatorios.html', 'bi-bar-chart-line', 'Relatórios']];
+      ? [['dashboard.html', 'bi-grid-1x2', 'Painel'], ['aprovacoes.html', 'bi-shield-check', 'Aprovar'], ['ocorrencias.html', 'bi-list-ul', 'Ocorrências'], ['relatorios.html', 'bi-bar-chart-line', 'Relatórios']]
+      : [['dashboard.html', 'bi-house-door', 'Início'], ['feed.html', 'bi-megaphone', 'Feed'], ['ocorrencias.html', 'bi-list-ul', 'Minhas'], ['nova-ocorrencia.html', 'bi-plus-circle', 'Nova'], ['relatorios.html', 'bi-bar-chart-line', 'Relatórios']];
     const navigation = document.createElement('nav');
     navigation.className = 'mobile-nav';
     navigation.setAttribute('aria-label', 'Navegação móvel');
+    if (!admin) navigation.style.gridTemplateColumns = 'repeat(5, 1fr)';
     navigation.innerHTML = links.map(function (link) {
       return `<a href="${prefix + link[0]}"><i class="bi ${link[1]}"></i><span>${link[2]}</span></a>`;
     }).join('');

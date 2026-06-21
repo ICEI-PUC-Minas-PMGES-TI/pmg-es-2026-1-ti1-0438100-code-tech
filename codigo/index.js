@@ -40,6 +40,11 @@ function verifyToken(token) {
   return decoded.exp > Date.now() ? decoded : null;
 }
 
+function getRequestSession(req) {
+  const token = String(req.headers.authorization || '').replace(/^Bearer\s+/i, '');
+  return verifyToken(token);
+}
+
 function hashPassword(password, salt) {
   return crypto.scryptSync(password, salt, 64).toString('hex');
 }
@@ -59,9 +64,20 @@ server.post('/login', (req, res) => {
   });
 });
 
+server.get('/feed', (req, res) => {
+  const session = getRequestSession(req);
+  if (!session) return res.status(401).json({ mensagem: 'Sessão inválida ou expirada.' });
+  const approved = router.db.get('ocorrencias')
+    .filter({ moderationStatus: 'Aprovada' })
+    .sortBy('createdAt')
+    .value()
+    .slice()
+    .reverse();
+  return res.json(approved);
+});
+
 server.use('/ocorrencias', (req, res, next) => {
-  const token = String(req.headers.authorization || '').replace(/^Bearer\s+/i, '');
-  const session = verifyToken(token);
+  const session = getRequestSession(req);
   if (!session) return res.status(401).json({ mensagem: 'Sessão inválida ou expirada.' });
   req.session = session;
 
@@ -70,7 +86,8 @@ server.use('/ocorrencias', (req, res, next) => {
     if (req.method === 'GET' && !occurrenceId) {
       req.query.usuarioId = session.id;
     }
-    if (occurrenceId) {
+    const isConfirmation = req.path.endsWith('/confirmar');
+    if (occurrenceId && !isConfirmation) {
       const occurrence = router.db.get('ocorrencias').find({ id: occurrenceId }).value();
       if (occurrence && occurrence.usuarioId !== session.id) {
         return res.status(403).json({ mensagem: 'Você não tem permissão para acessar esta ocorrência.' });
@@ -111,7 +128,7 @@ server.use((req, res, next) => {
     const bairro = String(body.bairro || '').trim();
     const description = String(body.description || '').trim();
     const photos = Array.isArray(body.photos) ? body.photos.slice(0, 5) : [];
-    const invalidPhoto = photos.some(photo => !photo || typeof photo.src !== 'string' || photo.src.length > 1500000);
+    const invalidPhoto = photos.some(photo => !photo || typeof photo.src !== 'string' || !/^data:image\/(png|jpe?g|webp|gif);base64,/i.test(photo.src) || photo.src.length > 1500000);
     if (address.length < 5 || address.length > 250 || bairro.length < 2 || bairro.length > 80 || description.length < 20 || description.length > 500) {
       return res.status(422).json({ mensagem: 'Endereço, bairro ou descrição não atendem ao padrão do site.' });
     }
