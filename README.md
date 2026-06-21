@@ -67,7 +67,7 @@ codigo/
 - **Hector Paulo Nogueira Xavier:** filtros de ocorrências e configuração do JSON Server.
 - **João Pedro Lemos Faria:** detalhes da ocorrência, mapa/fotos, ações, confirmações e ocorrências similares.
 - **Felipe Marzano:** separação das áreas de cidadão e administrador, integração REST, anexos, listagens, filtros e fluxo completo das ocorrências.
-- **Raul Rocha:** responsividade das interfaces em celular, tablet e desktop.
+- **Raul Rocha:** responsividade das interfaces em celular, tablet e desktop; fluxo de aprovação de denúncias, moderação administrativa e proteção contra spam.
 
 ## Professores responsáveis
 

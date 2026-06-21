@@ -107,7 +107,7 @@ O trabalho foi dividido por funcionalidades em branches individuais. A integraç
 | Hector Paulo | Filtros e JSON Server |
 | João Pedro | Detalhes, confirmações e similares |
 | Felipe Marzano | Áreas cidadão/administrador e integração REST |
-| Raul Rocha | Responsividade e navegação móvel |
+| Raul Rocha | Responsividade, navegação móvel, aprovação de denúncias, moderação administrativa e proteção contra spam |
 
 ## 6. Solução implementada
 
