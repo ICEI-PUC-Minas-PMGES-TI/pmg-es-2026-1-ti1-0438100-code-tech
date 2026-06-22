@@ -14,7 +14,7 @@
   }
 
   function loginUrl() {
-    return isAdminPage() ? '../../index.html' : '../index.html';
+    return isAdminPage() ? '../../login.html' : '../login.html';
   }
 
   function protectPage() {

@@ -8,7 +8,8 @@ codigo/
 ├── index.js                   # servidor, autenticação e API
 ├── package.json               # configuração alternativa para execução pela pasta codigo
 └── public/
-    ├── index.html             # login
+    ├── index.html             # redirecionamento inicial
+    ├── login.html             # página oficial de autenticação
     ├── css/                   # estilos compartilhados e login
     ├── js/                    # sessão, autenticação e regras comuns
     ├── usuario/               # dashboard e fluxos do cidadão

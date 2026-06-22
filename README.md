@@ -54,7 +54,8 @@ codigo/
 ├── db/db.json             # usuários e ocorrências
 ├── index.js               # servidor, login e API REST
 └── public/
-    ├── index.html         # login
+    ├── index.html         # redirecionamento inicial
+    ├── login.html         # página oficial de autenticação
     ├── usuario/           # experiência do cidadão
     ├── Adm/               # painel administrativo
     ├── css/               # estilos compartilhados
