@@ -1,4 +1,235 @@
-/* Registrar Ocorrência page styles */
-/* Esta página reutiliza principalmente os estilos globais compartilhados.
-   Este arquivo existe para facilitar futuras customizações específicas da página.
-*/
+/* CABEÇALHO DOS CARDS */
+.card-header-custom {
+  padding: 12px 16px;
+  background: #f8f9fa;
+  border-bottom: 2px solid #00684a;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.card-header-custom i {
+  color: #00684a;
+  font-size: 18px;
+}
+
+/* MAPA */
+#mapa {
+  height: 320px;
+  border-radius: 12px;
+  border: 1px solid #dce5e3;
+}
+
+/* COORDENADAS */
+.coordenadas {
+  font-size: 14px;
+  font-weight: 500;
+  color: #00684a;
+}
+
+/* BARRA DE PROGRESSO */
+.progress {
+  height: 10px;
+  background: #e8edeb;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #00684a, #00996b);
+  transition: width 0.3s;
+  border-radius: 20px;
+}
+
+/* INPUTS */
+.form-control,
+.form-select {
+  border-radius: 10px;
+  border: 1px solid #ced4da;
+  padding: 10px 14px;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #00684a;
+  box-shadow: 0 0 0 0.2rem rgba(0, 104, 74, 0.15);
+}
+
+/* BOTÕES */
+.btn-mongodb-primary {
+  background: #00684a;
+  border: none;
+  color: white;
+  border-radius: 10px;
+  padding: 10px 18px;
+  transition: 0.2s;
+}
+
+.btn-mongodb-primary:hover {
+  background: #004d36;
+  color: white;
+}
+
+.btn-mongodb-outline {
+  border: 1px solid #00684a;
+  color: #00684a;
+  border-radius: 10px;
+  padding: 10px 18px;
+  transition: 0.2s;
+}
+
+.btn-mongodb-outline:hover {
+  background: #00684a;
+  color: white;
+}
+
+/* DRAG AND DROP */
+.drag-drop {
+  border: 2px dashed #00684a;
+  border-radius: 14px;
+  padding: 32px 20px;
+  text-align: center;
+  cursor: pointer;
+  background: #f8fffc;
+  transition: 0.3s;
+}
+
+.drag-drop:hover,
+.drag-over {
+  background: #e9f7f1;
+  border-color: #004d36;
+  transform: scale(1.01);
+}
+
+.upload-icon {
+  font-size: 42px;
+  color: #00684a;
+}
+
+/* PREVIEW DAS FOTOS */
+.photo-thumb {
+  position: relative;
+  height: 120px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #e8edeb;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.photo-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.photo-thumb::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.45),
+    transparent
+  );
+  opacity: 0;
+  transition: 0.2s;
+}
+
+.photo-thumb:hover::after {
+  opacity: 1;
+}
+
+/* BOTÃO REMOVER FOTO */
+.btn-remove {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+  background: #dc3545;
+  color: white;
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  opacity: 0;
+  transition: 0.2s;
+}
+
+.photo-thumb:hover .btn-remove {
+  opacity: 1;
+}
+
+/* LISTA DE SUGESTÕES */
+.lista-sugestoes {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  max-height: 260px;
+  overflow-y: auto;
+  z-index: 1000;
+  margin-top: 4px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.item-sugestao {
+  padding: 12px;
+  cursor: pointer;
+  transition: 0.2s;
+  border-bottom: 1px solid #f1f1f1;
+  font-size: 14px;
+}
+
+.item-sugestao:hover {
+  background: #f3fbf7;
+}
+
+.item-sugestao i {
+  color: #00684a;
+  margin-right: 6px;
+}
+
+/* MODAL */
+.modal-success {
+  border-radius: 18px;
+  text-align: center;
+}
+
+.modal-success .bi-check-circle {
+  font-size: 70px;
+  color: #00684a;
+  margin-bottom: 16px;
+  animation: scale-in 0.5s;
+}
+
+@keyframes scale-in {
+  from {
+    transform: scale(0);
+  }
+
+  to {
+    transform: scale(1);
+  }
+}
+
+/* RESPONSIVO */
+@media (max-width: 768px) {
+
+  .photo-thumb {
+    height: 100px;
+  }
+
+  .drag-drop {
+    padding: 24px 14px;
+  }
+
+  #mapa {
+    height: 260px;
+  }
+}
