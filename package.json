@@ -1,0 +1,12 @@
+{
+  "name": "sistema-ocorrencias-infra",
+  "version": "1.0.0",
+  "description": "Sistema de mapeamento de má infraestrutura urbana",
+  "main": "package.json",
+  "scripts": {
+    "start": "json-server --watch data/db.json --static ."
+  },
+  "dependencies": {
+    "json-server": "^0.17.4"
+  }
+}

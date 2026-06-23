@@ -14,395 +14,326 @@ document.addEventListener("DOMContentLoaded", function () {
   const dragDrop = document.getElementById("dragDrop");
   const inputFotos = document.getElementById("inputFotos");
   const fotosContainer = document.getElementById("fotosContainer");
-
   const btnBuscar = document.querySelector(".input-group .btn-mongodb-primary");
 
-  //Exibição da data
- document.getElementById("dataAtual").textContent =
-  new Date().toLocaleDateString("pt-BR");
+  // Exibição da data atual no topo do formulário
+  if (document.getElementById("dataAtual")) {
+    document.getElementById("dataAtual").textContent = new Date().toLocaleDateString("pt-BR");
+  }
 
-  // VARIÁVEIS
+  // VARIÁVEIS DE CONTROLO
   let latitude = null;
   let longitude = null;
+  let bairroExtraido = "Não informado"; // Importante para a tabela do dashboard/ocorrências dos teus colegas
   let marcador = null;
-  let timeout = null;
   let fotos = [];
 
-  // SISTEMA DE NOTIFICAÇÕES
+  // SISTEMA DE NOTIFICAÇÕES PROFISSIONAL
   function criarNotificacao(tipo, mensagem) {
+    const antigas = document.querySelectorAll(".alert-flutuante");
+    antigas.forEach(a => a.remove()); // Remove anteriores para não acumular
+
     const notificacao = document.createElement("div");
-    notificacao.className = `alert alert-${tipo} alert-dismissible fade show`;
+    notificacao.className = `alert alert-${tipo} alert-dismissible fade show alert-flutuante`;
     notificacao.setAttribute("role", "alert");
     notificacao.style.position = "fixed";
     notificacao.style.top = "20px";
     notificacao.style.right = "20px";
     notificacao.style.zIndex = "9999";
-    notificacao.style.minWidth = "300px";
     notificacao.style.boxShadow = "0 4px 12px rgba(0,0,0,0.15)";
 
-    let icone = "";
-    if (tipo === "danger") icone = '<i class="bi bi-exclamation-circle"></i>';
-    if (tipo === "warning") icone = '<i class="bi bi-exclamation-triangle"></i>';
-    if (tipo === "info") icone = '<i class="bi bi-info-circle"></i>';
-    if (tipo === "success") icone = '<i class="bi bi-check-circle"></i>';
-
     notificacao.innerHTML = `
-      ${icone} <strong>${mensagem}</strong>
-      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      <div class="d-flex align-items-center gap-2">
+        <i class="bi ${tipo === 'success' ? 'bi-check-circle-fill' : 'bi-exclamation-triangle-fill'}"></i>
+        <div>${mensagem}</div>
+      </div>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     `;
 
     document.body.appendChild(notificacao);
 
-    // Remover automaticamente após 5 segundos
     setTimeout(() => {
-      notificacao.remove();
-    }, 5000);
+      notificacao.classList.remove("show");
+      setTimeout(() => notificacao.remove(), 300);
+    }, 4000);
   }
 
-  // MAPA
-  const mapa = L.map("mapa").setView([-19.9167, -43.9345], 7);
+  // CONFIGURAÇÃO DO MAPA (LEAFLET)
+  const mapa = L.map("mapa").setView([-19.9191, -43.9386], 13); // BH Centro por padrão
 
-  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: "&copy; OpenStreetMap"
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
   }).addTo(mapa);
 
-  // LIMITA MAPA EM MG
-  const limitesMG = L.latLngBounds(
-    L.latLng(-22.9068, -46.2576),
-    L.latLng(-14.8831, -39.8622)
-  );
-
-  mapa.setMaxBounds(limitesMG);
-
-  mapa.on("drag", function () {
-    mapa.panInsideBounds(limitesMG, { animate: false });
-  });
-
-  // MELHORA A BUSCA
-  function montarEnderecoBusca(texto) {
-    return `${texto}, Minas Gerais, Brasil`;
-  }
-
-  // FORMATA O ENDEREÇO
-  function formatarEndereco(item, textoDigitado = "") {
-    const a = item.address || {};
-
-    const rua = a.road || "";
-    let numero = a.house_number || "";
-
-    if (!numero) {
-      const numeroDigitado = textoDigitado.match(/\d+/);
-
-      if (numeroDigitado) {
-        numero = numeroDigitado[0];
-      }
-    }
-
-    const bairro =
-      a.suburb ||
-      a.neighbourhood ||
-      a.city_district ||
-      "";
-
-    const cidade =
-      a.city ||
-      a.town ||
-      a.village ||
-      "Contagem";
-
-    const estado =
-      a.state ||
-      "Minas Gerais";
-
-    return `${rua}${numero ? ", " + numero : ""} - ${bairro}, ${cidade} - ${estado}`;
-  }
-
-  // ATUALIZA MAPA E MARCADOR
-  function atualizarMapa() {
-    mapa.setView([latitude, longitude], 15);
+  // Função para atualizar marcador e buscar dados do endereço (Geocoding Reverso)
+  function atualizarMarcador(lat, lng, atualizarTextoEndereco = false) {
+    latitude = lat;
+    longitude = lng;
+    coordenadas.textContent = `Lat: ${lat.toFixed(5)} | Lng: ${lng.toFixed(5)}`;
+    coordenadas.classList.remove("text-danger");
+    erroMapa.style.display = "none";
 
     if (marcador) {
-      mapa.removeLayer(marcador);
+      marcador.setLatLng([lat, lng]);
+    } else {
+      marcador = L.marker([lat, lng], { draggable: true }).addTo(mapa);
+      marcador.on("dragend", function (e) {
+        const pos = e.target.getLatLng();
+        atualizarMarcador(pos.lat, pos.lng, true);
+      });
     }
 
-    marcador = L.marker([latitude, longitude]).addTo(mapa);
+    mapa.panTo([lat, lng]);
 
-    coordenadas.textContent = `Lat: ${latitude.toFixed(4)} | Lng: ${longitude.toFixed(4)}`;
-    erroMapa.textContent = "";
-  }
-
-  // REMOVE LISTA DE SUGESTÕES
-  function removerLista() {
-    const lista = document.getElementById("listaSugestoes");
-
-    if (lista) {
-      lista.remove();
-    }
-  }
-
-  // BUSCA ENDEREÇO PELO BOTÃO
-  btnBuscar.addEventListener("click", function () {
-    const texto = endereco.value.trim();
-
-    if (texto === "") {
-      criarNotificacao("warning", "Digite um endereço.");
-      return;
-    }
-
-    fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(montarEnderecoBusca(texto))}&format=json&addressdetails=1&limit=5&countrycodes=br&accept-language=pt-BR`)
-      .then(resposta => resposta.json())
+    // Busca o Bairro automaticamente via API do OpenStreetMap (Nominatim)
+    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+      .then(res => res.json())
       .then(dados => {
-
-        if (dados.length === 0) {
-          criarNotificacao("danger", "Endereço não encontrado.");
-          return;
+        if (dados && dados.address) {
+          // Extrai o bairro de forma robusta dependendo de como a API retorna
+          bairroExtraido = dados.address.suburb || dados.address.neighbourhood || dados.address.village || "Centro";
+          
+          if (atualizarTextoEndereco) {
+            const rua = dados.address.road || "";
+            const numero = dados.address.house_number || "";
+            endereco.value = numero ? `${rua}, ${numero}` : rua;
+          }
         }
-
-        // tenta pegar resultado mais completo
-        const resultado =
-          dados.find(item =>
-            item.address &&
-            item.address.road &&
-            (
-              item.address.city ||
-              item.address.town
-            )
-          ) || dados[0];
-
-        latitude = parseFloat(resultado.lat);
-        longitude = parseFloat(resultado.lon);
-
-        endereco.value =
-          formatarEndereco(resultado, texto);
-
-        atualizarMapa();
-        atualizarProgresso();
       })
-      .catch(() => {
-        criarNotificacao("danger", "Erro ao buscar endereço.");
-      });
-  });
-
-  // BUSCAR AO APERTAR ENTER
-  endereco.addEventListener("keydown", function (evento) {
-
-    if (evento.key === "Enter") {
-
-      evento.preventDefault();
-
-      btnBuscar.click();
-    }
-  });
-
-  // CLICAR NO MAPA
-  mapa.on("click", function (evento) {
-    latitude = evento.latlng.lat;
-    longitude = evento.latlng.lng;
-
-    atualizarMapa();
-    atualizarProgresso();
-
-    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1&accept-language=pt-BR`)
-      .then(resposta => resposta.json())
-      .then(dados => {
-        if (dados.address) {
-          endereco.value = formatarEndereco(dados);
-          atualizarProgresso();
-        }
-      });
-  });
-
-  // PROGRESSOa
-  function atualizarProgresso() {
-    let total = 0;
-
-    if (endereco.value.trim() !== "") total += 25;
-    if (tipo.value !== "") total += 25;
-    if (descricao.value.trim() !== "") total += 25;
-    if (latitude !== null && longitude !== null) total += 15;
-    if (fotos.length > 0) total += 10;
-
-    progress.textContent = total;
-    progressBar.style.width = total + "%";
+      .catch(err => console.error("Erro na busca reversa do endereço:", err));
   }
 
-  tipo.addEventListener("change", atualizarProgresso);
-
-  descricao.addEventListener("input", function () {
-
-    contadorDescricao.textContent = descricao.value.length;
-
-    if (descricao.value.trim().length >= 20) {
-      erroDescricao.textContent = "";
-    }
-
-    atualizarProgresso();
+  // Clique direto no mapa
+  mapa.on("click", function (e) {
+    atualizarMarcador(e.latlng.lat, e.latlng.lng, true);
   });
 
-  // UPLOAD DE FOTOS
-  dragDrop.addEventListener("click", function () {
-    inputFotos.click();
-  });
+  // Tenta obter a localização real do utilizador ao abrir a página
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        atualizarMarcador(pos.coords.latitude, pos.coords.longitude, true);
+      },
+      () => { console.log("Geolocalização não permitida ou indisponível."); }
+    );
+  }
 
-  inputFotos.addEventListener("change", function () {
-    adicionarFotos(inputFotos.files);
-  });
+  // BOTÃO BUSCAR ENDEREÇO (Geocoding)
+  if (btnBuscar) {
+    btnBuscar.addEventListener("click", function () {
+      const textoBusca = endereco.value.trim();
+      if (!textoBusca) {
+        criarNotificacao("warning", "Introduza um endereço para pesquisar.");
+        return;
+      }
 
-  dragDrop.addEventListener("dragover", function (evento) {
-    evento.preventDefault();
-    dragDrop.classList.add("drag-over");
-  });
+      fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(textoBusca)}&limit=1`)
+        .then(res => res.json())
+        .then(resultados => {
+          if (resultados && resultados.length > 0) {
+            const local = resultados[0];
+            atualizarMarcador(parseFloat(local.lat), parseFloat(local.lon), false);
+          } else {
+            criarNotificacao("danger", "Endereço não localizado. Tente marcar clicando diretamente no mapa.");
+          }
+        })
+        .catch(() => criarNotificacao("danger", "Erro ao comunicar com o serviço de mapas."));
+    });
+  }
 
-  dragDrop.addEventListener("dragleave", function () {
-    dragDrop.classList.remove("drag-over");
-  });
+  // CONTADOR DE CARACTERES DA DESCRIÇÃO
+  if (descricao && contadorDescricao) {
+    descricao.addEventListener("input", function () {
+      const total = descricao.value.length;
+      contadorDescricao.textContent = `${total}/250`;
+      if (total >= 20) {
+        erroDescricao.style.display = "none";
+        descricao.classList.remove("is-invalid");
+      }
+    });
+  }
 
-  dragDrop.addEventListener("drop", function (evento) {
-    evento.preventDefault();
-    dragDrop.classList.remove("drag-over");
-    adicionarFotos(evento.dataTransfer.files);
-  });
+  // GESTÃO DE ARRASTAR E SOLTAR FOTOS (Base64)
+  if (dragDrop && inputFotos) {
+    dragDrop.addEventListener("click", () => inputFotos.click());
 
-  function adicionarFotos(arquivos) {
+    dragDrop.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      dragDrop.style.borderColor = "#00684a";
+      dragDrop.style.background = "#f0f7f4";
+    });
 
-    if (fotos.length + arquivos.length > 5) {
-      criarNotificacao("warning", "Você pode enviar no máximo 5 fotos.");
+    dragDrop.addEventListener("dragleave", () => {
+      dragDrop.style.borderColor = "#c1cdc9";
+      dragDrop.style.background = "transparent";
+    });
+
+    dragDrop.addEventListener("drop", (e) => {
+      e.preventDefault();
+      dragDrop.style.borderColor = "#c1cdc9";
+      dragDrop.style.background = "transparent";
+      processarArquivos(e.dataTransfer.files);
+    });
+
+    inputFotos.addEventListener("change", (e) => {
+      processarArquivos(e.target.files);
+    });
+  }
+
+  function processarArquivos(arquivos) {
+    if (fotos.length + arquivos.length > 3) {
+      criarNotificacao("warning", "Pode enviar no máximo 3 fotografias por ocorrência.");
       return;
     }
 
-    Array.from(arquivos).forEach(arquivo => {
+    Array.from(arquivos).forEach(file => {
+      if (!file.type.startsWith("image/")) {
+        criarNotificacao("danger", "Apenas ficheiros de imagem são permitidos.");
+        return;
+      }
 
-      if (!arquivo.type.startsWith("image/")) return;
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const base64 = e.target.result;
+        fotos.push(base64);
 
-      const leitor = new FileReader();
+        // Cria miniatura na interface
+        const thumb = document.createElement("div");
+        thumb.className = "photo-thumb position-relative m-1";
+        thumb.style.width = "80px";
+        thumb.style.height = "80px";
+        thumb.style.borderRadius = "8px";
+        thumb.style.overflow = "hidden";
+        thumb.style.border = "1px solid #ddd";
 
-      leitor.onload = function (evento) {
-        fotos.push(evento.target.result);
-        mostrarFotos();
-        atualizarProgresso();
+        thumb.innerHTML = `
+          <img src="${base64}" style="width:100%; height:100%; object-fit:cover;">
+          <button type="button" class="btn-remove btn btn-danger btn-sm p-0 position-absolute top-0 end-0" 
+                  style="width:20px; height:20px; font-size:12px; border-radius:50%; line-height:1;">&times;</button>
+        `;
+
+        thumb.querySelector(".btn-remove").addEventListener("click", function () {
+          const idx = fotos.indexOf(base64);
+          if (idx > -1) fotos.splice(idx, 1);
+          thumb.remove();
+        });
+
+        fotosContainer.appendChild(thumb);
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // SUBMISSÃO DO FORMULÁRIO (POST COMPLETO PARA O JSON-SERVER)
+  if (form) {
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      let valido = true;
+
+      // Validação do Tipo/Categoria
+      if (!tipo.value) {
+        tipo.classList.add("is-invalid");
+        valido = false;
+      } else {
+        tipo.classList.remove("is-invalid");
+      }
+
+      // Validação do Endereço escrito
+      if (!endereco.value.trim()) {
+        endereco.classList.add("is-invalid");
+        valido = false;
+      } else {
+        endereco.classList.remove("is-invalid");
+      }
+
+      // Validação do tamanho mínimo do relato
+      if (descricao.value.trim().length < 20) {
+        descricao.classList.add("is-invalid");
+        erroDescricao.style.display = "block";
+        valido = false;
+      } else {
+        descricao.classList.remove("is-invalid");
+        erroDescricao.style.display = "none";
+      }
+
+      // Validação da seleção do Local no mapa
+      if (!latitude || !longitude) {
+        erroMapa.style.display = "block";
+        coordenadas.classList.add("text-danger");
+        valido = false;
+      }
+
+      if (!valido) {
+        criarNotificacao("danger", "Por favor, corrija os erros no formulário antes de enviar.");
+        return;
+      }
+
+      // COMO REMOVESTE O INDEX.JS, ENVIAMOS A DATA E STATUS DIRETAMENTE AQUI:
+      const ocorrencia = {
+        tipo: tipo.value,
+        endereco: endereco.value.trim(),
+        bairro: bairroExtraido, 
+        descricao: descricao.value.trim(),
+        latitude: latitude,
+        longitude: longitude,
+        fotos: fotos,
+        data: new Date().toLocaleDateString("pt-BR"), // Adicionado aqui no Frontend!
+        status: "Pendente"                          // Adicionado aqui no Frontend!
       };
 
-      leitor.readAsDataURL(arquivo);
+      // Ativa efeito visual da barra de progresso
+      if (progress && progressBar) {
+        progress.style.display = "block";
+        progressBar.style.width = "40%";
+      }
+
+      // Envia para a rota padrão do json-server
+      fetch("http://localhost:3000/ocorrencias", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(ocorrencia)
+      })
+        .then(resposta => {
+          if (!resposta.ok) throw new Error("Falha ao salvar a ocorrência.");
+          if (progressBar) progressBar.style.width = "100%";
+          return resposta.json();
+        })
+        .then(dados => {
+          console.log("Sucesso no JSON Server:", dados);
+
+          // Dispara o Modal de Sucesso original do teu HTML
+          const modalElement = document.getElementById("modalSucesso");
+          if (modalElement) {
+            const modal = new bootstrap.Modal(modalElement);
+            modal.show();
+          } else {
+            criarNotificacao("success", "Ocorrência enviada com sucesso!");
+          }
+
+          // Limpa todos os campos para um novo cadastro
+          form.reset();
+          fotos = [];
+          if (fotosContainer) fotosContainer.innerHTML = "";
+          if (coordenadas) coordenadas.textContent = "Lat: -- | Lng: --";
+          latitude = null;
+          longitude = null;
+          bairroExtraido = "Não informado";
+
+          if (marcador) {
+            mapa.removeLayer(marcador);
+            marcador = null;
+          }
+
+          if (progress) progress.style.display = "none";
+        })
+        .catch(erro => {
+          console.error(erro);
+          criarNotificacao("danger", "Erro de conexão. Certifica-te de que o JSON Server está ligado na porta 3000!");
+          if (progress) progress.style.display = "none";
+        });
     });
   }
-
-  function mostrarFotos() {
-    fotosContainer.innerHTML = "";
-
-    fotos.forEach((foto, index) => {
-      const div = document.createElement("div");
-      div.className = "col-4";
-
-      div.innerHTML = `
-        <div class="photo-thumb">
-          <img src="${foto}" alt="Foto">
-
-          <button
-            type="button"
-            class="btn-remove"
-            onclick="removerFoto(${index})"
-          >
-            <i class="bi bi-x"></i>
-          </button>
-        </div>
-      `;
-
-      fotosContainer.appendChild(div);
-    });
-  }
-
-  window.removerFoto = function (index) {
-    fotos.splice(index, 1);
-    mostrarFotos();
-    atualizarProgresso();
-  };
-
-  // CADASTRO
-  form.addEventListener("submit", function (evento) {
-    evento.preventDefault();
-
-    if (endereco.value.trim() === "") {
-      criarNotificacao("warning", "Preencha o endereço.");
-      return;
-    }
-
-    if (tipo.value === "") {
-      criarNotificacao("warning", "Selecione o tipo.");
-      return;
-    }
-
-    if (descricao.value.trim().length < 20) {
-      erroDescricao.textContent =
-        "A descrição deve conter pelo menos 20 caracteres.";
-      return;
-    }
-
-    if (latitude === null || longitude === null) {
-      erroMapa.textContent =
-        "Selecione uma localização no mapa.";
-      return;
-    }
-
-    const ocorrencia = {
-      endereco: endereco.value,
-      tipo: tipo.value,
-      descricao: descricao.value,
-      latitude: latitude,
-      longitude: longitude,
-      fotos: fotos,
-      data: new Date().toLocaleString("pt-BR"),
-      status: "Pendente"
-    };
-
-    fetch("http://localhost:3000/ocorrencias", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify(ocorrencia)
-})
-  .then(resposta => {
-    console.log("Resposta recebida:", resposta);
-    return resposta.json();
-  })
-  .then(dados => {
-    console.log("Dados salvos:", dados);
-    
-    const modalElement = document.getElementById("modalSucesso");
-    console.log("Modal encontrado:", modalElement);
-    
-    if (modalElement) {
-      const modal = new bootstrap.Modal(modalElement);
-      modal.show();
-      console.log("Modal exibido");
-    } else {
-      criarNotificacao("danger", "Modal não encontrado no HTML");
-    }
-
-    form.reset();
-    fotos = [];
-    fotosContainer.innerHTML = "";
-    coordenadas.textContent = "Lat: -- | Lng: --";
-
-    latitude = null;
-    longitude = null;
-
-    if (marcador) {
-      mapa.removeLayer(marcador);
-      marcador = null;
-    }
-
-    contadorDescricao.textContent = 0;
-    atualizarProgresso();
-
-  })
-  .catch((erro) => {
-    console.error("Erro:", erro);
-    criarNotificacao("danger", "Erro ao salvar ocorrência.");
-  });
-
-  });
-
-  contadorDescricao.textContent = 0;
-
 });
