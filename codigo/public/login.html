@@ -35,9 +35,22 @@
         <div class="mobile-brand"><i class="bi bi-buildings"></i> Infra<span>BH</span></div>
         <p class="eyebrow">Área segura</p>
         <h2 id="login-title">Boas-vindas</h2>
-        <p class="subtitle">Entre para acessar suas ocorrências.</p>
+        <p id="login-subtitle" class="subtitle">Entre para acessar suas ocorrências.</p>
+
+        <div class="auth-switch" role="tablist" aria-label="Escolha entre entrar ou criar conta">
+          <button id="show-login" class="auth-tab is-active" type="button" role="tab" aria-selected="true">Entrar</button>
+          <button id="show-register" class="auth-tab" type="button" role="tab" aria-selected="false">Criar conta</button>
+        </div>
 
         <form id="login-form" novalidate>
+          <div id="name-group" class="register-only" hidden>
+            <label for="nome">Nome completo</label>
+            <div class="input-wrap">
+              <i class="bi bi-person"></i>
+              <input id="nome" name="nome" type="text" autocomplete="name" placeholder="Seu nome" minlength="3" maxlength="80">
+            </div>
+          </div>
+
           <label for="email">E-mail</label>
           <div class="input-wrap">
             <i class="bi bi-envelope"></i>
@@ -55,6 +68,7 @@
           <button id="login-button" class="submit-button" type="submit">
             <span>Entrar</span><i class="bi bi-arrow-right"></i>
           </button>
+          <p id="register-helper" class="helper-text" hidden>Cadastros novos entram sempre como cidadão comum. Administrador é apenas conta pré-cadastrada para avaliação.</p>
         </form>
 
         <details class="demo-access">

@@ -9,6 +9,7 @@ O InfraBH aproxima moradores e equipes responsáveis pela manutenção urbana. C
 ## Funcionalidades
 
 - Autenticação com perfis de cidadão e administrador.
+- Cadastro público apenas para cidadão comum.
 - Sessão autenticada com validade de 8 horas e senhas armazenadas como hash.
 - Cadastro de ocorrências com mapa, busca de endereço, fotos e validação.
 - Fila de moderação: denúncias de cidadãos aguardam aprovação ou rejeição administrativa.
@@ -55,7 +56,7 @@ codigo/
 ├── index.js               # servidor, login e API REST
 └── public/
     ├── index.html         # redirecionamento inicial
-    ├── login.html         # página oficial de autenticação
+    ├── login.html         # página oficial de autenticação e cadastro
     ├── usuario/           # experiência do cidadão
     ├── Adm/               # painel administrativo
     ├── css/               # estilos compartilhados

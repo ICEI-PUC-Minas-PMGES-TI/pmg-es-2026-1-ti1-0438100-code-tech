@@ -9,7 +9,7 @@ codigo/
 ├── package.json               # configuração alternativa para execução pela pasta codigo
 └── public/
     ├── index.html             # redirecionamento inicial
-    ├── login.html             # página oficial de autenticação
+    ├── login.html             # página oficial de autenticação e cadastro
     ├── css/                   # estilos compartilhados e login
     ├── js/                    # sessão, autenticação e regras comuns
     ├── usuario/               # dashboard e fluxos do cidadão
@@ -30,6 +30,7 @@ O servidor será iniciado em `http://localhost:3000` e entregará tanto a interf
 ## Rotas principais
 
 - `POST /login`: valida credenciais e retorna sessão assinada.
+- `POST /cadastro`: cria uma conta de cidadão comum e retorna sessão assinada.
 - `GET /ocorrencias`: lista ocorrências autorizadas.
 - `POST /ocorrencias`: cria uma ocorrência e associa o usuário autenticado.
 - `POST /ocorrencias/:id/confirmar`: confirma uma ocorrência já aprovada.

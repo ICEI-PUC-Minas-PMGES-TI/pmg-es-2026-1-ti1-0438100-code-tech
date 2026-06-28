@@ -37,6 +37,9 @@ body {
 .mobile-brand { display: none; margin-bottom: 48px; color: var(--ink); }
 .login-card h2 { margin: 0; font-size: 38px; letter-spacing: -.04em; }
 .subtitle { margin: 10px 0 34px; color: var(--muted); }
+.auth-switch { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: -14px 0 24px; padding: 5px; background: #eaf1ef; border: 1px solid var(--line); border-radius: 14px; }
+.auth-tab { height: 42px; color: var(--muted); background: transparent; border: 0; border-radius: 10px; font: 700 14px Inter, sans-serif; cursor: pointer; transition: .2s; }
+.auth-tab.is-active { color: var(--ink); background: white; box-shadow: 0 8px 20px rgba(0,30,43,.08); }
 label { display: block; margin: 18px 0 8px; font-size: 13px; font-weight: 600; }
 .input-wrap { position: relative; }
 .input-wrap > i { position: absolute; left: 16px; top: 50%; color: var(--muted); transform: translateY(-50%); }
@@ -47,9 +50,11 @@ input:focus { border-color: var(--dark-green); box-shadow: 0 0 0 3px rgba(0,104,
 .submit-button { width: 100%; height: 52px; display: flex; align-items: center; justify-content: center; gap: 12px; color: var(--ink); background: var(--green); border: 0; border-radius: 12px; font: 700 15px Inter, sans-serif; cursor: pointer; transition: transform .2s, box-shadow .2s; }
 .submit-button:hover { transform: translateY(-1px); box-shadow: 0 10px 25px rgba(0,104,74,.18); }
 .submit-button:disabled { cursor: wait; opacity: .65; }
+.helper-text { margin: 12px 0 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
 .demo-access { margin-top: 26px; padding: 14px 16px; color: var(--muted); background: #eaf1ef; border-radius: 12px; font-size: 12px; }
 .demo-access summary { color: var(--ink); font-weight: 600; cursor: pointer; }
 .demo-access p { margin: 10px 0 0; overflow-wrap: anywhere; }
+[hidden] { display: none !important; }
 
 @media (max-width: 850px) {
   .login-shell { grid-template-columns: 1fr; }

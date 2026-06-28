@@ -52,6 +52,7 @@ Desenvolver uma aplicação web responsiva que centralize o registro, a análise
 ### 2.3 Objetivos específicos
 
 - Permitir que cidadãos registrem denúncias com endereço, bairro, categoria, prioridade, descrição, localização no mapa e fotos.
+- Permitir que novos cidadãos criem uma conta comum, sem opção pública de cadastro administrativo.
 - Criar um fluxo de moderação em que denúncias enviadas por usuários comuns sejam analisadas por um administrador antes de aparecerem no feed público.
 - Disponibilizar uma área administrativa para aprovação, rejeição, acompanhamento, alteração de status e consulta de relatórios.
 - Exibir ao cidadão apenas denúncias aprovadas no feed, evitando spam e conteúdos fora do padrão.
@@ -241,6 +242,7 @@ O servidor `codigo/index.js`:
 
 - entrega os arquivos da pasta `codigo/public`;
 - implementa login em `POST /login`;
+- implementa cadastro público de cidadão em `POST /cadastro`;
 - protege rotas de ocorrência por token;
 - valida denúncias antes de salvar;
 - controla moderação;
@@ -254,6 +256,8 @@ O banco acadêmico fica em `codigo/db/db.json`.
 #### Login por perfil
 
 O sistema possui autenticação com perfis de cidadão e administrador. Após o login, o usuário é redirecionado para a área correta.
+
+Também existe cadastro público para novos cidadãos. Por segurança e para evitar criação indevida de contas privilegiadas, o cadastro sempre grava o perfil como `cidadao`; administradores usam apenas contas pré-cadastradas para avaliação.
 
 Credenciais demonstrativas:
 
@@ -365,6 +369,7 @@ O servidor limita cada usuário a três denúncias em dez minutos. Também valid
 | Rota | Método | Finalidade |
 |---|---|---|
 | `/login` | POST | Autenticar usuário |
+| `/cadastro` | POST | Criar conta de cidadão comum |
 | `/ocorrencias` | GET | Listar ocorrências |
 | `/ocorrencias` | POST | Criar nova ocorrência |
 | `/ocorrencias/:id` | PUT/PATCH | Atualizar ocorrência |

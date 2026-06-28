@@ -49,6 +49,10 @@ function hashPassword(password, salt) {
   return crypto.scryptSync(password, salt, 64).toString('hex');
 }
 
+function sanitizeUser(user) {
+  return { id: user.id, nome: user.nome, email: user.email, role: user.role };
+}
+
 server.post('/login', (req, res) => {
   const email = String(req.body.email || '').trim().toLowerCase();
   const password = String(req.body.password || '');
@@ -60,7 +64,43 @@ server.post('/login', (req, res) => {
 
   return res.json({
     token: createToken(user),
-    usuario: { id: user.id, nome: user.nome, email: user.email, role: user.role },
+    usuario: sanitizeUser(user),
+  });
+});
+
+server.post('/cadastro', (req, res) => {
+  const nome = String(req.body.nome || '').trim().replace(/\s+/g, ' ');
+  const email = String(req.body.email || '').trim().toLowerCase();
+  const password = String(req.body.password || '');
+
+  if (nome.length < 3 || nome.length > 80) {
+    return res.status(422).json({ mensagem: 'Informe um nome com 3 a 80 caracteres.' });
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 120) {
+    return res.status(422).json({ mensagem: 'Informe um e-mail válido.' });
+  }
+  if (password.length < 8 || password.length > 72) {
+    return res.status(422).json({ mensagem: 'A senha deve ter entre 8 e 72 caracteres.' });
+  }
+  if (router.db.get('usuarios').find({ email }).value()) {
+    return res.status(409).json({ mensagem: 'Já existe uma conta cadastrada com este e-mail.' });
+  }
+
+  const salt = crypto.randomBytes(16).toString('hex');
+  const user = {
+    id: `USR${Date.now()}`,
+    nome,
+    email,
+    role: 'cidadao',
+    salt,
+    passwordHash: hashPassword(password, salt),
+  };
+
+  router.db.get('usuarios').push(user).write();
+
+  return res.status(201).json({
+    token: createToken(user),
+    usuario: sanitizeUser(user),
   });
 });
 
