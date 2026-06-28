@@ -1,12 +1,39 @@
 # Documentação do Projeto — InfraBH
 
-## 1. Contexto do projeto
+## 1. Introdução
+
+Informações básicas do projeto.
+
+- **Projeto:** InfraBH
+
+- **Repositório GitHub:** [pmg-es-2026-1-ti1-0438100-code-tech](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-1-ti1-0438100-code-tech)
+
+- **Membros da equipe:**
+  - Felipe Gabriel Nogueira Aquino
+  - Lucas Dias
+  - Gabriel Luiz Drumond Oliveira
+  - Hector Paulo Nogueira Xavier
+  - João Pedro Lemos Faria
+  - Felipe Marzano
+  - Raul Rocha
+
+A documentação do projeto é estruturada da seguinte forma:
+
+1. Introdução
+2. Contexto
+3. Product Discovery
+4. Product Design
+5. Metodologia
+6. Solução
+7. Referências Bibliográficas
+
+## 2. Contexto do projeto
 
 O **InfraBH** é uma aplicação web colaborativa criada para apoiar o registro, a moderação e o acompanhamento de ocorrências de infraestrutura urbana na Região Metropolitana de Belo Horizonte.
 
 A solução foi desenvolvida para a disciplina de Trabalho Interdisciplinar: Aplicações Web, utilizando HTML, CSS, JavaScript, Node.js e JSON Server. O sistema simula uma plataforma em que cidadãos conseguem registrar problemas urbanos e administradores conseguem validar, organizar e acompanhar essas denúncias.
 
-### 1.1 Problema
+### 2.1 Problema
 
 Moradores de centros urbanos convivem diariamente com problemas como buracos em vias, vazamentos, falta de água, calçadas danificadas e outras situações que prejudicam a mobilidade, a segurança e a qualidade de vida.
 
@@ -18,11 +45,11 @@ Apesar de esses problemas serem comuns, o registro costuma acontecer por canais 
 
 Em uma situação comum, um cidadão encontra um buraco em uma rua movimentada, tira uma foto, comenta com vizinhos, mas não sabe se alguém já comunicou o problema. Mesmo quando registra a reclamação em algum canal, não recebe uma visão clara de andamento. O InfraBH nasce para transformar esse processo disperso em um fluxo único, rastreável e mais transparente.
 
-### 1.2 Objetivo geral
+### 2.2 Objetivo geral
 
 Desenvolver uma aplicação web responsiva que centralize o registro, a análise e o acompanhamento de ocorrências urbanas, aproximando cidadãos e responsáveis pela gestão da infraestrutura.
 
-### 1.3 Objetivos específicos
+### 2.3 Objetivos específicos
 
 - Permitir que cidadãos registrem denúncias com endereço, bairro, categoria, prioridade, descrição, localização no mapa e fotos.
 - Criar um fluxo de moderação em que denúncias enviadas por usuários comuns sejam analisadas por um administrador antes de aparecerem no feed público.
@@ -31,13 +58,13 @@ Desenvolver uma aplicação web responsiva que centralize o registro, a análise
 - Oferecer filtros, dashboards e relatórios para melhorar a visualização das ocorrências.
 - Garantir responsividade para uso em computador, tablet e celular.
 
-### 1.4 Justificativa
+### 2.4 Justificativa
 
 A infraestrutura urbana afeta diretamente a rotina da população. Buracos, vazamentos e falta de água podem causar acidentes, desperdício de recursos e prejuízos ao deslocamento de moradores.
 
 Uma aplicação centralizada melhora a qualidade das informações recebidas, reduz registros duplicados e ajuda a administração a priorizar demandas mais urgentes. Além disso, a moderação evita que denúncias falsas, repetidas ou inadequadas sejam exibidas publicamente, mantendo o feed mais confiável.
 
-### 1.5 Público-alvo
+### 2.5 Público-alvo
 
 O público-alvo é formado por:
 
@@ -48,13 +75,13 @@ O público-alvo é formado por:
 
 O cidadão comum precisa de uma experiência simples, visual e direta. O administrador precisa de uma visão mais ampla, com indicadores, filtros, mapa e controle sobre o ciclo de atendimento.
 
-## 2. Processo de Product Discovery
+## 3. Processo de Product Discovery
 
 O grupo utilizou práticas de Design Thinking para compreender o problema antes de definir a solução. O objetivo foi identificar usuários envolvidos, dores principais e oportunidades de melhoria.
 
 O material consolidado do processo está disponível no arquivo [processo-dt.pdf](files/processo-dt.pdf).
 
-### 2.1 Matriz CSD
+### 3.1 Matriz CSD
 
 A Matriz CSD foi utilizada para organizar:
 
@@ -62,7 +89,7 @@ A Matriz CSD foi utilizada para organizar:
 - **Suposições:** usuários tendem a participar mais quando o processo de denúncia é simples; ocorrências com várias confirmações podem indicar maior urgência.
 - **Dúvidas:** quais categorias são mais relevantes; quais informações mínimas devem ser exigidas; como impedir spam sem dificultar o uso.
 
-### 2.2 Mapa de stakeholders
+### 3.2 Mapa de stakeholders
 
 Os principais envolvidos identificados foram:
 
@@ -72,7 +99,7 @@ Os principais envolvidos identificados foram:
 - equipes responsáveis pela triagem e manutenção;
 - órgãos públicos ou organizações responsáveis pela infraestrutura urbana.
 
-### 2.3 Entrevistas e highlights de pesquisa
+### 3.3 Entrevistas e highlights de pesquisa
 
 A análise do problema considerou situações reais vividas por moradores em relação a buracos, vazamentos e outros problemas urbanos. Os principais pontos levantados foram:
 
@@ -82,7 +109,7 @@ A análise do problema considerou situações reais vividas por moradores em rel
 - necessidade de anexar foto e localização para facilitar a análise;
 - importância de evitar registros falsos ou fora do padrão.
 
-### 2.4 Personas
+### 3.4 Personas
 
 **Persona 1 — Cidadão**
 
@@ -92,9 +119,9 @@ Morador que encontra um problema urbano durante sua rotina e deseja registrar a 
 
 Usuário responsável por analisar denúncias, validar informações, rejeitar registros inadequados, acompanhar ocorrências e visualizar indicadores para apoiar decisões.
 
-## 3. Processo de Product Design
+## 4. Processo de Product Design
 
-### 3.1 Histórias de usuário
+### 4.1 Histórias de usuário
 
 | ID | Como... | Quero... | Para... |
 |---|---|---|---|
@@ -107,7 +134,7 @@ Usuário responsável por analisar denúncias, validar informações, rejeitar r
 | HU-07 | administrador | aprovar ou rejeitar denúncias | evitar spam e manter a qualidade do feed |
 | HU-08 | administrador | consultar dashboard e relatórios | priorizar ocorrências e acompanhar indicadores |
 
-### 3.2 Proposta de valor
+### 4.2 Proposta de valor
 
 O InfraBH entrega valor ao cidadão por permitir um registro simples, visual e rastreável de problemas urbanos. Para a administração, entrega valor ao organizar as denúncias em uma base única, com moderação, filtros e indicadores.
 
@@ -119,7 +146,7 @@ Principais ganhos:
 - maior transparência no acompanhamento;
 - melhoria na comunicação entre população e gestão urbana.
 
-### 3.3 Requisitos funcionais
+### 4.3 Requisitos funcionais
 
 | ID | Descrição | Prioridade |
 |---|---|---|
@@ -136,7 +163,7 @@ Principais ganhos:
 | RF-011 | Gerar relatórios por categoria, bairro, status e prioridade | Média |
 | RF-012 | Limitar envios repetidos para reduzir spam | Alta |
 
-### 3.4 Requisitos não funcionais
+### 4.4 Requisitos não funcionais
 
 | ID | Descrição | Prioridade |
 |---|---|---|
@@ -148,7 +175,7 @@ Principais ganhos:
 | RNF-006 | Organização do código em pastas por perfil e funcionalidade | Média |
 | RNF-007 | Uso de bibliotecas externas apenas quando agregarem valor ao projeto | Média |
 
-### 3.5 Fluxo do usuário
+### 4.5 Fluxo do usuário
 
 Fluxo do cidadão:
 
@@ -170,13 +197,13 @@ Fluxo do administrador:
 6. Atualiza status de atendimento.
 7. Consulta relatórios e ocorrências.
 
-### 3.6 Wireframes e protótipo
+### 4.6 Wireframes e protótipo
 
 Durante o projeto, o grupo definiu telas para login, dashboard, cadastro de ocorrência, listagem, detalhes, feed, aprovações e relatórios. O layout final foi implementado diretamente em HTML, CSS, Bootstrap e JavaScript, mantendo responsividade e navegação separada por perfil.
 
-## 4. Metodologia
+## 5. Metodologia
 
-### 4.1 Ferramentas utilizadas
+### 5.1 Ferramentas utilizadas
 
 - **Visual Studio Code:** edição e organização do código.
 - **Git e GitHub:** versionamento, branches e integração das entregas.
@@ -186,7 +213,7 @@ Durante o projeto, o grupo definiu telas para login, dashboard, cadastro de ocor
 - **JSON Server:** persistência simulada e API REST acadêmica.
 - **Navegador e DevTools:** testes de interface, responsividade e requisições.
 
-### 4.2 Organização da equipe e divisão de papéis
+### 5.2 Organização da equipe e divisão de papéis
 
 O desenvolvimento foi dividido por funcionalidades em branches individuais. Ao final, as partes foram integradas na branch principal do repositório.
 
@@ -200,13 +227,13 @@ O desenvolvimento foi dividido por funcionalidades em branches individuais. Ao f
 | Felipe Marzano | Separação das áreas de cidadão e administrador e integração REST |
 | Raul Rocha | Responsividade, login, aprovação de denúncias, moderação administrativa e proteção contra spam |
 
-### 4.3 Quadro de controle de tarefas
+### 5.3 Quadro de controle de tarefas
 
 O controle das tarefas foi realizado por meio das branches, commits e organização do repositório GitHub. Cada integrante trabalhou em sua parte e a integração final consolidou as funcionalidades em uma versão única da aplicação.
 
-## 5. Solução implementada
+## 6. Solução implementada
 
-### 5.1 Arquitetura
+### 6.1 Arquitetura
 
 A aplicação possui frontend estático e backend Node.js com JSON Server.
 
@@ -222,7 +249,7 @@ O servidor `codigo/index.js`:
 
 O banco acadêmico fica em `codigo/db/db.json`.
 
-### 5.2 Funcionalidades
+### 6.2 Funcionalidades
 
 #### Login por perfil
 
@@ -273,7 +300,7 @@ A área administrativa apresenta indicadores, ocorrências recentes e relatório
 
 O servidor limita cada usuário a três denúncias em dez minutos. Também valida categoria, prioridade, descrição, endereço, bairro e fotos.
 
-### 5.3 Estruturas de dados
+### 6.3 Estruturas de dados
 
 #### Usuário
 
@@ -322,7 +349,7 @@ O servidor limita cada usuário a três denúncias em dez minutos. Também valid
 }
 ```
 
-### 5.4 Módulos e APIs
+### 6.4 Módulos e APIs
 
 - **Node.js:** servidor da aplicação.
 - **JSON Server:** persistência em arquivo JSON e API REST.
@@ -333,7 +360,7 @@ O servidor limita cada usuário a três denúncias em dez minutos. Também valid
 - **Chart.js:** gráficos dos relatórios.
 - **Crypto do Node.js:** hash de senha e assinatura do token de sessão.
 
-### 5.5 Rotas principais
+### 6.5 Rotas principais
 
 | Rota | Método | Finalidade |
 |---|---|---|
@@ -345,7 +372,7 @@ O servidor limita cada usuário a três denúncias em dez minutos. Também valid
 | `/ocorrencias/:id/confirmar` | POST | Confirmar ocorrência aprovada |
 | `/feed` | GET | Listar apenas denúncias aprovadas |
 
-### 5.6 Instruções de acesso e uso
+### 6.6 Instruções de acesso e uso
 
 Na raiz do repositório:
 
@@ -370,7 +397,7 @@ Para validar o fluxo principal:
 6. Aprove a denúncia.
 7. Volte ao feed do cidadão e confirme que ela aparece publicada.
 
-### 5.7 Testes realizados
+### 6.7 Testes realizados
 
 Foram verificados:
 
@@ -387,7 +414,7 @@ Foram verificados:
 - responsividade básica;
 - checagem de sintaxe dos scripts principais com `npm run check`.
 
-## 6. Limitações e evolução
+## 7. Limitações e evolução
 
 O JSON Server atende ao escopo acadêmico, mas uma versão de produção deveria utilizar:
 
@@ -399,7 +426,7 @@ O JSON Server atende ao escopo acadêmico, mas uma versão de produção deveria
 - deploy com backend Node.js persistente;
 - controle mais robusto de permissões.
 
-## 7. Referências bibliográficas
+## 8. Referências bibliográficas
 
 - BOOTSTRAP. *Bootstrap 5 Documentation*. Disponível em: <https://getbootstrap.com/docs/5.3/>.
 - CHART.JS. *Chart.js Documentation*. Disponível em: <https://www.chartjs.org/docs/latest/>.
