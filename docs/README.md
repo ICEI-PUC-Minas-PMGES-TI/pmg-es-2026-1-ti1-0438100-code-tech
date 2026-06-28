@@ -1,128 +1,294 @@
-# Documentação do projeto — InfraBH
+# Documentação do Projeto — InfraBH
 
-## 1. Introdução
+## 1. Contexto do projeto
 
-O InfraBH é uma aplicação web desenvolvida para a disciplina de Trabalho Interdisciplinar: Aplicações Web. A solução cria um canal único para moradores registrarem problemas de infraestrutura urbana e acompanharem o atendimento, enquanto administradores organizam, priorizam e analisam as solicitações.
+O **InfraBH** é uma aplicação web colaborativa criada para apoiar o registro, a moderação e o acompanhamento de ocorrências de infraestrutura urbana na Região Metropolitana de Belo Horizonte.
 
-## 2. Contexto
+A solução foi desenvolvida para a disciplina de Trabalho Interdisciplinar: Aplicações Web, utilizando HTML, CSS, JavaScript, Node.js e JSON Server. O sistema simula uma plataforma em que cidadãos conseguem registrar problemas urbanos e administradores conseguem validar, organizar e acompanhar essas denúncias.
 
-### Problema
+### 1.1 Problema
 
-Moradores da Região Metropolitana de Belo Horizonte convivem com buracos, vazamentos, falta de água e outros problemas urbanos. Os canais tradicionais de comunicação são dispersos e nem sempre oferecem retorno claro. Isso dificulta o acompanhamento, favorece registros duplicados e reduz a participação da população.
+Moradores de centros urbanos convivem diariamente com problemas como buracos em vias, vazamentos, falta de água, calçadas danificadas e outras situações que prejudicam a mobilidade, a segurança e a qualidade de vida.
 
-### Objetivo geral
+Apesar de esses problemas serem comuns, o registro costuma acontecer por canais diferentes, pouco centralizados e com baixo retorno ao cidadão. Isso gera três dificuldades principais:
 
-Desenvolver uma plataforma web responsiva que centralize o registro, o acompanhamento e a gestão de ocorrências urbanas.
+- o morador não sabe exatamente onde registrar a ocorrência;
+- a administração tem dificuldade para organizar e priorizar as solicitações;
+- outros moradores não conseguem confirmar ou acompanhar problemas já relatados.
 
-### Objetivos específicos
+Em uma situação comum, um cidadão encontra um buraco em uma rua movimentada, tira uma foto, comenta com vizinhos, mas não sabe se alguém já comunicou o problema. Mesmo quando registra a reclamação em algum canal, não recebe uma visão clara de andamento. O InfraBH nasce para transformar esse processo disperso em um fluxo único, rastreável e mais transparente.
 
-- Simplificar o envio de uma ocorrência com informações suficientes para localização e triagem.
-- Dar visibilidade ao cidadão sobre o status e o histórico da solicitação.
-- Permitir que moradores confirmem problemas já registrados, reduzindo duplicidade e indicando relevância.
-- Oferecer ao administrador indicadores, filtros, mapa, notificações e relatórios para apoiar a priorização.
-- Manter os dados em uma API REST baseada em JSON Server, conforme os requisitos da disciplina.
+### 1.2 Objetivo geral
 
-### Justificativa
+Desenvolver uma aplicação web responsiva que centralize o registro, a análise e o acompanhamento de ocorrências urbanas, aproximando cidadãos e responsáveis pela gestão da infraestrutura.
 
-Uma comunicação estruturada entre população e responsáveis pela manutenção urbana melhora a qualidade dos dados, reduz retrabalho e torna as decisões mais transparentes. A proposta possui impacto social direto: facilita a participação cidadã e ajuda a direcionar recursos para problemas mais urgentes ou recorrentes.
+### 1.3 Objetivos específicos
 
-### Público-alvo
+- Permitir que cidadãos registrem denúncias com endereço, bairro, categoria, prioridade, descrição, localização no mapa e fotos.
+- Criar um fluxo de moderação em que denúncias enviadas por usuários comuns sejam analisadas por um administrador antes de aparecerem no feed público.
+- Disponibilizar uma área administrativa para aprovação, rejeição, acompanhamento, alteração de status e consulta de relatórios.
+- Exibir ao cidadão apenas denúncias aprovadas no feed, evitando spam e conteúdos fora do padrão.
+- Oferecer filtros, dashboards e relatórios para melhorar a visualização das ocorrências.
+- Garantir responsividade para uso em computador, tablet e celular.
 
-- Moradores da Região Metropolitana de Belo Horizonte.
-- Motoristas, motociclistas, ciclistas e pedestres.
-- Comerciantes afetados por problemas de infraestrutura local.
-- Órgãos públicos e equipes de manutenção urbana.
+### 1.4 Justificativa
 
-## 3. Product Discovery
+A infraestrutura urbana afeta diretamente a rotina da população. Buracos, vazamentos e falta de água podem causar acidentes, desperdício de recursos e prejuízos ao deslocamento de moradores.
 
-O grupo utilizou Design Thinking para compreender o problema e modelar a solução. Foram produzidos mapa de stakeholders, Matriz CSD, persona, proposta de valor, fluxos e wireframes. O material consolidado está no [processo de Design Thinking](files/processo-dt.pdf).
+Uma aplicação centralizada melhora a qualidade das informações recebidas, reduz registros duplicados e ajuda a administração a priorizar demandas mais urgentes. Além disso, a moderação evita que denúncias falsas, repetidas ou inadequadas sejam exibidas publicamente, mantendo o feed mais confiável.
 
-### Personas principais
+### 1.5 Público-alvo
 
-**Cidadão:** precisa relatar um problema rapidamente, anexar evidências e acompanhar o atendimento sem conhecer processos internos do poder público.
+O público-alvo é formado por:
 
-**Administrador:** precisa visualizar todas as solicitações, identificar urgências e recorrências, atualizar o atendimento e acompanhar indicadores.
+- moradores da Região Metropolitana de Belo Horizonte;
+- pedestres, motoristas, motociclistas e ciclistas;
+- comerciantes impactados por problemas de infraestrutura;
+- administradores responsáveis por analisar, acompanhar e organizar solicitações urbanas.
 
-## 4. Product Design
+O cidadão comum precisa de uma experiência simples, visual e direta. O administrador precisa de uma visão mais ampla, com indicadores, filtros, mapa e controle sobre o ciclo de atendimento.
 
-### Histórias de usuário
+## 2. Processo de Product Discovery
+
+O grupo utilizou práticas de Design Thinking para compreender o problema antes de definir a solução. O objetivo foi identificar usuários envolvidos, dores principais e oportunidades de melhoria.
+
+O material consolidado do processo está disponível no arquivo [processo-dt.pdf](files/processo-dt.pdf).
+
+### 2.1 Matriz CSD
+
+A Matriz CSD foi utilizada para organizar:
+
+- **Certezas:** moradores enfrentam problemas urbanos recorrentes; fotos e localização ajudam a descrever melhor uma ocorrência; a administração precisa de dados organizados.
+- **Suposições:** usuários tendem a participar mais quando o processo de denúncia é simples; ocorrências com várias confirmações podem indicar maior urgência.
+- **Dúvidas:** quais categorias são mais relevantes; quais informações mínimas devem ser exigidas; como impedir spam sem dificultar o uso.
+
+### 2.2 Mapa de stakeholders
+
+Os principais envolvidos identificados foram:
+
+- cidadãos moradores da cidade;
+- usuários que circulam pelas vias, como motoristas e pedestres;
+- administradores da plataforma;
+- equipes responsáveis pela triagem e manutenção;
+- órgãos públicos ou organizações responsáveis pela infraestrutura urbana.
+
+### 2.3 Entrevistas e highlights de pesquisa
+
+A análise do problema considerou situações reais vividas por moradores em relação a buracos, vazamentos e outros problemas urbanos. Os principais pontos levantados foram:
+
+- dificuldade de saber onde registrar uma reclamação;
+- falta de retorno claro sobre o andamento;
+- repetição de reclamações sobre o mesmo problema;
+- necessidade de anexar foto e localização para facilitar a análise;
+- importância de evitar registros falsos ou fora do padrão.
+
+### 2.4 Personas
+
+**Persona 1 — Cidadão**
+
+Morador que encontra um problema urbano durante sua rotina e deseja registrar a ocorrência de forma rápida. Tem familiaridade básica com tecnologia e espera um processo simples, com poucos campos e retorno claro.
+
+**Persona 2 — Administrador**
+
+Usuário responsável por analisar denúncias, validar informações, rejeitar registros inadequados, acompanhar ocorrências e visualizar indicadores para apoiar decisões.
+
+## 3. Processo de Product Design
+
+### 3.1 Histórias de usuário
 
 | ID | Como... | Quero... | Para... |
 |---|---|---|---|
-| HU-01 | cidadão | entrar no sistema | acessar minhas solicitações com privacidade |
-| HU-02 | cidadão | registrar uma ocorrência com localização e fotos | comunicar o problema com precisão |
-| HU-03 | cidadão | filtrar e consultar minhas ocorrências | acompanhar cada atendimento |
-| HU-04 | cidadão | confirmar uma ocorrência similar | reforçar que o problema afeta outras pessoas |
-| HU-05 | administrador | visualizar mapa, totais e notificações | identificar prioridades rapidamente |
-| HU-06 | administrador | atualizar o status de uma ocorrência | manter o cidadão informado |
-| HU-07 | administrador | consultar relatórios | apoiar decisões de manutenção urbana |
+| HU-01 | cidadão | fazer login no sistema | acessar minhas denúncias com segurança |
+| HU-02 | cidadão | registrar uma ocorrência com endereço, mapa e foto | comunicar um problema urbano com clareza |
+| HU-03 | cidadão | acompanhar minhas ocorrências | saber se a denúncia foi aprovada, rejeitada ou atendida |
+| HU-04 | cidadão | visualizar um feed de denúncias aprovadas | acompanhar problemas reais da cidade |
+| HU-05 | cidadão | confirmar uma ocorrência semelhante | reforçar que o problema também me afeta |
+| HU-06 | administrador | acessar uma fila de aprovação | analisar denúncias antes da publicação |
+| HU-07 | administrador | aprovar ou rejeitar denúncias | evitar spam e manter a qualidade do feed |
+| HU-08 | administrador | consultar dashboard e relatórios | priorizar ocorrências e acompanhar indicadores |
 
-### Requisitos funcionais
+### 3.2 Proposta de valor
 
-| ID | Descrição | Prioridade |
-|---|---|---|
-| RF-001 | Autenticar usuários e direcionar cada perfil à área correta | Alta |
-| RF-002 | Cadastrar ocorrência com endereço, bairro, categoria, prioridade, descrição, coordenadas e fotos | Alta |
-| RF-003 | Listar e filtrar ocorrências | Alta |
-| RF-004 | Exibir detalhes, status e histórico | Alta |
-| RF-005 | Permitir confirmações e sugerir ocorrências similares | Média |
-| RF-006 | Exibir dashboard com indicadores, mapa e notificações | Alta |
-| RF-007 | Permitir ao administrador alterar status e excluir registros | Alta |
-| RF-008 | Gerar gráficos dinâmicos por categoria, bairro, status e prioridade | Média |
-| RF-009 | Submeter denúncias de cidadãos à aprovação ou rejeição administrativa | Alta |
-| RF-010 | Limitar envios repetidos e validar o padrão mínimo da denúncia | Alta |
-| RF-011 | Publicar no feed cidadão somente denúncias aprovadas | Alta |
+O InfraBH entrega valor ao cidadão por permitir um registro simples, visual e rastreável de problemas urbanos. Para a administração, entrega valor ao organizar as denúncias em uma base única, com moderação, filtros e indicadores.
 
-### Requisitos não funcionais
+Principais ganhos:
+
+- centralização das ocorrências;
+- redução de denúncias duplicadas ou inadequadas;
+- visualização por categoria, bairro, prioridade e status;
+- maior transparência no acompanhamento;
+- melhoria na comunicação entre população e gestão urbana.
+
+### 3.3 Requisitos funcionais
 
 | ID | Descrição | Prioridade |
 |---|---|---|
-| RNF-001 | Ser responsivo a partir de 320 px de largura | Alta |
-| RNF-002 | Utilizar Node.js e JSON Server como backend acadêmico | Alta |
-| RNF-003 | Proteger a API de ocorrências com sessão autenticada | Alta |
-| RNF-004 | Armazenar senhas como hash, sem texto puro | Alta |
-| RNF-005 | Fornecer mensagens claras de validação e erro | Média |
-| RNF-006 | Utilizar marcação semântica e controles acessíveis por teclado | Média |
+| RF-001 | Autenticar usuários e direcionar por perfil | Alta |
+| RF-002 | Permitir cadastro de ocorrência com dados completos | Alta |
+| RF-003 | Permitir upload de 1 a 5 fotos | Alta |
+| RF-004 | Permitir marcação de localização no mapa | Alta |
+| RF-005 | Listar e filtrar ocorrências | Alta |
+| RF-006 | Exibir detalhes, histórico e mapa da ocorrência | Alta |
+| RF-007 | Permitir confirmação de ocorrências aprovadas | Média |
+| RF-008 | Exibir dashboard administrativo | Alta |
+| RF-009 | Permitir aprovação e rejeição administrativa | Alta |
+| RF-010 | Exibir feed apenas com denúncias aprovadas | Alta |
+| RF-011 | Gerar relatórios por categoria, bairro, status e prioridade | Média |
+| RF-012 | Limitar envios repetidos para reduzir spam | Alta |
 
-### Fluxo principal
+### 3.4 Requisitos não funcionais
 
-1. O usuário acessa a página de login.
-2. O servidor valida e devolve uma sessão com perfil e validade.
-3. O cidadão acessa o dashboard, registra uma ocorrência ou consulta as existentes.
-4. A API valida os campos, aplica o limite antispam e grava a denúncia como “Aguardando aprovação”.
-5. O administrador recebe a nova denúncia em uma página exclusiva de aprovações e decide aprovar ou rejeitar, informando o motivo quando necessário.
-6. Somente após a aprovação a ocorrência entra nos indicadores, no mapa, no feed da cidade e no fluxo normal de atendimento.
-7. Ao atualizar a moderação ou o status, o sistema registra o evento no histórico.
+| ID | Descrição | Prioridade |
+|---|---|---|
+| RNF-001 | Interface responsiva para desktop, tablet e celular | Alta |
+| RNF-002 | Utilização de Node.js e JSON Server no backend acadêmico | Alta |
+| RNF-003 | API protegida por sessão autenticada | Alta |
+| RNF-004 | Senhas armazenadas como hash | Alta |
+| RNF-005 | Mensagens claras de validação e erro | Média |
+| RNF-006 | Organização do código em pastas por perfil e funcionalidade | Média |
+| RNF-007 | Uso de bibliotecas externas apenas quando agregarem valor ao projeto | Média |
 
-## 5. Metodologia
+### 3.5 Fluxo do usuário
 
-O trabalho foi dividido por funcionalidades em branches individuais. A integração final preserva o histórico de todas as branches e consolida as partes em uma arquitetura única. Git e GitHub foram usados para versionamento; Figma, Miro e Pencil apoiaram descoberta e prototipação; o navegador e ferramentas de desenvolvimento foram usados nos testes responsivos.
+Fluxo do cidadão:
 
-### Divisão das contribuições
+1. Acessa a tela de login.
+2. Entra com credenciais de cidadão.
+3. Acessa o dashboard.
+4. Registra uma nova ocorrência com mapa, endereço, bairro, prioridade, descrição e foto.
+5. A denúncia fica aguardando aprovação.
+6. Após aprovação do administrador, a ocorrência aparece no feed da cidade.
+7. O cidadão acompanha suas denúncias e seus status.
 
-| Integrante | Entrega principal |
+Fluxo do administrador:
+
+1. Acessa a tela de login.
+2. Entra com credenciais de administrador.
+3. Visualiza dashboard e indicadores.
+4. Acessa a fila de aprovações.
+5. Aprova ou rejeita denúncias.
+6. Atualiza status de atendimento.
+7. Consulta relatórios e ocorrências.
+
+### 3.6 Wireframes e protótipo
+
+Durante o projeto, o grupo definiu telas para login, dashboard, cadastro de ocorrência, listagem, detalhes, feed, aprovações e relatórios. O layout final foi implementado diretamente em HTML, CSS, Bootstrap e JavaScript, mantendo responsividade e navegação separada por perfil.
+
+## 4. Metodologia
+
+### 4.1 Ferramentas utilizadas
+
+- **Visual Studio Code:** edição e organização do código.
+- **Git e GitHub:** versionamento, branches e integração das entregas.
+- **Canvas PUC Minas:** acompanhamento das tarefas da disciplina.
+- **Figma, Miro e Pencil:** apoio ao processo de descoberta, fluxos, ideias e prototipação.
+- **Node.js e npm:** execução do servidor local.
+- **JSON Server:** persistência simulada e API REST acadêmica.
+- **Navegador e DevTools:** testes de interface, responsividade e requisições.
+
+### 4.2 Organização da equipe e divisão de papéis
+
+O desenvolvimento foi dividido por funcionalidades em branches individuais. Ao final, as partes foram integradas na branch principal do repositório.
+
+| Integrante | Contribuição principal |
 |---|---|
-| Felipe Gabriel | Dashboard administrativo, mapa, notificações e engajamento |
-| Lucas Dias | Categorias e relatórios alimentados pela API |
-| Gabriel Drumond | Cadastro com mapa, fotos e validação |
-| Hector Paulo | Filtros e JSON Server |
-| João Pedro | Detalhes, confirmações e similares |
-| Felipe Marzano | Áreas cidadão/administrador e integração REST |
-| Raul Rocha | Responsividade, navegação móvel, aprovação de denúncias, moderação administrativa e proteção contra spam |
+| Felipe Gabriel Nogueira Aquino | Dashboard administrativo, mapa, notificações, engajamento e melhorias visuais |
+| Lucas Dias | Categorias, relatórios e integração de dados com JSON Server |
+| Gabriel Luiz Drumond Oliveira | Cadastro de ocorrência, mapa, fotos, validações e experiência de envio |
+| Hector Paulo Nogueira Xavier | Filtros de ocorrências e configuração do JSON Server |
+| João Pedro Lemos Faria | Página de detalhes, confirmações e ocorrências similares |
+| Felipe Marzano | Separação das áreas de cidadão e administrador e integração REST |
+| Raul Rocha | Responsividade, login, aprovação de denúncias, moderação administrativa e proteção contra spam |
 
-## 6. Solução implementada
+### 4.3 Quadro de controle de tarefas
 
-### Arquitetura
+O controle das tarefas foi realizado por meio das branches, commits e organização do repositório GitHub. Cada integrante trabalhou em sua parte e a integração final consolidou as funcionalidades em uma versão única da aplicação.
 
-O servidor Node.js entrega os arquivos estáticos e a API REST. O endpoint `POST /login` valida a senha com `scrypt`, gera um token assinado e limitado a oito horas. As rotas `/ocorrencias` exigem esse token. No navegador, a sessão fica no `sessionStorage`; o perfil controla o redirecionamento e a área administrativa. Novos registros de cidadãos recebem estado de moderação separado do status de atendimento, impedindo autoaprovação. A API exige dados padronizados, pelo menos uma foto e limita o usuário a três denúncias em dez minutos.
+## 5. Solução implementada
 
-### Estruturas de dados
+### 5.1 Arquitetura
 
-**Usuário:** identificador, nome, e-mail, perfil, salt e hash da senha.
+A aplicação possui frontend estático e backend Node.js com JSON Server.
 
-**Ocorrência:** identificador, tipo, endereço, bairro, prioridade, status de atendimento, estado e motivo da moderação, descrição, fotos, latitude, longitude, datas, confirmações, autor e histórico.
+O servidor `codigo/index.js`:
 
-Exemplo simplificado:
+- entrega os arquivos da pasta `codigo/public`;
+- implementa login em `POST /login`;
+- protege rotas de ocorrência por token;
+- valida denúncias antes de salvar;
+- controla moderação;
+- limita spam;
+- expõe dados pelo JSON Server.
+
+O banco acadêmico fica em `codigo/db/db.json`.
+
+### 5.2 Funcionalidades
+
+#### Login por perfil
+
+O sistema possui autenticação com perfis de cidadão e administrador. Após o login, o usuário é redirecionado para a área correta.
+
+Credenciais demonstrativas:
+
+| Perfil | E-mail | Senha |
+|---|---|---|
+| Cidadão | `cidadao@infrabh.com` | `Cidadao@123` |
+| Administrador | `admin@infrabh.com` | `Admin@123` |
+
+#### Cadastro de ocorrência
+
+O cidadão registra uma ocorrência informando:
+
+- endereço;
+- bairro;
+- tipo;
+- prioridade;
+- descrição;
+- localização no mapa;
+- fotos.
+
+Após o envio, a denúncia fica com `moderationStatus: "Aguardando aprovação"`.
+
+#### Aprovação administrativa
+
+O administrador acessa uma página específica de aprovações. Nela, pode aprovar ou rejeitar denúncias. Denúncias aprovadas são publicadas no feed. Denúncias rejeitadas podem receber um motivo.
+
+#### Feed da cidade
+
+O feed exibe apenas denúncias aprovadas. Isso evita que spam, testes ou denúncias fora do padrão apareçam publicamente.
+
+#### Listagem e filtros
+
+Usuários podem consultar ocorrências por tipo, status, bairro, endereço e data. O cidadão visualiza suas próprias ocorrências; o administrador visualiza a base completa.
+
+#### Detalhes e confirmações
+
+A tela de detalhes mostra informações completas da ocorrência, fotos, localização, histórico e ocorrências similares. Ocorrências aprovadas podem receber confirmações.
+
+#### Dashboard e relatórios
+
+A área administrativa apresenta indicadores, ocorrências recentes e relatórios por categoria, bairro, status e prioridade.
+
+#### Proteção contra spam
+
+O servidor limita cada usuário a três denúncias em dez minutos. Também valida categoria, prioridade, descrição, endereço, bairro e fotos.
+
+### 5.3 Estruturas de dados
+
+#### Usuário
+
+```json
+{
+  "id": "USR-CIDADAO-001",
+  "nome": "Cidadão InfraBH",
+  "email": "cidadao@infrabh.com",
+  "role": "cidadao",
+  "salt": "valor-do-salt",
+  "passwordHash": "hash-da-senha"
+}
+```
+
+#### Ocorrência
 
 ```json
 {
@@ -132,34 +298,112 @@ Exemplo simplificado:
   "bairro": "Bairro Novo",
   "priority": "Alta",
   "status": "Pendente",
+  "moderationStatus": "Aguardando aprovação",
+  "moderationReason": "",
   "description": "Buraco grande na pista próximo à faixa de pedestres.",
+  "photos": [
+    {
+      "name": "foto.jpg",
+      "src": "data:image/jpeg;base64,..."
+    }
+  ],
   "lat": -19.92,
   "lng": -43.94,
-  "confirmacoes": 12,
-  "usuarioId": "USR-CIDADAO-001"
+  "createdAt": 1680000000000,
+  "updatedAt": 1680000000000,
+  "confirmacoes": 0,
+  "usuarioId": "USR-CIDADAO-001",
+  "history": [
+    {
+      "time": "28/06/2026 às 18:00",
+      "message": "Ocorrência enviada para aprovação."
+    }
+  ]
 }
 ```
 
-### APIs e bibliotecas
+### 5.4 Módulos e APIs
 
-- JSON Server: persistência e API REST.
-- Leaflet e OpenStreetMap: mapas e marcadores.
-- Nominatim: busca de endereço.
-- Chart.js: gráficos dos relatórios.
-- Bootstrap 5 e Bootstrap Icons: componentes, grade e ícones.
+- **Node.js:** servidor da aplicação.
+- **JSON Server:** persistência em arquivo JSON e API REST.
+- **Bootstrap 5:** grid, componentes e responsividade.
+- **Bootstrap Icons:** ícones da interface.
+- **Leaflet:** mapa interativo.
+- **OpenStreetMap/Nominatim:** busca e geocodificação de endereços.
+- **Chart.js:** gráficos dos relatórios.
+- **Crypto do Node.js:** hash de senha e assinatura do token de sessão.
 
-### Execução e teste
+### 5.5 Rotas principais
 
-Na raiz do repositório, execute `npm install` e `npm start`. Acesse `http://localhost:3000`, entre com uma das credenciais demonstrativas documentadas no README e valide os fluxos de cidadão e administrador.
+| Rota | Método | Finalidade |
+|---|---|---|
+| `/login` | POST | Autenticar usuário |
+| `/ocorrencias` | GET | Listar ocorrências |
+| `/ocorrencias` | POST | Criar nova ocorrência |
+| `/ocorrencias/:id` | PUT/PATCH | Atualizar ocorrência |
+| `/ocorrencias/:id` | DELETE | Excluir ocorrência |
+| `/ocorrencias/:id/confirmar` | POST | Confirmar ocorrência aprovada |
+| `/feed` | GET | Listar apenas denúncias aprovadas |
 
-## 7. Limitações e evolução
+### 5.6 Instruções de acesso e uso
 
-O JSON Server é adequado ao escopo didático, mas uma versão de produção deve usar banco de dados transacional, HTTPS, renovação de sessão, recuperação de senha, armazenamento externo das imagens, registro de auditoria e autorização no servidor por proprietário e perfil em cada operação.
+Na raiz do repositório:
 
-## 8. Referências
+```bash
+npm install
+npm start
+```
+
+Depois acesse:
+
+```text
+http://localhost:3000
+```
+
+Para validar o fluxo principal:
+
+1. Entre como cidadão.
+2. Cadastre uma ocorrência com foto e localização.
+3. Confirme que ela fica aguardando aprovação.
+4. Saia e entre como administrador.
+5. Acesse a página de aprovações.
+6. Aprove a denúncia.
+7. Volte ao feed do cidadão e confirme que ela aparece publicada.
+
+### 5.7 Testes realizados
+
+Foram verificados:
+
+- login de cidadão;
+- login de administrador;
+- proteção de páginas por perfil;
+- cadastro de ocorrência autenticado;
+- validação de campos obrigatórios;
+- envio de foto;
+- moderação como “Aguardando aprovação”;
+- aprovação administrativa;
+- exibição no feed apenas após aprovação;
+- listagem de ocorrências;
+- responsividade básica;
+- checagem de sintaxe dos scripts principais com `npm run check`.
+
+## 6. Limitações e evolução
+
+O JSON Server atende ao escopo acadêmico, mas uma versão de produção deveria utilizar:
+
+- banco de dados real;
+- HTTPS;
+- recuperação de senha;
+- armazenamento externo de imagens;
+- auditoria de ações administrativas;
+- deploy com backend Node.js persistente;
+- controle mais robusto de permissões.
+
+## 7. Referências bibliográficas
 
 - BOOTSTRAP. *Bootstrap 5 Documentation*. Disponível em: <https://getbootstrap.com/docs/5.3/>.
 - CHART.JS. *Chart.js Documentation*. Disponível em: <https://www.chartjs.org/docs/latest/>.
 - LEAFLET. *Leaflet Documentation*. Disponível em: <https://leafletjs.com/reference.html>.
 - MDN WEB DOCS. *JavaScript Guide*. Disponível em: <https://developer.mozilla.org/docs/Web/JavaScript/Guide>.
+- OPENSTREETMAP. *OpenStreetMap*. Disponível em: <https://www.openstreetmap.org/>.
 - TYPICODE. *JSON Server*. Disponível em: <https://github.com/typicode/json-server>.
