@@ -177,26 +177,6 @@ body {
   gap: 20px;
 }
 
-.notification-bell {
-  display: none !important;
-}
-
-.notification-bell .badge-dot {
-  position: absolute;
-  top: -2px;
-  right: -4px;
-  width: 16px;
-  height: 16px;
-  background: var(--dark-green);
-  color: white;
-  border-radius: 50%;
-  font-size: 9px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-}
-
 .user-info {
   display: flex;
   align-items: center;

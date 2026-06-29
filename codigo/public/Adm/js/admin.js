@@ -114,23 +114,6 @@ async function renderAdminDashboard() {
         .addTo(map);
     });
   }
-
-  const bell = document.querySelector('.notification-bell');
-  if (bell) {
-    const important = items.filter(item => moderationLabel(item) === 'Aguardando aprovação' || item.priority === 'Alta').slice(0, 5);
-    const badge = bell.querySelector('.badge-dot');
-    if (badge) badge.textContent = important.length;
-    bell.style.cursor = 'pointer';
-    bell.addEventListener('click', function () {
-      let panel = document.getElementById('admin-notifications');
-      if (panel) { panel.remove(); return; }
-      panel = document.createElement('div');
-      panel.id = 'admin-notifications';
-      panel.style.cssText = 'position:absolute;right:24px;top:66px;z-index:1000;width:min(380px,calc(100vw - 32px));padding:18px;background:white;border:1px solid #dfe7e5;border-radius:14px;box-shadow:0 18px 50px rgba(0,30,43,.18)';
-      panel.innerHTML = '<strong>Fila de moderação e prioridades</strong>' + (important.length ? important.map(item => `<a href="ocorrencias.html" style="display:block;padding:12px 0;border-bottom:1px solid #e8edeb;color:inherit;text-decoration:none"><b>${escapeHtml(item.type)}</b> · ${escapeHtml(item.bairro)}<br><small>${escapeHtml(moderationLabel(item))} · ${escapeHtml(item.priority)}</small></a>`).join('') : '<p style="margin:12px 0 0">Nenhuma denúncia aguardando análise.</p>');
-      document.body.appendChild(panel);
-    });
-  }
 }
 
 async function renderAdminOccurrences() {
