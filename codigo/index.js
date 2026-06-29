@@ -144,7 +144,9 @@ server.post('/ocorrencias/:id/confirmar', (req, res) => {
     return res.status(422).json({ mensagem: 'Somente ocorrências aprovadas podem receber confirmações.' });
   }
 
-  occurrence.confirmacoes = (occurrence.confirmacoes || 0) + 1;
+  const isConfirming = req.body?.confirmed !== false;
+  const currentConfirmations = Number(occurrence.confirmacoes || 0);
+  occurrence.confirmacoes = isConfirming ? currentConfirmations + 1 : Math.max(0, currentConfirmations - 1);
   occurrence.updatedAt = Date.now();
   router.db.get('ocorrencias').find({ id: occurrence.id }).assign(occurrence).write();
   return res.json(occurrence);

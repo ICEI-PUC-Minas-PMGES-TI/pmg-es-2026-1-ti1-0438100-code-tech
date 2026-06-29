@@ -34,13 +34,35 @@
 
       <div class="page-header">
         <div class="page-header-row">
-          <div><p class="leafy-label">Ocorrências verificadas</p><h1>Feed da <span class="accent-underline">cidade</span></h1><p class="subtitle">Aqui aparecem somente denúncias analisadas e aprovadas pela administração.</p></div>
+          <div><p class="leafy-label">Ocorrências verificadas</p><h1>Feed da <span class="accent-underline">cidade</span></h1><p class="subtitle">Denúncias aprovadas, organizadas por localização e abertas para confirmação da comunidade.</p></div>
           <a href="nova-ocorrencia.html" class="btn-mongodb-primary"><i class="bi bi-plus-lg"></i> Enviar denúncia</a>
         </div>
       </div>
 
       <div class="content-area">
-        <div id="feed-summary" class="feed-summary"></div>
+        <section class="feed-hero" aria-label="Resumo do feed">
+          <div class="feed-hero-copy">
+            <span class="feed-kicker"><i class="bi bi-shield-check"></i> Feed moderado</span>
+            <h2>Informação pública com mais confiança.</h2>
+            <p>O cidadão denuncia, a administração analisa e a cidade acompanha somente registros verificados.</p>
+          </div>
+          <div class="feed-stats">
+            <div class="feed-stat-card"><strong id="feed-total">0</strong><span>Aprovadas</span></div>
+            <div class="feed-stat-card"><strong id="feed-bairros">0</strong><span>Bairros</span></div>
+            <div class="feed-stat-card"><strong id="feed-confirmacoes">0</strong><span>Confirmações</span></div>
+          </div>
+        </section>
+
+        <div class="feed-toolbar">
+          <div id="feed-summary" class="feed-summary"></div>
+          <div class="feed-chip-group" aria-label="Filtrar por tipo">
+            <button class="feed-chip active" type="button" data-type="todos">Todos</button>
+            <button class="feed-chip" type="button" data-type="Buraco">Buracos</button>
+            <button class="feed-chip" type="button" data-type="Vazamento">Vazamentos</button>
+            <button class="feed-chip" type="button" data-type="Falta de Água">Falta de água</button>
+            <button class="feed-chip" type="button" data-type="Outros">Outros</button>
+          </div>
+        </div>
         <section id="feed-list" class="feed-grid" aria-live="polite"></section>
       </div>
     </main>

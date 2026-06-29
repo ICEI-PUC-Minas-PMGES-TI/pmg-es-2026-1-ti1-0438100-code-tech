@@ -78,8 +78,12 @@ async function deleteOcorrencia(id) {
   });
 }
 
-async function confirmOcorrencia(id) {
-  return await apiRequest('/ocorrencias/' + encodeURIComponent(id) + '/confirmar', { method: 'POST' });
+async function confirmOcorrencia(id, confirmed = true) {
+  return await apiRequest('/ocorrencias/' + encodeURIComponent(id) + '/confirmar', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ confirmed }),
+  });
 }
 
 function formatDate(date) {
@@ -188,6 +192,38 @@ function getValue(id) {
   return el ? el.value : '';
 }
 
+function normalizeText(value) {
+  return String(value || '')
+    .trim()
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+}
+
+function getUniqueBairros(items) {
+  const grouped = {};
+  items.forEach(function(item) {
+    const bairro = String(item.bairro || '').trim();
+    if (!bairro) return;
+    const key = normalizeText(bairro);
+    if (!grouped[key]) grouped[key] = bairro;
+  });
+  return Object.values(grouped).sort(function(a, b) {
+    return a.localeCompare(b, 'pt-BR', { sensitivity: 'base' });
+  });
+}
+
+function populateBairroFilter(items) {
+  const select = document.getElementById('filter-bairro');
+  if (!select) return;
+  const selected = select.value || 'todos';
+  const bairros = getUniqueBairros(items);
+  select.innerHTML = '<option value="todos">Todos os bairros</option>' + bairros.map(function(bairro) {
+    return `<option value="${escapeHtml(bairro)}">${escapeHtml(bairro)}</option>`;
+  }).join('');
+  select.value = bairros.some(function(bairro) { return normalizeText(bairro) === normalizeText(selected); }) ? selected : 'todos';
+}
+
 function applyFilters(items) {
   var typeFilter = getValue('filter-type') || 'todos';
   var statusFilter = getValue('filter-status') || 'todos';
@@ -199,10 +235,10 @@ function applyFilters(items) {
 
   return items.filter(function(item) {
     if (typeFilter !== 'todos' && item.type !== typeFilter) return false;
-    if (statusFilter !== 'todos' && item.status !== statusFilter) return false;
-    if (bairroFilter !== 'todos' && item.bairro !== bairroFilter) return false;
-    if (addressFilter && item.address.toLowerCase().indexOf(addressFilter) === -1) return false;
-    if (searchFilter && (item.id + ' ' + item.type + ' ' + item.address + ' ' + item.bairro + ' ' + item.description).toLowerCase().indexOf(searchFilter) === -1) return false;
+    if (statusFilter !== 'todos' && visibleStatus(item) !== statusFilter && item.status !== statusFilter) return false;
+    if (bairroFilter !== 'todos' && normalizeText(item.bairro) !== normalizeText(bairroFilter)) return false;
+    if (addressFilter && normalizeText(item.address).indexOf(normalizeText(addressFilter)) === -1) return false;
+    if (searchFilter && normalizeText(item.id + ' ' + item.type + ' ' + item.address + ' ' + item.bairro + ' ' + item.description).indexOf(normalizeText(searchFilter)) === -1) return false;
     if (startDate) {
       var start = parseFilterDate(startDate);
       if (item.createdAt < start) return false;
@@ -220,6 +256,7 @@ async function renderOcorrenciasList() {
   const items = await getCurrentOcorrencias();
   if (!rowsContainer) return;
 
+  populateBairroFilter(items);
   const filtered = applyFilters(items);
   rowsContainer.innerHTML = '';
 
@@ -397,22 +434,33 @@ async function populateDetailPage() {
     if (moderationLabel(ocorrencia) !== 'Aprovada') {
       confirmationButton.disabled = true;
       confirmationButton.innerHTML = '<i class="bi bi-hourglass-split"></i> Aguardando aprovação';
+    } else {
+      const key = `infrabh.confirmed.${ocorrencia.id}`;
+      const updateConfirmationButton = function () {
+        const isConfirmed = localStorage.getItem(key) === 'true';
+        confirmationButton.classList.toggle('is-confirmed', isConfirmed);
+        confirmationButton.innerHTML = isConfirmed
+          ? '<i class="bi bi-check2"></i> Desconfirmar ocorrência'
+          : '<i class="bi bi-hand-thumbs-up"></i> Confirmar ocorrência';
+      };
+
+      updateConfirmationButton();
+      confirmationButton.addEventListener('click', async function () {
+        const isConfirmed = localStorage.getItem(key) === 'true';
+        confirmationButton.disabled = true;
+        const updated = await confirmOcorrencia(ocorrencia.id, !isConfirmed);
+        if (!updated) {
+          confirmationButton.disabled = false;
+          return;
+        }
+        ocorrencia.confirmacoes = updated.confirmacoes;
+        if (isConfirmed) localStorage.removeItem(key);
+        else localStorage.setItem(key, 'true');
+        confirmationText.textContent = `${ocorrencia.confirmacoes} pessoas confirmaram`;
+        confirmationButton.disabled = false;
+        updateConfirmationButton();
+      });
     }
-    const key = `infrabh.confirmed.${ocorrencia.id}`;
-    if (localStorage.getItem(key)) {
-      confirmationButton.disabled = true;
-      confirmationButton.innerHTML = '<i class="bi bi-check2"></i> Ocorrência confirmada';
-    }
-    confirmationButton.addEventListener('click', async function () {
-      if (localStorage.getItem(key)) return;
-      const updated = await confirmOcorrencia(ocorrencia.id);
-      if (!updated) return;
-      ocorrencia.confirmacoes = updated.confirmacoes;
-      localStorage.setItem(key, 'true');
-      confirmationText.textContent = `${ocorrencia.confirmacoes} pessoas confirmaram`;
-      confirmationButton.disabled = true;
-      confirmationButton.innerHTML = '<i class="bi bi-check2"></i> Ocorrência confirmada';
-    });
   }
 
   const similarContainer = document.getElementById('similar-occurrences');

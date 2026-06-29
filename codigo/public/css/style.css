@@ -178,10 +178,7 @@ body {
 }
 
 .notification-bell {
-  position: relative;
-  color: var(--teal-gray);
-  font-size: 20px;
-  cursor: pointer;
+  display: none !important;
 }
 
 .notification-bell .badge-dot {
@@ -239,6 +236,13 @@ body {
 
 .page-header {
   padding: 24px 32px 0;
+}
+
+.page-header-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
 }
 
 .page-header h1 {
@@ -374,6 +378,19 @@ body {
 .btn-mongodb-outline:hover {
   border-color: var(--dark-green);
   color: var(--dark-green);
+}
+
+.btn-mongodb-primary.is-confirmed,
+.btn-mongodb-outline.is-confirmed {
+  background: #e9fff4;
+  border-color: rgba(0, 104, 74, .45);
+  color: var(--dark-green);
+}
+
+.btn-mongodb-primary.is-confirmed:hover,
+.btn-mongodb-outline.is-confirmed:hover {
+  background: #d8f8e8;
+  color: var(--forest-black);
 }
 
 .btn-mongodb-danger {
@@ -583,6 +600,10 @@ body {
   color: var(--cool-gray);
 }
 
+.content-area {
+  padding: 24px 32px 32px;
+}
+
 .mobile-nav { display: none; }
 
 @media (max-width: 1024px) {
@@ -596,6 +617,22 @@ body {
   }
   .main-content {
     margin-left: 60px;
+  }
+  .top-bar {
+    padding: 18px 28px;
+  }
+  .search-box {
+    width: min(440px, 52vw);
+  }
+  .page-header {
+    padding: 28px 28px 0;
+  }
+  .page-header-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .content-area {
+    padding: 24px 28px 32px;
   }
   :root {
     --sidebar-width: 60px;

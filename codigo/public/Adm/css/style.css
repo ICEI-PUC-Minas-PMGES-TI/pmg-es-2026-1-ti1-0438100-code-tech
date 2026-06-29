@@ -178,10 +178,7 @@ body {
 }
 
 .notification-bell {
-  position: relative;
-  color: var(--teal-gray);
-  font-size: 20px;
-  cursor: pointer;
+  display: none !important;
 }
 
 .notification-bell .badge-dot {
@@ -755,6 +752,22 @@ body {
   }
   .main-content {
     margin-left: 60px;
+  }
+  .top-bar {
+    padding: 18px 28px;
+  }
+  .search-box {
+    width: min(440px, 52vw);
+  }
+  .page-header {
+    padding: 28px 28px 0;
+  }
+  .page-header-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .content-area {
+    padding: 24px 28px 32px;
   }
   :root {
     --sidebar-width: 60px;

@@ -2,7 +2,10 @@ document.addEventListener('DOMContentLoaded', async function () {
   const page = document.body.dataset.page;
   if (page === 'dashboard') await renderAdminDashboard();
   if (page === 'aprovacoes') await renderApprovalQueue();
-  if (page === 'ocorrencias') await renderAdminOccurrences();
+  if (page === 'ocorrencias') {
+    await renderAdminOccurrences();
+    bindAdminOccurrenceFilters();
+  }
   if (page === 'detalhes') await renderAdminDetail();
 });
 
@@ -132,9 +135,12 @@ async function renderAdminDashboard() {
 
 async function renderAdminOccurrences() {
   const items = await getCurrentOcorrencias();
-  const tableBody = document.querySelector('.table-mongodb tbody');
+  const tableBody = document.getElementById('admin-ocorrencias-table-body') || document.querySelector('.table-mongodb tbody');
   if (!tableBody) return;
-  tableBody.innerHTML = items.map(function (item) {
+  populateBairroFilter(items);
+  const filtered = applyFilters(items);
+
+  tableBody.innerHTML = filtered.map(function (item) {
     const moderation = moderationLabel(item);
     const moderationActions = moderation === 'Aguardando aprovação'
       ? '<a href="aprovacoes.html" class="btn-mongodb-outline" style="padding:6px 10px;font-size:12px"><i class="bi bi-shield-check"></i> Analisar</a>'
@@ -162,6 +168,36 @@ async function renderAdminOccurrences() {
     });
   });
 
+}
+
+function resetAdminOccurrenceFilters() {
+  ['filter-type', 'filter-status', 'filter-bairro', 'filter-start', 'filter-end', 'filter-address', 'search-text'].forEach(function(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (el.tagName === 'SELECT') {
+      el.value = 'todos';
+    } else {
+      el.value = '';
+    }
+  });
+  renderAdminOccurrences();
+}
+
+function bindAdminOccurrenceFilters() {
+  ['filter-type', 'filter-status', 'filter-bairro', 'filter-start', 'filter-end', 'filter-address', 'search-text'].forEach(function(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('input', renderAdminOccurrences);
+    el.addEventListener('change', renderAdminOccurrences);
+  });
+
+  const clearLink = document.getElementById('clear-filters');
+  if (clearLink) {
+    clearLink.addEventListener('click', function(event) {
+      event.preventDefault();
+      resetAdminOccurrenceFilters();
+    });
+  }
 }
 
 function statusClass(status) {

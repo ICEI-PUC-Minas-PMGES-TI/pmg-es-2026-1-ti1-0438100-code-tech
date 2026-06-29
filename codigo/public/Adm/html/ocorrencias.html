@@ -60,7 +60,7 @@
       <div class="top-bar">
         <div class="search-box">
           <i class="bi bi-search"></i>
-          <input type="text" placeholder="Buscar por Endereço, bairro, tipo...">
+          <input id="search-text" type="text" placeholder="Buscar por Endereço, bairro, tipo...">
         </div>
         <div class="top-bar-right">
           <div class="notification-bell">
@@ -96,51 +96,47 @@
         <div class="filter-box">
           <div class="d-flex align-items-center justify-content-between mb-3">
             <h3 style="margin: 0;">Filtros</h3>
-            <a href="#" style="color: var(--action-blue); text-decoration: none; font-size: 13px; font-weight: 400;">Limpar filtros</a>
+            <a id="clear-filters" href="#" style="color: var(--action-blue); text-decoration: none; font-size: 13px; font-weight: 400;">Limpar filtros</a>
           </div>
           <div class="row g-3">
             <div class="col-md-4">
               <label class="form-label-mongodb">Tipo</label>
-              <select class="form-control-mongodb select-mongodb">
-                <option>todos</option>
-                <option>Buraco</option>
-                <option>Vazamento</option>
-                <option>Falta de Água</option>
-                <option>Outros</option>
+              <select id="filter-type" class="form-control-mongodb select-mongodb">
+                <option value="todos">todos</option>
+                <option value="Buraco">Buraco</option>
+                <option value="Vazamento">Vazamento</option>
+                <option value="Falta de Água">Falta de Água</option>
+                <option value="Outros">Outros</option>
               </select>
             </div>
             <div class="col-md-4">
               <label class="form-label-mongodb">Status</label>
-              <select class="form-control-mongodb select-mongodb">
-                <option>todos</option>
-                <option>Pendente</option>
-                <option>Em andamento</option>
-                <option>Resolvido</option>
+              <select id="filter-status" class="form-control-mongodb select-mongodb">
+                <option value="todos">todos</option>
+                <option value="Aguardando aprovação">Aguardando aprovação</option>
+                <option value="Pendente">Pendente</option>
+                <option value="Em andamento">Em andamento</option>
+                <option value="Resolvido">Resolvido</option>
+                <option value="Rejeitada">Rejeitada</option>
               </select>
             </div>
             <div class="col-md-4">
               <label class="form-label-mongodb">Bairro</label>
-              <select class="form-control-mongodb select-mongodb">
-                <option>todos</option>
-                <option>Comiteco</option>
-                <option>Boa Viagem</option>
-                <option>Pantanal</option>
-                <option>Barreto</option>
-                <option>Queiroz</option>
-                <option>Vila Rica</option>
+              <select id="filter-bairro" class="form-control-mongodb select-mongodb">
+                <option value="todos">todos</option>
               </select>
             </div>
             <div class="col-md-4">
               <label class="form-label-mongodb">Data inicial</label>
-              <input type="text" class="form-control-mongodb" placeholder="dd/mm/aaaa">
+              <input id="filter-start" type="date" class="form-control-mongodb" placeholder="dd/mm/aaaa">
             </div>
             <div class="col-md-4">
               <label class="form-label-mongodb">Data final</label>
-              <input type="text" class="form-control-mongodb" placeholder="dd/mm/aaaa">
+              <input id="filter-end" type="date" class="form-control-mongodb" placeholder="dd/mm/aaaa">
             </div>
             <div class="col-md-4">
               <label class="form-label-mongodb">Endereço</label>
-              <input type="text" class="form-control-mongodb" placeholder="Buscar por Endereço...">
+              <input id="filter-address" type="text" class="form-control-mongodb" placeholder="Buscar por Endereço...">
             </div>
           </div>
         </div>
@@ -159,7 +155,7 @@
                 <th>Ações</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody id="admin-ocorrencias-table-body">
               <tr>
                 <td><a href="detalhes.html" style="color: var(--forest-black); font-weight: 500; text-decoration: none;">#1023</a></td>
                 <td>Buraco</td>
